@@ -1,14 +1,14 @@
 'use strict';
 
 const Homey = require('homey');
-const YamahaReceiverClient = require('../../lib/YamahaReceiver/YamahaReceiverClient.js');
+const YamahaExtendedControlClient = require('../../lib/YamahaExtendedControl/YamahaExtendedControlClient.js');
 
 // A list of devices, with their 'id' as key
 // it is generally advisable to keep a list of
 // paired and active devices in your driver's memory.
 let devices = {};
 
-class YamahaReceiverDriver extends Homey.Driver {
+class YamahaMusicCastDriver extends Homey.Driver {
 
     init(devices_data, callback) {
         devices_data.forEach((device_data) => {
@@ -23,7 +23,7 @@ class YamahaReceiverDriver extends Homey.Driver {
     }
 
     onInit() {
-        this.log('YamahaReceiverDriver has been inited');
+        this.log('YamahaMusicCastDriver has been inited');
     }
 
     // a helper method to add a device to the devices list
@@ -133,4 +133,4 @@ class YamahaReceiverDriver extends Homey.Driver {
     }
 }
 
-module.exports = YamahaReceiverDriver;
+module.exports = YamahaMusicCastDriver;

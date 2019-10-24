@@ -478,6 +478,112 @@
     }
   ],
   "flow": {
+    "triggers": [
+      {
+        "id": "input_changed",
+        "title": {
+          "en": "Input was changed",
+          "nl": "Input is gewijzigd",
+          "de": "Eingabe wurde geändert"
+        },
+        "tokens": [
+          {
+            "name": "input",
+            "type": "text",
+            "title": {
+              "en": "Selected input",
+              "nl": "Geselecteerde input",
+              "de": "Ausgewählter Eingang"
+            },
+            "example": "HDMI1"
+          }
+        ],
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select receiver",
+              "nl": "Selecteer versterker",
+              "de": "Verstärker auswählen"
+            },
+            "filter": "driver_id=receiver"
+          }
+        ]
+      },
+      {
+        "id": "surround_program_changed",
+        "title": {
+          "en": "Surround program was changed",
+          "nl": "Surround-programma is gewijzigd",
+          "de": "Surround-Programm wurde geändert"
+        },
+        "tokens": [
+          {
+            "name": "surround_program",
+            "type": "text",
+            "title": {
+              "en": "Selected surround program",
+              "nl": "Geselecteerde surround-programma",
+              "de": "Ausgewähltes Surround-Programm"
+            },
+            "example": "5ch Stereo"
+          }
+        ],
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select receiver",
+              "nl": "Selecteer versterker",
+              "de": "Verstärker auswählen"
+            },
+            "filter": "driver_id=receiver"
+          }
+        ]
+      },
+      {
+        "id": "muted",
+        "title": {
+          "en": "Amplifier was muted",
+          "nl": "Versterker is gedempt",
+          "de": "Verstärker wurde stummgeschaltet"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select receiver",
+              "nl": "Selecteer versterker",
+              "de": "Verstärker auswählen"
+            },
+            "filter": "driver_id=receiver"
+          }
+        ]
+      },
+      {
+        "id": "unmuted",
+        "title": {
+          "en": "Amplifier was unmuted",
+          "nl": "Versterker is ongedempt",
+          "de": "Verstärker ist ungedämpft"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select receiver",
+              "nl": "Selecteer versterker",
+              "de": "Verstärker auswählen"
+            },
+            "filter": "driver_id=receiver"
+          }
+        ]
+      }
+    ],
     "actions": [
       {
         "id": "change_input",
@@ -493,7 +599,7 @@
             "placeholder": {
               "en": "Select receiver",
               "nl": "Selecteer versterker",
-              "de": "Selecteer Verstärker auswählen"
+              "de": "Verstärker auswählen"
             },
             "filter": "driver_id=receiver"
           },
@@ -512,7 +618,7 @@
         "id": "change_surround_program",
         "title": {
           "en": "Change surround program",
-          "nl": "Wijzig surround programma",
+          "nl": "Wijzig surround-programma",
           "de": "Ändern Sie das Surround-Programm"
         },
         "args": [
@@ -522,7 +628,7 @@
             "placeholder": {
               "en": "Select receiver",
               "nl": "Selecteer versterker",
-              "de": "Selecteer Verstärker auswählen"
+              "de": "Verstärker auswählen"
             },
             "filter": "driver_id=receiver"
           },
@@ -531,7 +637,7 @@
             "type": "autocomplete",
             "placeholder": {
               "en": "Surround program",
-              "nl": "Surround programma",
+              "nl": "Surround-programma",
               "de": "Surround-Programm"
             }
           }
@@ -556,7 +662,7 @@
             "placeholder": {
               "en": "Select receiver",
               "nl": "Selecteer versterker",
-              "de": "Selecteer Verstärker auswählen"
+              "de": "Verstärker auswählen"
             },
             "filter": "driver_id=receiver"
           },

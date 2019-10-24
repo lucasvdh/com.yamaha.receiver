@@ -1,6 +1,6 @@
 'use strict';
 
-const InputEnum = require('./lib/enums/InputEnum');
+const InputEnum = require('./lib/YamahaReceiver/enums/InputEnum');
 
 console.log(Object.values(InputEnum).map(value => {
     return {
