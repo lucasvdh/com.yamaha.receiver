@@ -1,9 +1,9 @@
 "use strict";
 
 const Homey = require('homey');
-const YamahaReceiverClient = require('../../lib/YamahaReceiver/YamahaReceiverClient.js');
-const SurroundProgramEnum = require('../../lib/YamahaReceiver/enums/SurroundProgramEnum.js');
-const InputEnum = require('../../lib/YamahaReceiver/enums/InputEnum.js');
+const YamahaReceiverClient = require('../../lib/YamahaReceiver/YamahaReceiverClient');
+const SurroundProgramEnum = require('../../lib/YamahaReceiver/enums/SurroundProgramEnum');
+const InputEnum = require('../../lib/YamahaReceiver/enums/InputEnum');
 
 const CAPABILITIES_SET_DEBOUNCE = 100;
 const MINIMUM_UPDATE_INTERVAL = 5000;
@@ -32,10 +32,10 @@ class YamahaReceiverDevice extends Homey.Device {
         this._onCapabilitiesSet = this._onCapabilitiesSet.bind(this);
 
         this.registerCapabilityListener('onoff', value => {
-            return this.getClient().setPower(value);
+            return this.getClient().setPower(value).catch(this.error);
         });
         this.registerCapabilityListener('volume_set', value => {
-            return this.getClient().setVolume(value * 100);
+            return this.getClient().setVolume(value * 100).catch(this.error);
         });
         this.registerCapabilityListener('volume_mute', value => {
             return this.getClient().setMuted(value).then(() => {
@@ -44,36 +44,36 @@ class YamahaReceiverDevice extends Homey.Device {
                 } else {
                     this.unmutedTrigger.trigger(this).then(this.log).catch(this.error);
                 }
-            });
+            }).catch(this.error);
         });
         this.registerCapabilityListener('input_selected', value => {
             return this.getClient().setInput(value).then(() => {
                 this.inputChangedTrigger.trigger(this, {
                     input: value
                 }).then(this.log).catch(this.error)
-            });
+            }).catch(this.error);
         });
         this.registerCapabilityListener('surround_program', value => {
-            return this.getClient().setSurroundProgram(value);
-        }).then(() => {
-            this.surroundProgramChangedTrigger.trigger(this, {
-                surround_program: value
-            }).then(this.log).catch(this.error)
-        });
+            return this.getClient().setSurroundProgram(value).then(() => {
+                this.surroundProgramChangedTrigger.trigger(this, {
+                    surround_program: value
+                }).then(this.log).catch(this.error)
+            }).catch(this.error);
+        })
         this.registerCapabilityListener('surround_straight', value => {
-            return this.getClient().setSurroundStraight(value);
+            return this.getClient().setSurroundStraight(value).catch(this.error);
         });
         this.registerCapabilityListener('surround_enhancer', value => {
-            return this.getClient().setSurroundEnhancer(value);
+            return this.getClient().setSurroundEnhancer(value).catch(this.error);
         });
         this.registerCapabilityListener('sound_direct', value => {
-            return this.getClient().setSoundDirect(value);
+            return this.getClient().setSoundDirect(value).catch(this.error);
         });
         this.registerCapabilityListener('sound_extra_bass', value => {
-            return this.getClient().setSoundExtraBass(value);
+            return this.getClient().setSoundExtraBass(value).catch(this.error);
         });
         this.registerCapabilityListener('sound_adaptive_drc', value => {
-            return this.getClient().setSoundAdaptiveDRC(value);
+            return this.getClient().setSoundAdaptiveDRC(value).catch(this.error);
         });
     }
 
@@ -87,11 +87,11 @@ class YamahaReceiverDevice extends Homey.Device {
         this.unmutedTrigger = new Homey.FlowCardTrigger('unmuted')
             .register();
 
-        this.changeInputAction = new Homey.FlowCardAction('change_input');
+        this.changeInputAction = new Homey.FlowCardAction('change_input')
+            .register();
         this.changeInputAction
-            .register()
             .registerRunListener((args, state) => {
-                return this.getClient().setInput(args.input);
+                return this.getClient().setInput(args.input).catch(this.error);
             });
         this.changeInputAction
             .getArgument('input')
@@ -106,11 +106,11 @@ class YamahaReceiverDevice extends Homey.Device {
                 );
             });
 
-        this.changeSurroundProgramAction = new Homey.FlowCardAction('change_surround_program');
+        this.changeSurroundProgramAction = new Homey.FlowCardAction('change_surround_program')
+            .register();
         this.changeSurroundProgramAction
-            .register()
             .registerRunListener((args, state) => {
-                return this.getClient().setSurroundProgram(args.surround_program);
+                return this.getClient().setSurroundProgram(args.surround_program).catch(this.error);
             });
         this.changeSurroundProgramAction
             .getArgument('surround_program')
@@ -161,17 +161,21 @@ class YamahaReceiverDevice extends Homey.Device {
     }
 
     updateDevice(resolve, reject) {
-        return this.getClient().getState().then((receiverStatus) => {
-            this.syncReceiverStateToCapabilities(receiverStatus);
+        return this.getClient().getState().then((receiverState) => {
+            this.syncReceiverStateToCapabilities(receiverState);
+
+            this.deviceLog('monitor updated device values');
+
+            if (!this.getAvailable()) {
+                this.setAvailable().catch(this.error)
+            }
         }).catch(error => {
-            this.deviceLog('monitor failed updating device values', error);
+            this.deviceLog('monitor failed updating device values', error.code);
 
             if (this.getAvailable()) {
-                this.setUnavailable();
                 this.setCapabilityValue('onoff', false).catch(this.error);
+                this.setUnavailable().catch(this.error);
             }
-        }).then(() => {
-            this.deviceLog('monitor updated device values');
         });
     }
 
@@ -183,14 +187,6 @@ class YamahaReceiverDevice extends Homey.Device {
 
     onClientSuccess(error) {
         // We got a success so the device is available, check if we need to re-enable it
-        if (!this.getAvailable()) {
-            this.setAvailable();
-        }
-    }
-
-    onClientError(error) {
-        // We got an error so the device is unavailable, check if we need to disable it
-        this.error(error)
     }
 
     deviceLog(...message) {
@@ -203,8 +199,7 @@ class YamahaReceiverDevice extends Homey.Device {
     getClient() {
         if (typeof this._yamahaReceiverClient === "undefined" || this._yamahaReceiverClient === null) {
             this._yamahaReceiverClient = new YamahaReceiverClient(this.getIPAddress(), this.getZone());
-            this._yamahaReceiverClient.onSuccess(this.onClientSuccess);
-            this._yamahaReceiverClient.onError(this.onClientError);
+            // this._yamahaReceiverClient.onSuccess(this.onClientSuccess.bind(this));
         }
 
         return this._yamahaReceiverClient;

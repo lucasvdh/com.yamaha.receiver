@@ -489,7 +489,7 @@
         "tokens": [
           {
             "name": "input",
-            "type": "text",
+            "type": "string",
             "title": {
               "en": "Selected input",
               "nl": "Geselecteerde input",
@@ -521,7 +521,7 @@
         "tokens": [
           {
             "name": "surround_program",
-            "type": "text",
+            "type": "string",
             "title": {
               "en": "Selected surround program",
               "nl": "Geselecteerde surround-programma",
