@@ -1,0 +1,91 @@
+<link href="../assets/pairing.css" rel="stylesheet">
+
+<div class="container">
+    <p data-i18n="pair.start.intro"></p>
+
+    <table class="pairSettings">
+        <tr>
+            <th data-i18n="pair.start.ipAddress">IP address</th>
+        </tr>
+        <tr>
+            <td><input id="ipAddress" type="text" value="192.168.1.10" placeholder=""/></td>
+        </tr>
+        <tr>
+            <td class="info" data-i18n="pair.start.ipAddressDescription"></td>
+        </tr>
+        <tr>
+            <th data-i18n="pair.start.zone">Zone</th>
+        </tr>
+        <tr>
+            <td><input id="zone" type="text" value="Main_Zone" placeholder=""/></td>
+        </tr>
+        <tr>
+            <td class="info" data-i18n="pair.start.zoneDescription"></td>
+        </tr>
+    </table>
+</div>
+
+<a class="btn btn-success btn-block btn-lg" id="saveButton" data-i18n="pair.start.saveSettings"
+   onclick="saveSettings()">Save</a>
+
+<script>
+    var saveButton = document.getElementById('saveButton');
+    var ipAddressElement = document.getElementById('ipAddress');
+    var zoneElement = document.getElementById('zone');
+    var loading = true;
+
+    Homey.setTitle(__('pair.start.title'));
+
+    Homey.on('error', function (errortype, callback) {
+        if (errortype === 'error') {
+            Homey.alert(__('error.generic'), 'error');
+            Homey.done();
+        } else if (errortype === 'invalid_zone') {
+            Homey.alert(__('error.invalidZone'), 'error');
+        } else if (errortype === 'not_found') {
+            Homey.alert(__('error.endpointNotFound'), 'error');
+        } else if (errortype === 'host_unreachable') {
+            Homey.alert(__('error.hostUnreachable'), 'error');
+        } else if (errortype === 'host_timeout') {
+            Homey.alert(__('error.connectionTimedOut'), 'error');
+        } else {
+            Homey.alert(JSON.stringify(errortype));
+        }
+    });
+
+    Homey.on('continue', function (success, callback) {
+        loading = false;
+        Homey.showView('list_devices');
+    })
+
+    function saveSettings() {
+        if (loading) {
+            console.log('Loading ..')
+        }
+        saveButton.classList.add('loading-fade-out');
+        loading = true;
+
+        console.log('Saving settings...');
+
+        let ipAddress = ipAddressElement.value,
+            zone = zoneElement.value;
+
+        // If required values are filled in
+        if (ipAddress !== '') {
+            // Build data array
+            let data = {
+                ipAddress: ipAddress,
+                zone: zone,
+            };
+
+            console.log('Saving device data', data);
+
+            // Continue to back-end, pass along data
+            Homey.emit('get_devices', data);
+        } else {
+            saveButton.classList.remove('loading-fade-out');
+            loading = false;
+        }
+    }
+
+</script>

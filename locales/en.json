@@ -1,0 +1,19 @@
+{
+  "pair": {
+    "start": {
+      "intro": "Ensure that your amplifier is on and has access to the internet.",
+      "title": "Finding device...",
+      "ipAddress": "IP address",
+      "ipAddressDescription": "Ensure that the IP address of your amplifier does not change by assigning it a static IP address. <br/><br/> You can change this in the settings of your amplifier, under \"Setup\" > \"Network Setup\" > \"IP Address\", or in your router by assigning the MAC-address of your amplifier to an IP address.",
+      "zone": "Zone",
+      "zoneDescription": "You only need to change the zone of the device if you have consciously changed it via the Yamaha App",
+      "saveSettings": "Save settings"
+    }
+  },
+  "error": {
+    "generic": "An error occured",
+    "hostUnreachable": "Could not reach the amplifier on this IP address. Is the IP correct and the amplifier turned on?",
+    "invalidZone": "Could reach the amplifier but the zone is probably incorrect.",
+    "connectionTimedOut": "The connection to the amplifier timed out. Is the IP correct and the amplifier turned on?"
+  }
+}

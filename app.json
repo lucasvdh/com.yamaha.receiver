@@ -1,0 +1,601 @@
+{
+  "id": "com.yamaha.receiver",
+  "version": "0.0.1",
+  "compatibility": "3.0.0",
+  "sdk": 2,
+  "name": {
+    "en": "Yamaha receiver",
+    "nl": "Yamaha versterker",
+    "de": "Yamaha Verstärker"
+  },
+  "description": {
+    "en": "Adds support for Yamaha receivers.",
+    "nl": "Voegt ondersteuning voor Yamaha versterkers.",
+    "de": "Fügt Unterstützung für Yamaha-Verstärker hinzu."
+  },
+  "category": [
+    "music",
+    "appliances"
+  ],
+  "permissions": [],
+  "images": {
+    "large": "/assets/images/large.png",
+    "small": "/assets/images/small.png"
+  },
+  "author": {
+    "name": "Lucas van der Have",
+    "email": "lucasvdhave@gmail.com"
+  },
+  "capabilities": {
+    "input_selected": {
+      "type": "enum",
+      "title": {
+        "en": "Selected source",
+        "nl": "Geselecteerde bron"
+      },
+      "getable": true,
+      "setable": true,
+      "values": [
+        {
+          "id": "HDMI1",
+          "title": {
+            "en": "HDMI1"
+          }
+        },
+        {
+          "id": "HDMI2",
+          "title": {
+            "en": "HDMI2"
+          }
+        },
+        {
+          "id": "HDMI3",
+          "title": {
+            "en": "HDMI3"
+          }
+        },
+        {
+          "id": "HDMI4",
+          "title": {
+            "en": "HDMI4"
+          }
+        },
+        {
+          "id": "HDMI5",
+          "title": {
+            "en": "HDMI5"
+          }
+        },
+        {
+          "id": "HDMI6",
+          "title": {
+            "en": "HDMI6"
+          }
+        },
+        {
+          "id": "HDMI7",
+          "title": {
+            "en": "HDMI7"
+          }
+        },
+        {
+          "id": "HDMI8",
+          "title": {
+            "en": "HDMI8"
+          }
+        },
+        {
+          "id": "AV1",
+          "title": {
+            "en": "AV1"
+          }
+        },
+        {
+          "id": "AV2",
+          "title": {
+            "en": "AV2"
+          }
+        },
+        {
+          "id": "AV3",
+          "title": {
+            "en": "AV3"
+          }
+        },
+        {
+          "id": "AV4",
+          "title": {
+            "en": "AV4"
+          }
+        },
+        {
+          "id": "AV5",
+          "title": {
+            "en": "AV5"
+          }
+        },
+        {
+          "id": "AV6",
+          "title": {
+            "en": "AV6"
+          }
+        },
+        {
+          "id": "AUDIO1",
+          "title": {
+            "en": "AUDIO1"
+          }
+        },
+        {
+          "id": "AUDIO2",
+          "title": {
+            "en": "AUDIO2"
+          }
+        },
+        {
+          "id": "AUDIO3",
+          "title": {
+            "en": "AUDIO3"
+          }
+        },
+        {
+          "id": "TUNER",
+          "title": {
+            "en": "TUNER"
+          }
+        },
+        {
+          "id": "V-AUX",
+          "title": {
+            "en": "V-AUX"
+          }
+        },
+        {
+          "id": "SERVER",
+          "title": {
+            "en": "SERVER"
+          }
+        },
+        {
+          "id": "NET RADIO",
+          "title": {
+            "en": "NET RADIO"
+          }
+        },
+        {
+          "id": "USB",
+          "title": {
+            "en": "USB"
+          }
+        },
+        {
+          "id": "Spotify",
+          "title": {
+            "en": "Spotify"
+          }
+        },
+        {
+          "id": "AirPlay",
+          "title": {
+            "en": "AirPlay"
+          }
+        }
+      ]
+    },
+    "surround_program": {
+      "type": "enum",
+      "title": {
+        "en": "Surround program",
+        "nl": "Surround-programma"
+      },
+      "getable": true,
+      "setable": true,
+      "values": [
+        {
+          "id": "Action Game",
+          "title": {
+            "en": "Action Game"
+          }
+        },
+        {
+          "id": "Roleplaying Game",
+          "title": {
+            "en": "Roleplaying Game"
+          }
+        },
+        {
+          "id": "Music Video",
+          "title": {
+            "en": "Music Video"
+          }
+        },
+        {
+          "id": "Standard",
+          "title": {
+            "en": "Standard"
+          }
+        },
+        {
+          "id": "Spectacle",
+          "title": {
+            "en": "Spectacle"
+          }
+        },
+        {
+          "id": "Sci-Fi",
+          "title": {
+            "en": "Sci-Fi"
+          }
+        },
+        {
+          "id": "Adventure",
+          "title": {
+            "en": "Adventure"
+          }
+        },
+        {
+          "id": "Drama",
+          "title": {
+            "en": "Drama"
+          }
+        },
+        {
+          "id": "Hall in Munich",
+          "title": {
+            "en": "Hall in Munich"
+          }
+        },
+        {
+          "id": "Hall in Vienna",
+          "title": {
+            "en": "Hall in Vienna"
+          }
+        },
+        {
+          "id": "Chamber",
+          "title": {
+            "en": "Chamber"
+          }
+        },
+        {
+          "id": "Cellar Club",
+          "title": {
+            "en": "Cellar Club"
+          }
+        },
+        {
+          "id": "The Roxy Theatre",
+          "title": {
+            "en": "The Roxy Theatre"
+          }
+        },
+        {
+          "id": "The Bottom Line",
+          "title": {
+            "en": "The Bottom Line"
+          }
+        },
+        {
+          "id": "Sports",
+          "title": {
+            "en": "Sports"
+          }
+        },
+        {
+          "id": "Mono Movie",
+          "title": {
+            "en": "Mono Movie"
+          }
+        },
+        {
+          "id": "2ch Stereo",
+          "title": {
+            "en": "2ch Stereo"
+          }
+        },
+        {
+          "id": "5ch Stereo",
+          "title": {
+            "en": "5ch Stereo"
+          }
+        },
+        {
+          "id": "7ch Stereo",
+          "title": {
+            "en": "7ch Stereo"
+          }
+        },
+        {
+          "id": "Surround Decoder",
+          "title": {
+            "en": "Surround Decoder"
+          }
+        }
+      ]
+    },
+    "surround_straight": {
+      "type": "boolean",
+      "title": {
+        "en": "Straight audio",
+        "nl": "Straight audio",
+        "de": "Straight Audio"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "button",
+      "uiQuickAction": true
+    },
+    "surround_enhancer": {
+      "type": "boolean",
+      "title": {
+        "en": "Enhancer",
+        "nl": "Enhancer",
+        "de": "Enhancer"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "button",
+      "uiQuickAction": true
+    },
+    "sound_direct": {
+      "type": "boolean",
+      "title": {
+        "en": "Direct audio",
+        "nl": "Direct audio",
+        "de": "Direktes Audio"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "button",
+      "uiQuickAction": true
+    },
+    "sound_extra_bass": {
+      "type": "boolean",
+      "title": {
+        "en": "Extra bass",
+        "nl": "Extra bas",
+        "de": "Extra Bass"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "button",
+      "uiQuickAction": true
+    },
+    "sound_adaptive_drc": {
+      "type": "boolean",
+      "title": {
+        "en": "Adaptive DRC",
+        "nl": "Adaptieve DRC",
+        "de": "Adaptive DRC"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "button",
+      "uiQuickAction": true
+    }
+  },
+  "drivers": [
+    {
+      "id": "receiver",
+      "name": {
+        "en": "Yamaha receiver",
+        "nl": "Yamaha versterker",
+        "de": "Yamaha Verstärker"
+      },
+      "images": {
+        "large": "drivers/receiver/assets/images/large.jpg",
+        "small": "drivers/receiver/assets/images/small.jpg"
+      },
+      "class": "other",
+      "capabilities": [
+        "onoff",
+        "volume_set",
+        "volume_mute",
+        "input_selected",
+        "surround_program",
+        "surround_straight",
+        "surround_enhancer",
+        "sound_direct",
+        "sound_extra_bass",
+        "sound_adaptive_drc"
+      ],
+      "pair": [
+        {
+          "id": "start"
+        },
+        {
+          "id": "validate",
+          "template": "loading"
+        },
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_receiver"
+          }
+        },
+        {
+          "id": "add_receiver",
+          "template": "add_devices"
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "General settings",
+            "nl": "Algemene instellingen",
+            "de": "Allgemeine Einstellungen"
+          },
+          "children": [
+            {
+              "id": "ipAddress",
+              "type": "text",
+              "label": {
+                "en": "IP address",
+                "nl": "IP-adres",
+                "de": "IP Adresse"
+              },
+              "value": "0.0.0.0",
+              "hint": {
+                "en": "IP address of your Yamaha receiver.",
+                "nl": "IP-adres van uw Yamaha versterker.",
+                "de": "IP-Adresse Ihres Yamaha-Empfängers."
+              }
+            },
+            {
+              "id": "zone",
+              "type": "text",
+              "label": {
+                "en": "Zone",
+                "nl": "Zone"
+              },
+              "value": "Main_Zone",
+              "hint": {
+                "en": "Enter the Zone of your Yamaha receiver here. If you are unsure what to enter, fill in 'Main_Zone'.",
+                "nl": "Vul de Zone van uw Yamaha receiver hier in. Als je niet zeker weet wat u in moet voeren, vul dan 'Main_Zone' in.",
+                "de": "Geben Sie hier die Zone Ihres Yamaha-Empfängers ein. Wenn Sie sich nicht sicher sind, was Sie eingeben sollen, geben Sie 'Main_Zone' ein."
+              }
+            },
+            {
+              "id": "updateInterval",
+              "type": "number",
+              "label": {
+                "en": "Update interval in seconds",
+                "nl": "Update interval in seconden",
+                "de": "Aktualisierungsintervall in Sekunden"
+              },
+              "value": 5,
+              "hint": {
+                "en": "The interval in which Homey should check if anything has changed. The minimum value if 5.",
+                "nl": "De interval waarin Homey moet controleren of er iets is veranderd. De minimumwaarde is 5.",
+                "de": "Das Intervall, in dem Homey prüfen muss, ob sich etwas geändert hat. Der Mindestwert ist 5."
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "flow": {
+    "actions": [
+      {
+        "id": "change_input",
+        "title": {
+          "en": "Change input",
+          "nl": "Wijzig bron",
+          "de": "Quelle ändern"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select receiver",
+              "nl": "Selecteer versterker",
+              "de": "Selecteer Verstärker auswählen"
+            },
+            "filter": "driver_id=receiver"
+          },
+          {
+            "name": "input",
+            "type": "autocomplete",
+            "placeholder": {
+              "en": "Input",
+              "nl": "Input",
+              "de": "Eingang"
+            }
+          }
+        ]
+      },
+      {
+        "id": "change_surround_program",
+        "title": {
+          "en": "Change surround program",
+          "nl": "Wijzig surround programma",
+          "de": "Ändern Sie das Surround-Programm"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select receiver",
+              "nl": "Selecteer versterker",
+              "de": "Selecteer Verstärker auswählen"
+            },
+            "filter": "driver_id=receiver"
+          },
+          {
+            "name": "surround_program",
+            "type": "autocomplete",
+            "placeholder": {
+              "en": "Surround program",
+              "nl": "Surround programma",
+              "de": "Surround-Programm"
+            }
+          }
+        ]
+      },
+      {
+        "id": "change_line_input",
+        "title": {
+          "en": "Select line input",
+          "nl": "Selecteer regelnummer",
+          "de": "Zeilennummer auswählen"
+        },
+        "hint": {
+          "en": "Select a specific line within a menu (only for menu based inputs like Net Radio, Server, USB).",
+          "nl": "Selecteer een specifieke regelnummer binnen een menu (alleen voor menu gebaseerde inputs zoals Net Radio, Server, USB).",
+          "de": "Wählen Sie eine bestimmte Zeilennummer innerhalb eines Menüs (nur für menübasierte Eingänge wie Net Radio, Server, USB)."
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select receiver",
+              "nl": "Selecteer versterker",
+              "de": "Selecteer Verstärker auswählen"
+            },
+            "filter": "driver_id=receiver"
+          },
+          {
+            "name": "input",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "NET_RADIO",
+                "label": {
+                  "en": "NET RADIO"
+                }
+              },
+              {
+                "id": "USB",
+                "label": {
+                  "en": "USB"
+                }
+              },
+              {
+                "id": "SERVER",
+                "label": {
+                  "en": "SERVER"
+                }
+              }
+            ]
+          },
+          {
+            "name": "line",
+            "type": "number",
+            "min": 1,
+            "placeholder": {
+              "en": "Line number",
+              "nl": "Regelnummer",
+              "de": "Zeilennummer"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

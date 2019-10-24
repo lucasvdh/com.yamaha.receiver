@@ -1,0 +1,19 @@
+{
+  "pair": {
+    "start": {
+      "intro": "Stellen Sie sicher, dass Ihr Verstärker eingeschaltet ist und Zugang zum Internet hat.",
+      "title": "Gerät suchen ...",
+      "ipAddress": "IP-Adresse",
+      "ipAddressDescription": "Stellen Sie sicher, dass sich die IP-Adresse Ihres Verstärkers nicht ändert, indem Sie ihm eine statische IP-Adresse zuweisen. <br/><br/> Sie können dies in den Einstellungen Ihres Verstärkers unter \"Setup\" > \"Network Setup\" > \"IP Address\" oder in Ihrem Router, indem Sie die MAC-Adresse Ihres Verstärkers einer IP-Adresse zuweisen. ",
+      "zone": "Zone",
+      "zoneDescription": "Sie müssen die Zone des Geräts nur ändern, wenn Sie sie über die Yamaha-App bewusst geändert haben",
+      "saveSettings": "Einstellungen speichern"
+    }
+  },
+  "error": {
+    "generic": "Ein Fehler ist aufgetreten",
+    "hostUnreachable": "Konnte den Verstärker unter dieser IP-Adresse nicht erreichen. Ist die IP korrekt und der Verstärker eingeschaltet?",
+    "invalidZone": "Konnte den Verstärker erreichen, aber die Zone ist wahrscheinlich falsch.",
+    "connectionTimedOut": "Zeitüberschreitung bei der Verbindung zum Verstärker. Ist die IP korrekt und der Verstärker eingeschaltet?"
+  }
+}

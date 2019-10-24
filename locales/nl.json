@@ -1,0 +1,19 @@
+{
+  "pair": {
+    "start": {
+      "title": "Apparaat zoeken...",
+      "intro": "Zorg ervoor dat uw versterker aanstaat en verbinding heeft met het internet.",
+      "ipAddress": "IP-adres",
+      "ipAddressDescription": "Zorg ervoor dat het IP-adres van uw versterker niet wijzigt door deze een statisch adres toe te kennen. <br/><br/> Dit kan u in de instellingen van uw versterker wijzigen, onder \"Setup\" > \"Network Setup\" > \"IP Address\", of in uw router door het MAC-adres van uw versterker aan een IP-adres toe te wijzen.",
+      "zone": "Zone",
+      "zoneDescription": "De zone van het apparaat hoeft u alleen te wijzigen wanneer u dit zelf bewust heeft gewwijzigd via de Yamaha App",
+      "saveSettings": "Gegevens opslaan"
+    }
+  },
+  "error": {
+    "generic": "Er is een fout opgetreden",
+    "hostUnreachable": "Kon de versterker niet bereiken op dit IP-adres. Is het IP juist en staat de versterker aan?",
+    "invalidZone": "Kon de versterker bereiken maar waarschijnlijk is de zone onjuist.",
+    "connectionTimedOut": "Kon de versterker niet bereiken op dit IP-adres. Is het IP juist en staat de versterker aan?"
+  }
+}
