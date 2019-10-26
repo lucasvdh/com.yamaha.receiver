@@ -1,6 +1,8 @@
 'use strict';
 
 const Homey = require('homey');
+const axios = require('axios');
+const xml2js = require('xml2js');
 const YamahaReceiverClient = require('../../lib/YamahaReceiver/YamahaReceiverClient.js');
 
 // A list of devices, with their 'id' as key
@@ -34,6 +36,8 @@ class YamahaReceiverDriver extends Homey.Driver {
     }
 
     onPair(socket) {
+        const discoveryStrategy = this.getDiscoveryStrategy();
+
         let defaultIP = '192.168.1.2',
             defaultZone = 'Main_Zone',
             pairingDevice = {
@@ -52,7 +56,14 @@ class YamahaReceiverDriver extends Homey.Driver {
         // this method is run when Homey.emit('list_devices') is run on the front-end
         // which happens when you use the template `list_devices`
         socket.on('list_devices', (data, callback) => {
-            callback(null, [pairingDevice]);
+            const discoveryResults = discoveryStrategy.getDiscoveryResults();
+
+            Promise.all(Object.values(discoveryResults).map(discoveryResult => {
+                return this.getDeviceByDiscoveryResult(discoveryResult);
+            })).then((devices) => {
+                console.log(devices);
+                callback(null, devices);
+            }).catch(callback);
         });
 
         // this is called when the user presses save settings button in start.html
@@ -61,7 +72,7 @@ class YamahaReceiverDriver extends Homey.Driver {
             socket.showView('validate');
 
             this.validateIPAddress(data.ipAddress, data.zone).then(() => {
-                pairingDevice.id = data.ipAddress + '[' + data.zone + ']';
+                pairingDevice.data.id = data.ipAddress + '[' + data.zone + ']';
                 pairingDevice.data.ipAddress = data.ipAddress;
                 pairingDevice.data.zone = data.zone;
                 pairingDevice.settings = {
@@ -92,7 +103,7 @@ class YamahaReceiverDriver extends Homey.Driver {
 
         socket.on('disconnect', () => {
             this.log("Yamaha receiver app - User aborted pairing, or pairing is finished");
-        })
+        });
     }
 
     added(device_data, callback) {
@@ -130,6 +141,39 @@ class YamahaReceiverDriver extends Homey.Driver {
     validateIPAddress(ipAddress, zone) {
         let client = new YamahaReceiverClient(ipAddress, zone);
         return client.getState();
+    }
+
+    getDeviceByDiscoveryResult(discoveryResult) {
+        let ssdpDetailsLocation = discoveryResult.headers.location,
+            device = {
+                id: discoveryResult.id,
+                name: 'Yamaha amplifier [' + discoveryResult.address + ']',
+                data: {
+                    driver: "receiver",
+                },
+                settings: {
+                    ipAddress: discoveryResult.address,
+                    zone: 'Main_Zone'
+                },
+            };
+
+        return axios.get(ssdpDetailsLocation).then(data => {
+            return xml2js.parseStringPromise(data.data)
+                .then(result => {
+                    if (typeof result.root['yamaha:X_device'] !== "undefined" && false) {
+                        let xmlDevices = result.root.device,
+                            xmlDevice = xmlDevices[0],
+                            friendlyName = xmlDevice.friendlyName[0],
+                            modelName = xmlDevice.modelName[0];
+
+                        device.name = friendlyName + ' - ' + modelName + ' [' + discoveryResult.address + ']';
+
+                        return device;
+                    } else {
+                        return null;
+                    }
+                });
+        }).catch(this.error);
     }
 }
 
