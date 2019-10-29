@@ -47,16 +47,16 @@ class YamahaReceiverDevice extends Homey.Device {
             }).catch(this.error);
         });
         this.registerCapabilityListener('input_selected', value => {
-            return this.getClient().setInput(value).then(() => {
+            return this.getClient().setInput(value.id).then(() => {
                 this.inputChangedTrigger.trigger(this, {
-                    input: value
+                    input: value.id
                 }).then(this.log).catch(this.error)
             }).catch(this.error);
         });
         this.registerCapabilityListener('surround_program', value => {
-            return this.getClient().setSurroundProgram(value).then(() => {
+            return this.getClient().setSurroundProgram(value.id).then(() => {
                 this.surroundProgramChangedTrigger.trigger(this, {
-                    surround_program: value
+                    surround_program: value.id
                 }).then(this.log).catch(this.error)
             }).catch(this.error);
         })
@@ -91,7 +91,7 @@ class YamahaReceiverDevice extends Homey.Device {
             .register();
         this.changeInputAction
             .registerRunListener((args, state) => {
-                return this.getClient().setInput(args.input).catch(this.error);
+                return this.getClient().setInput(args.input.id).catch(this.error);
             });
         this.changeInputAction
             .getArgument('input')
@@ -110,7 +110,7 @@ class YamahaReceiverDevice extends Homey.Device {
             .register();
         this.changeSurroundProgramAction
             .registerRunListener((args, state) => {
-                return this.getClient().setSurroundProgram(args.surround_program).catch(this.error);
+                return this.getClient().setSurroundProgram(args.surround_program.id).catch(this.error);
             });
         this.changeSurroundProgramAction
             .getArgument('surround_program')

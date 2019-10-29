@@ -68,7 +68,7 @@ class YamahaMusicCastDevice extends Homey.Device {
         changeInputAction
             .register()
             .registerRunListener((args, state) => {
-                return this.getClient().setInput(args.input);
+                return this.getClient().setInput(args.input.id);
             });
         changeInputAction
             .getArgument('input')
@@ -87,7 +87,7 @@ class YamahaMusicCastDevice extends Homey.Device {
         changeSurroundProgramAction
             .register()
             .registerRunListener((args, state) => {
-                return this.getClient().setSurroundProgram(args.surround_program);
+                return this.getClient().setSurroundProgram(args.surround_program.id);
             });
         changeSurroundProgramAction
             .getArgument('surround_program')
