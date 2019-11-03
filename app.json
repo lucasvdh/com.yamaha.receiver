@@ -425,12 +425,11 @@
           "id": "list_devices",
           "template": "list_devices",
           "navigation": {
-            "next": "check_zone"
+            "next": "add_receiver"
           }
         },
         {
-          "id": "check_zone",
-          "template": "check_zone"
+          "id": "check_zone"
         },
         {
           "id": "add_receiver",
