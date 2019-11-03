@@ -61,6 +61,9 @@ class YamahaReceiverDriver extends Homey.Driver {
             Promise.all(Object.values(discoveryResults).map(discoveryResult => {
                 return this.getDeviceByDiscoveryResult(discoveryResult);
             })).then((devices) => {
+                devices = devices.filter(item => {
+                    return item !== null;
+                });
                 console.log(devices);
                 callback(null, devices);
             }).catch(callback);
@@ -131,7 +134,7 @@ class YamahaReceiverDriver extends Homey.Driver {
                         Homey.log('Yamaha - Zone changed to ' + newSettingsObj.zone);
                         break;
                 }
-            })
+            });
             callback(null, true)
         } catch (error) {
             callback(error)
@@ -160,7 +163,7 @@ class YamahaReceiverDriver extends Homey.Driver {
         return axios.get(ssdpDetailsLocation).then(data => {
             return xml2js.parseStringPromise(data.data)
                 .then(result => {
-                    if (typeof result.root['yamaha:X_device'] !== "undefined" && false) {
+                    if (typeof result.root['yamaha:X_device'] !== "undefined") {
                         let xmlDevices = result.root.device,
                             xmlDevice = xmlDevices[0],
                             friendlyName = xmlDevice.friendlyName[0],
