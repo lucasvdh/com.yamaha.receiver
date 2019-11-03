@@ -26,6 +26,27 @@
     "name": "Lucas van der Have",
     "email": "lucasvdhave@gmail.com"
   },
+  "contributing": {
+    "donate": {
+      "paypal": {
+        "username": "lucasvdh"
+      }
+    }
+  },
+  "contributors": {
+    "developers": [
+      {
+        "name": "Lucas van der Have",
+        "email": "lucasvdhave@gmail.com"
+      }
+    ],
+    "translators": [
+      {
+        "name": "🇩🇪Lucas van der Have",
+        "email": "sebastian@programmieramt.de"
+      }
+    ]
+  },
   "discovery": {
     "yamaha-receiver-discovery": {
       "type": "ssdp",
