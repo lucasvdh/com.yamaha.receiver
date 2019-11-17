@@ -1,7 +1,7 @@
 {
   "id": "com.yamaha.receiver",
   "version": "0.0.1",
-  "compatibility": "3.0.0",
+  "compatibility": ">=3.0.0",
   "sdk": 2,
   "name": {
     "en": "Yamaha receiver",
