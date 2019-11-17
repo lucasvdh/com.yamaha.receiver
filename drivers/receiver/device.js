@@ -21,6 +21,8 @@ class YamahaReceiverDevice extends Homey.Device {
         this.deviceLog('registering flow card conditions');
         this.registerFlowCards();
 
+        this.setAvailable().catch(this.error);
+
         this.ready(() => {
             this.deviceLog('initializing monitor');
             this.runMonitor();
