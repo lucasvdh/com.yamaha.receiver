@@ -47,6 +47,13 @@
       }
     ]
   },
+  "bugs": {
+    "url": "https://github.com/lucasvdh/com.yamaha.receiver/issues"
+  },
+  "homeyCommunityTopicId": 14064,
+  "source": "https://github.com/lucasvdh/com.yamaha.receiver",
+  "homepage": "https://github.com/lucasvdh/com.yamaha.receiver",
+  "support": "mailto:lucasvdhave@gmail.com",
   "discovery": {
     "yamaha-receiver-discovery": {
       "type": "ssdp",
