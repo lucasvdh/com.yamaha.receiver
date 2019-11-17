@@ -1,6 +1,6 @@
 {
   "id": "com.yamaha.receiver",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "compatibility": ">=3.0.0",
   "sdk": 2,
   "name": {
@@ -17,6 +17,18 @@
     "music",
     "appliances"
   ],
+  "tags": {
+    "en": [
+      "receiver",
+      "amplifier",
+      "audio"
+    ],
+    "nl": [
+      "ontvanger",
+      "versterker",
+      "audio"
+    ]
+  },
   "permissions": [],
   "images": {
     "large": "/assets/images/large.png",
@@ -42,15 +54,22 @@
     ],
     "translators": [
       {
+        "name": "🇬🇧Lucas van der Have",
+        "email": "lucasvdhave@gmail.com"
+      },
+      {
+        "name": "🇳🇱Lucas van der Have",
+        "email": "lucasvdhave@gmail.com"
+      },
+      {
         "name": "🇩🇪Lucas van der Have",
-        "email": "sebastian@programmieramt.de"
+        "email": "lucasvdhave@gmail.com"
       }
     ]
   },
   "bugs": {
     "url": "https://github.com/lucasvdh/com.yamaha.receiver/issues"
   },
-  "homeyCommunityTopicId": 14064,
   "source": "https://github.com/lucasvdh/com.yamaha.receiver",
   "homepage": "https://github.com/lucasvdh/com.yamaha.receiver",
   "support": "mailto:lucasvdhave@gmail.com",
@@ -431,8 +450,8 @@
         "de": "Yamaha Verstärker"
       },
       "images": {
-        "large": "drivers/receiver/assets/images/large.jpg",
-        "small": "drivers/receiver/assets/images/small.jpg"
+        "large": "drivers/receiver/assets/images/large.png",
+        "small": "drivers/receiver/assets/images/small.png"
       },
       "class": "other",
       "discovery": "yamaha-receiver-discovery",
