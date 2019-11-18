@@ -1,4 +1,8 @@
 {
+  "0.1.1": {
+    "en": "Added app store description changes",
+    "nl": "App store omschrijving wijzigingen"
+  },
   "0.1.0": {
     "en": "Added track controls and info",
     "nl": "Track-besturing en info toegevoegd"
