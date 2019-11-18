@@ -1,4 +1,8 @@
 {
+  "0.1.2": {
+    "en": "Fix set input",
+    "nl": "Fix input selecteren"
+  },
   "0.1.1": {
     "en": "Added app store description changes",
     "nl": "App store omschrijving wijzigingen"
