@@ -56,9 +56,12 @@ class YamahaReceiverDevice extends Homey.Device {
             }).catch(this.error);
         });
         this.registerCapabilityListener('surround_program', value => {
-            return this.getClient().setSurroundProgram(value.id).then(() => {
+            return this.getClient().setSurroundProgram(value).then(() => {
+                // TODO: this doesn't work fro some reason
                 this.surroundProgramChangedTrigger.trigger(this, {
-                    surround_program: value.id
+                    surround_program: {
+                        id: value
+                    }
                 }).then(this.log).catch(this.error)
             }).catch(this.error);
         })
@@ -76,6 +79,21 @@ class YamahaReceiverDevice extends Homey.Device {
         });
         this.registerCapabilityListener('sound_adaptive_drc', value => {
             return this.getClient().setSoundAdaptiveDRC(value).catch(this.error);
+        });
+        this.registerCapabilityListener('speaker_playing', value => {
+            return value
+                ? this.getClient().play().catch(this.error)
+                : this.getClient().pause().catch(this.error);
+        });
+        this.registerCapabilityListener('speaker_next', value => {
+            return this.getClient().next().then(() => {
+                return this.updateDevice();
+            }).catch(this.error);
+        });
+        this.registerCapabilityListener('speaker_prev', value => {
+            return this.getClient().previous().then(() => {
+                return this.updateDevice();
+            }).catch(this.error);
         });
     }
 
@@ -163,22 +181,27 @@ class YamahaReceiverDevice extends Homey.Device {
     }
 
     updateDevice(resolve, reject) {
-        return this.getClient().getState().then((receiverState) => {
-            this.syncReceiverStateToCapabilities(receiverState);
+        return Promise.all([
+            this.getClient().getState().then((receiverState) => {
+                this.syncReceiverStateToCapabilities(receiverState);
 
-            this.deviceLog('monitor updated device values');
+                this.deviceLog('monitor updated device values');
 
-            if (!this.getAvailable()) {
-                this.setAvailable().catch(this.error)
-            }
-        }).catch(error => {
-            this.deviceLog('monitor failed updating device values', error.code);
+                if (!this.getAvailable()) {
+                    this.setAvailable().catch(this.error)
+                }
+            }).catch(error => {
+                this.deviceLog('monitor failed updating device values', error.code);
 
-            if (this.getAvailable()) {
-                this.setCapabilityValue('onoff', false).catch(this.error);
-                this.setUnavailable().catch(this.error);
-            }
-        });
+                if (this.getAvailable()) {
+                    this.setCapabilityValue('onoff', false).catch(this.error);
+                    this.setUnavailable().catch(this.error);
+                }
+            }),
+            this.getClient().getPlayInfo().then(playInfo => {
+                this.syncReceiverPlayIntoToCapabilities(playInfo);
+            }).catch(this.error)
+        ]);
     }
 
     _onCapabilitiesSet(valueObj, optsObj) {
@@ -218,6 +241,13 @@ class YamahaReceiverDevice extends Homey.Device {
         this.setCapabilityValue('sound_direct', state.surround.straight).catch(this.error);
         this.setCapabilityValue('sound_extra_bass', state.surround.straight).catch(this.error);
         this.setCapabilityValue('sound_adaptive_drc', state.surround.straight).catch(this.error);
+    }
+
+    syncReceiverPlayIntoToCapabilities(playInfo) {
+        this.setCapabilityValue('speaker_playing', playInfo.playing).catch(this.error);
+        this.setCapabilityValue('speaker_track', playInfo.track).catch(this.error);
+        this.setCapabilityValue('speaker_album', playInfo.album).catch(this.error);
+        this.setCapabilityValue('speaker_artist', playInfo.artist).catch(this.error);
     }
 }
 

@@ -1,6 +1,6 @@
 {
   "id": "com.yamaha.receiver",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "compatibility": ">=3.0.0",
   "sdk": 2,
   "name": {
@@ -453,7 +453,7 @@
         "large": "drivers/receiver/assets/images/large.png",
         "small": "drivers/receiver/assets/images/small.png"
       },
-      "class": "other",
+      "class": "amplifier",
       "discovery": "yamaha-receiver-discovery",
       "capabilities": [
         "onoff",
@@ -465,7 +465,13 @@
         "surround_enhancer",
         "sound_direct",
         "sound_extra_bass",
-        "sound_adaptive_drc"
+        "sound_adaptive_drc",
+        "speaker_playing",
+        "speaker_next",
+        "speaker_prev",
+        "speaker_artist",
+        "speaker_track",
+        "speaker_album"
       ],
       "pair": [
         {
