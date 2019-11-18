@@ -49,9 +49,11 @@ class YamahaReceiverDevice extends Homey.Device {
             }).catch(this.error);
         });
         this.registerCapabilityListener('input_selected', value => {
-            return this.getClient().setInput(value.id).then(() => {
+            return this.getClient().setInput(value).then(() => {
                 this.inputChangedTrigger.trigger(this, {
-                    input: value.id
+                    input: {
+                        id: value
+                    }
                 }).then(this.log).catch(this.error)
             }).catch(this.error);
         });
