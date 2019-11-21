@@ -8,6 +8,15 @@
       "zone": "Zone",
       "zoneDescription": "You only need to change the zone of the device if you have consciously changed it via the Yamaha App",
       "saveSettings": "Save settings"
+    },
+    "search_device": {
+      "intro": "No device was found, manually search for your receiver.",
+      "title": "Search device...",
+      "ipAddress": "IP address",
+      "ipAddressDescription": "Ensure that the IP address of your amplifier does not change by assigning it a static IP address. <br/><br/> You can change this in the settings of your amplifier, under \"Setup\" > \"Network Setup\" > \"IP Address\", or in your router by assigning the MAC-address of your amplifier to an IP address.",
+      "zone": "Zone",
+      "zoneDescription": "You only need to change the zone of the device if you have manually changed it via the Yamaha App",
+      "submit": "Search device"
     }
   },
   "error": {

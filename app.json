@@ -1,6 +1,6 @@
 {
-  "id": "com.yamaha.receiver",
-  "version": "0.1.2",
+  "id": "martens.yamaha",
+  "version": "0.3.6",
   "compatibility": ">=3.0.0",
   "sdk": 2,
   "name": {
@@ -54,15 +54,7 @@
     ],
     "translators": [
       {
-        "name": "🇬🇧Lucas van der Have",
-        "email": "lucasvdhave@gmail.com"
-      },
-      {
-        "name": "🇳🇱Lucas van der Have",
-        "email": "lucasvdhave@gmail.com"
-      },
-      {
-        "name": "🇩🇪Lucas van der Have",
+        "name": "Lucas van der Have",
         "email": "lucasvdhave@gmail.com"
       }
     ]
@@ -482,7 +474,18 @@
           }
         },
         {
-          "id": "check_zone"
+          "id": "search_device"
+        },
+        {
+          "id": "loading",
+          "template": "loading"
+        },
+        {
+          "id": "list_manual_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_receiver"
+          }
         },
         {
           "id": "add_receiver",

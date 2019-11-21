@@ -217,6 +217,7 @@ class YamahaReceiverDevice extends Homey.Device {
     }
 
     deviceLog(...message) {
+        // console.log('data',this.getData(), 'state', this.getState(), 'settings', this.getSettings());
         this.log('Yamaha Device [' + this._data.id + ']', ...message);
     }
 

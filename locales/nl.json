@@ -8,6 +8,15 @@
       "zone": "Zone",
       "zoneDescription": "De zone van het apparaat hoeft u alleen te wijzigen wanneer u dit zelf bewust heeft gewwijzigd via de Yamaha App",
       "saveSettings": "Gegevens opslaan"
+    },
+    "search_device": {
+      "intro": "Er zijn geen apparaten gevonden, zoek hier handmatig naar je versterker.",
+      "title": "Apparaat zoeken...",
+      "ipAddress": "IP-adres",
+      "ipAddressDescription": "Zorg ervoor dat het IP-adres van uw versterker niet wijzigt door deze een statisch adres toe te kennen. <br/><br/> Dit kan u in de instellingen van uw versterker wijzigen, onder \"Setup\" > \"Network Setup\" > \"IP Address\", of in uw router door het MAC-adres van uw versterker aan een IP-adres toe te wijzen.",
+      "zone": "Zone",
+      "zoneDescription": "De zone van het apparaat hoeft u alleen te wijzigen wanneer u dit zelf bewust heeft gewwijzigd via de Yamaha App",
+      "submit": "Apparaat zoeken"
     }
   },
   "error": {

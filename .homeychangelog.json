@@ -1,4 +1,12 @@
 {
+  "0.3.6": {
+    "en": "Added Fallback to manually search for your amplifier when it could not be found automatically",
+    "nl": "Fallback toegevoegd om handmatig naar je versterker te zoeken wanneer deze niet automatisch kon worden gevonden"
+  },
+  "0.3.5": {
+    "en": "Needed to increase version due to app store restriction",
+    "nl": "De versie moest verhoogd worden vanwege een beperking van de app store"
+  },
   "0.1.2": {
     "en": "Fix set input",
     "nl": "Fix input selecteren"

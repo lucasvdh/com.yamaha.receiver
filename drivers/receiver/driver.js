@@ -24,7 +24,7 @@ class YamahaReceiverDriver extends Homey.Driver {
         callback();
     }
 
-    onInit() {
+    onInit(data) {
         this.log('YamahaReceiverDriver has been inited');
     }
 
@@ -40,69 +40,67 @@ class YamahaReceiverDriver extends Homey.Driver {
 
         let defaultIP = '192.168.1.2',
             defaultZone = 'Main_Zone',
-            pairingDevice = {
-                name: 'Yamaha amplifier',
-                data: {
-                    driver: "receiver",
-                    ipAddress: defaultIP,
-                    zone: defaultZone
-                },
-                settings: {
-                    ipAddress: defaultIP,
-                    zone: defaultZone
-                },
-            };
+            pairingDevice = null;
 
         // this method is run when Homey.emit('list_devices') is run on the front-end
         // which happens when you use the template `list_devices`
         socket.on('list_devices', (data, callback) => {
-            const discoveryResults = discoveryStrategy.getDiscoveryResults();
+            if (pairingDevice !== null) {
+                callback(null, [pairingDevice]);
+            } else {
+                const discoveryResults = discoveryStrategy.getDiscoveryResults();
 
-            Promise.all(Object.values(discoveryResults).map(discoveryResult => {
-                return this.getDeviceByDiscoveryResult(discoveryResult);
-            })).then((devices) => {
-                devices = devices.filter(item => {
-                    return item !== null;
-                });
-                console.log(devices);
-                callback(null, devices);
-            }).catch(callback);
+                let existingDevices = this.getDevices();
+
+                Promise.all(Object.values(discoveryResults).map(discoveryResult => {
+                    return this.getDeviceByDiscoveryResult(discoveryResult);
+                })).then((devices) => {
+                    devices = devices.filter(item => {
+                        return item !== null && existingDevices.filter(existingDevice => {
+                            return item.id === existingDevice.getData().id;
+                        }).length === 0;
+                    });
+
+                    if (devices.length === 0) {
+                        socket.showView('search_device');
+                    } else {
+                        callback(null, devices);
+                    }
+                }).catch(callback);
+            }
         });
 
         // this is called when the user presses save settings button in start.html
-        socket.on('get_devices', (data, callback) => {
+        socket.on('validate_data', (data, callback) => {
             // Continue to next view
-            socket.showView('validate');
+            socket.showView('loading');
 
-            this.validateIPAddress(data.ipAddress, data.zone).then(() => {
-                pairingDevice.data.id = data.ipAddress + '[' + data.zone + ']';
-                pairingDevice.data.ipAddress = data.ipAddress;
-                pairingDevice.data.zone = data.zone;
-                pairingDevice.settings = {
-                    ipAddress: data.ipAddress,
-                    zone: data.zone,
-                    updateInterval: 5
+            let client = new YamahaReceiverClient(data.ipAddress);
+
+            client.getState().then(state => {
+                pairingDevice = {
+                    id: data.ipAddress + '[' + data.zone + ']',
+                    name: 'Yamaha amplifier [' + data.ipAddress + ']',
+                    data: {
+                        id: data.ipAddress + '[' + data.zone + ']',
+                        driver: "receiver",
+                    },
+                    settings: {
+                        ipAddress: data.ipAddress,
+                        zone: 'Main_Zone'
+                    },
                 };
 
                 socket.showView('list_devices');
-            }).catch((error) => {
-                console.log(error);
-                socket.showView('start');
-
-                if (error.code === 'EHOSTUNREACH') {
-                    socket.emit('error', 'host_unreachable');
-                } else if (parseInt(error.statusCode) === 400) {
-                    socket.emit('error', 'invalid_zone');
-                } else {
-                    socket.emit('error', 'error');
-                }
+            }).catch(error => {
+                socket.showView('search_device');
+                socket.emit('error', 'error');
             });
         });
 
-
-        socket.on('get_device', (data, callback) => {
-            callback(null, pairingDevice);
-        });
+        // socket.on('get_device', (data, callback) => {
+        //     callback(null, pairingDevice);
+        // });
 
         socket.on('disconnect', () => {
             this.log("Yamaha receiver app - User aborted pairing, or pairing is finished");
@@ -142,8 +140,45 @@ class YamahaReceiverDriver extends Homey.Driver {
     }
 
     validateIPAddress(ipAddress, zone) {
-        let client = new YamahaReceiverClient(ipAddress, zone);
-        return client.getState();
+        let ssdpDetailsLocation = 'http://' + ipAddress + ':8080/MediaRenderer/desc.xml';
+
+        return new Promise((resolve, reject) => {
+            this.getDeviceNameFromSSDPDetailsLocation(ssdpDetailsLocation).then(name => {
+                resolve(name !== false);
+            }).catch(error => {
+                resolve(false);
+            });
+        }).catch(this.error);
+    }
+
+    getDeviceNameFromSSDPDetailsLocation(ssdpDetailsLocation, defaultName) {
+        return axios.get(ssdpDetailsLocation).then(data => {
+            return xml2js.parseStringPromise(data.data)
+                .then(result => {
+                    if (typeof result.root['yamaha:X_device'] !== "undefined") {
+                        if (
+                            typeof result.root !== "undefined"
+                            && typeof result.root.device !== "undefined"
+                            && typeof result.root.device[0] !== "undefined"
+                            && typeof result.root.device[0].friendlyName !== "undefined"
+                            && typeof result.root.device[0].friendlyName[0] !== "undefined"
+                            && typeof result.root.device[0].modelName !== "undefined"
+                            && typeof result.root.device[0].modelName[0] !== "undefined"
+                        ) {
+                            let xmlDevices = result.root.device,
+                                xmlDevice = xmlDevices[0],
+                                friendlyName = xmlDevice.friendlyName[0],
+                                modelName = xmlDevice.modelName[0];
+
+                            return friendlyName + ' - ' + modelName;
+                        } else {
+                            return defaultName;
+                        }
+                    } else {
+                        return false;
+                    }
+                });
+        });
     }
 
     getDeviceByDiscoveryResult(discoveryResult) {
@@ -152,6 +187,7 @@ class YamahaReceiverDriver extends Homey.Driver {
                 id: discoveryResult.id,
                 name: 'Yamaha amplifier [' + discoveryResult.address + ']',
                 data: {
+                    id: discoveryResult.id,
                     driver: "receiver",
                 },
                 settings: {
@@ -160,23 +196,15 @@ class YamahaReceiverDriver extends Homey.Driver {
                 },
             };
 
-        return axios.get(ssdpDetailsLocation).then(data => {
-            return xml2js.parseStringPromise(data.data)
-                .then(result => {
-                    if (typeof result.root['yamaha:X_device'] !== "undefined") {
-                        let xmlDevices = result.root.device,
-                            xmlDevice = xmlDevices[0],
-                            friendlyName = xmlDevice.friendlyName[0],
-                            modelName = xmlDevice.modelName[0];
+        return this.getDeviceNameFromSSDPDetailsLocation(ssdpDetailsLocation, device.name).then(name => {
+            if (name !== false) {
+                device.name = name;
+            } else {
+                return null;
+            }
 
-                        device.name = friendlyName + ' - ' + modelName + ' [' + discoveryResult.address + ']';
-
-                        return device;
-                    } else {
-                        return null;
-                    }
-                });
-        }).catch(this.error);
+            return device;
+        });
     }
 }
 
