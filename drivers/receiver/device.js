@@ -2,8 +2,8 @@
 
 const Homey = require('homey');
 const YamahaReceiverClient = require('../../lib/YamahaReceiver/YamahaReceiverClient');
-const SurroundProgramEnum = require('../../lib/YamahaReceiver/enums/SurroundProgramEnum');
-const InputEnum = require('../../lib/YamahaReceiver/enums/InputEnum');
+const SurroundProgramEnum = require('../../lib/YamahaReceiver/Enums/SurroundProgramEnum');
+const InputEnum = require('../../lib/YamahaReceiver/Enums/InputEnum');
 
 const CAPABILITIES_SET_DEBOUNCE = 100;
 const MINIMUM_UPDATE_INTERVAL = 5000;
@@ -154,7 +154,14 @@ class YamahaReceiverDevice extends Homey.Device {
                 .then(() => {
                     this.runMonitor();
                 })
-                .catch(() => {
+                .catch(errors => {
+                    console.log(errors);
+                    for (let i in errors) {
+                        if (errors[i].code !== 'EHOSTUNREACH') {
+                            throw errors[i];
+                        }
+                    }
+
                     this.runMonitor();
                 });
         }, this.getUpdateInterval());
@@ -182,7 +189,7 @@ class YamahaReceiverDevice extends Homey.Device {
         return this._settings.zone;
     }
 
-    updateDevice(resolve, reject) {
+    updateDevice() {
         return Promise.all([
             this.getClient().getState().then((receiverState) => {
                 this.syncReceiverStateToCapabilities(receiverState);
@@ -192,18 +199,22 @@ class YamahaReceiverDevice extends Homey.Device {
                 if (!this.getAvailable()) {
                     this.setAvailable().catch(this.error)
                 }
-            }).catch(error => {
-                this.deviceLog('monitor failed updating device values', error.code);
-
-                if (this.getAvailable()) {
-                    this.setCapabilityValue('onoff', false).catch(this.error);
-                    this.setUnavailable().catch(this.error);
-                }
             }),
             this.getClient().getPlayInfo().then(playInfo => {
                 this.syncReceiverPlayIntoToCapabilities(playInfo);
-            }).catch(this.error)
-        ]);
+            })
+        ]).catch(error => {
+            this.deviceLog('monitor failed updating device values');
+
+            if (this.getAvailable()) {
+                this.setCapabilityValue('onoff', false).catch(this.error);
+                this.setUnavailable().catch(this.error);
+            }
+
+            if (error.code !== 'EHOSTUNREACH') {
+                throw error;
+            }
+        });
     }
 
     _onCapabilitiesSet(valueObj, optsObj) {
