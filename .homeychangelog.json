@@ -1,4 +1,8 @@
 {
+  "0.4.0": {
+    "en": "Fixed mute/unmute. Fixed syncing of receiver values to buttons. Fixed flow card triggers and actions. Added a new way to parse responses from the receiver. Removed error suppression, the app might completely crash now but it does give me a better insight into the errors so I can resolve them faster.",
+    "nl": "Mute/unmute gefixt. Syncen van versterker waardes naar knoppen gefixt. Flow triggers en acties gefixt. Een nieuwe manier toegevoegd om de reactie van de versterker te parsen. Foutonderdrukking verwijderd, de app kan nu volledig crashen, maar dit geeft me een beter inzicht in de fouten, zodat ik ze sneller kan oplossen."
+  },
   "0.3.6": {
     "en": "Added Fallback to manually search for your amplifier when it could not be found automatically",
     "nl": "Fallback toegevoegd om handmatig naar je versterker te zoeken wanneer deze niet automatisch kon worden gevonden"
