@@ -42,9 +42,9 @@ class YamahaReceiverDevice extends Homey.Device {
         this.registerCapabilityListener('volume_mute', value => {
             return this.getClient().setMuted(value).then(() => {
                 if (value) {
-                    this.mutedTrigger.trigger(this).then(this.log).catch(this.error);
+                    this.mutedTrigger.trigger(this).catch(this.error);
                 } else {
-                    this.unmutedTrigger.trigger(this).then(this.log).catch(this.error);
+                    this.unmutedTrigger.trigger(this).catch(this.error);
                 }
             }).catch(this.error);
         });
@@ -54,12 +54,11 @@ class YamahaReceiverDevice extends Homey.Device {
                     input: {
                         id: value
                     }
-                }).then(this.log).catch(this.error)
+                }).catch(this.error)
             }).catch(this.error);
         });
         this.registerCapabilityListener('surround_program', value => {
             return this.getClient().setSurroundProgram(value).then(() => {
-                // TODO: this doesn't work fro some reason
                 this.surroundProgramChangedTrigger.trigger(this, {
                     surround_program: {
                         id: value
@@ -100,17 +99,12 @@ class YamahaReceiverDevice extends Homey.Device {
     }
 
     registerFlowCards() {
-        this.inputChangedTrigger = new Homey.FlowCardTrigger('input_changed')
-            .register();
-        this.surroundProgramChangedTrigger = new Homey.FlowCardTrigger('surround_program_changed')
-            .register();
-        this.mutedTrigger = new Homey.FlowCardTrigger('muted')
-            .register();
-        this.unmutedTrigger = new Homey.FlowCardTrigger('unmuted')
-            .register();
+        this.inputChangedTrigger = new Homey.FlowCardTriggerDevice('input_changed').register();
+        this.surroundProgramChangedTrigger = new Homey.FlowCardTriggerDevice('surround_program_changed').register();
+        this.mutedTrigger = new Homey.FlowCardTriggerDevice('muted').register();
+        this.unmutedTrigger = new Homey.FlowCardTriggerDevice('unmuted').register();
 
-        this.changeInputAction = new Homey.FlowCardAction('change_input')
-            .register();
+        this.changeInputAction = new Homey.FlowCardAction('change_input').register();
         this.changeInputAction
             .registerRunListener((args, state) => {
                 return this.getClient().setInput(args.input.id).catch(this.error);
@@ -128,8 +122,7 @@ class YamahaReceiverDevice extends Homey.Device {
                 );
             });
 
-        this.changeSurroundProgramAction = new Homey.FlowCardAction('change_surround_program')
-            .register();
+        this.changeSurroundProgramAction = new Homey.FlowCardAction('change_surround_program').register();
         this.changeSurroundProgramAction
             .registerRunListener((args, state) => {
                 return this.getClient().setSurroundProgram(args.surround_program.id).catch(this.error);
@@ -251,10 +244,10 @@ class YamahaReceiverDevice extends Homey.Device {
         this.setCapabilityValue('input_selected', state.input.selected).catch(this.error);
         this.setCapabilityValue('surround_program', state.surround.program).catch(this.error);
         this.setCapabilityValue('surround_straight', state.surround.straight).catch(this.error);
-        this.setCapabilityValue('surround_enhancer', state.surround.straight).catch(this.error);
-        this.setCapabilityValue('sound_direct', state.surround.straight).catch(this.error);
-        this.setCapabilityValue('sound_extra_bass', state.surround.straight).catch(this.error);
-        this.setCapabilityValue('sound_adaptive_drc', state.surround.straight).catch(this.error);
+        this.setCapabilityValue('surround_enhancer', state.surround.enhancer).catch(this.error);
+        this.setCapabilityValue('sound_direct', state.sound.direct).catch(this.error);
+        this.setCapabilityValue('sound_extra_bass', state.sound.extraBass).catch(this.error);
+        this.setCapabilityValue('sound_adaptive_drc', state.sound.adaptiveDynamicRangeControl).catch(this.error);
     }
 
     syncReceiverPlayIntoToCapabilities(playInfo) {
