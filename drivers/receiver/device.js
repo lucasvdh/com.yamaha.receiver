@@ -231,7 +231,6 @@ class YamahaReceiverDevice extends Homey.Device {
     getClient() {
         if (typeof this._yamahaReceiverClient === "undefined" || this._yamahaReceiverClient === null) {
             this._yamahaReceiverClient = new YamahaReceiverClient(this.getIPAddress(), this.getZone());
-            // this._yamahaReceiverClient.onSuccess(this.onClientSuccess.bind(this));
         }
 
         return this._yamahaReceiverClient;
