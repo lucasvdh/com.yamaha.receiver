@@ -109,7 +109,13 @@ class YamahaMusicCastDevice extends Homey.Device {
                 .then(() => {
                     this.runMonitor();
                 })
-                .catch(() => {
+                .catch(error => {
+                    console.log(error);
+
+                    if (error.code !== 'EHOSTUNREACH') {
+                        throw error;
+                    }
+
                     this.runMonitor();
                 });
         }, this.getUpdateInterval());
@@ -139,12 +145,19 @@ class YamahaMusicCastDevice extends Homey.Device {
 
     updateDevice(resolve, reject) {
         return this.getClient().getState().then((receiverStatus) => {
-            this.syncReceiverStateToCapabilities(receiverStatus);
+            this.syncMusicCastStateToCapabilities(receiverStatus);
         }).catch(error => {
-            this.deviceLog('monitor failed updating device values', error);
-        }).then(() => {
-            this.deviceLog('monitor updated device values');
-        });
+            this.deviceLog('monitor failed updating device values');
+
+            if (this.getAvailable()) {
+                this.setCapabilityValue('onoff', false).catch(this.error);
+                this.setUnavailable().catch(this.error);
+            }
+
+            if (error.code !== 'EHOSTUNREACH') {
+                throw error;
+            }
+        });;
     }
 
     _onCapabilitiesSet(valueObj, optsObj) {
@@ -170,33 +183,26 @@ class YamahaMusicCastDevice extends Homey.Device {
     }
 
     deviceLog(...message) {
-        this.log('Yamaha Device [' + this._data.id + ']', ...message);
+        this.log('Yamaha MusicCast Device [' + this._data.id + ']', ...message);
     }
 
     /**
-     * @returns YamahaReceiverClient
+     * @returns YamahaExtendedControlClient
      */
     getClient() {
-        if (typeof this._yamahaReceiverClient === "undefined" || this._yamahaReceiverClient === null) {
-            this._yamahaReceiverClient = new YamahaReceiverClient(this.getIPAddress(), this.getZone());
-            this._yamahaReceiverClient.onSuccess(this.onClientSuccess);
-            this._yamahaReceiverClient.onError(this.onClientError);
+        if (typeof this._yamahaExtendedControlClient === "undefined" || this._yamahaExtendedControlClient === null) {
+            this._yamahaExtendedControlClient = new YamahaExtendedControlClient(this.getIPAddress(), this.getZone());
         }
 
-        return this._yamahaReceiverClient;
+        return this._yamahaExtendedControlClient;
     }
 
-    syncReceiverStateToCapabilities(state) {
+    syncMusicCastStateToCapabilities(state) {
         this.setCapabilityValue('onoff', state.power).catch(this.error);
-        this.setCapabilityValue('volume_set', state.volume.current / 100).catch(this.error);
-        this.setCapabilityValue('volume_mute', state.volume.muted).catch(this.error);
-        this.setCapabilityValue('input_selected', state.input.selected).catch(this.error);
-        this.setCapabilityValue('surround_program', state.surround.program).catch(this.error);
-        this.setCapabilityValue('surround_straight', state.surround.straight).catch(this.error);
-        this.setCapabilityValue('surround_enhancer', state.surround.straight).catch(this.error);
-        this.setCapabilityValue('sound_direct', state.surround.straight).catch(this.error);
-        this.setCapabilityValue('sound_extra_bass', state.surround.straight).catch(this.error);
-        this.setCapabilityValue('sound_adaptive_drc', state.surround.straight).catch(this.error);
+        this.setCapabilityValue('volume_set', state.volume).catch(this.error);
+        this.setCapabilityValue('volume_mute', state.muted).catch(this.error);
+        this.setCapabilityValue('input_selected', state.input).catch(this.error);
+        this.setCapabilityValue('surround_program', state.sound_program).catch(this.error);
     }
 }
 

@@ -50,6 +50,10 @@
       {
         "name": "Lucas van der Have",
         "email": "lucasvdhave@gmail.com"
+      },
+      {
+        "name": "Koen Martens",
+        "email": "koen-martens@hotmail.com"
       }
     ],
     "translators": [
@@ -528,6 +532,84 @@
                 "en": "Enter the Zone of your Yamaha receiver here. If you are unsure what to enter, fill in 'Main_Zone'.",
                 "nl": "Vul de Zone van uw Yamaha receiver hier in. Als je niet zeker weet wat u in moet voeren, vul dan 'Main_Zone' in.",
                 "de": "Geben Sie hier die Zone Ihres Yamaha-Empfängers ein. Wenn Sie sich nicht sicher sind, was Sie eingeben sollen, geben Sie 'Main_Zone' ein."
+              }
+            },
+            {
+              "id": "updateInterval",
+              "type": "number",
+              "label": {
+                "en": "Update interval in seconds",
+                "nl": "Update interval in seconden",
+                "de": "Aktualisierungsintervall in Sekunden"
+              },
+              "value": 5,
+              "hint": {
+                "en": "The interval in which Homey should check if anything has changed. The minimum value if 5.",
+                "nl": "De interval waarin Homey moet controleren of er iets is veranderd. De minimumwaarde is 5.",
+                "de": "Das Intervall, in dem Homey prüfen muss, ob sich etwas geändert hat. Der Mindestwert ist 5."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "musiccast",
+      "name": {
+        "en": "Yamaha MusicCast",
+        "nl": "Yamaha MusicCast",
+        "de": "Yamaha MusicCast"
+      },
+      "images": {
+        "large": "drivers/musiccast/assets/images/large.jpg",
+        "small": "drivers/musiccast/assets/images/small.jpg"
+      },
+      "class": "amplifier",
+      "capabilities": [
+        "onoff",
+        "volume_mute",
+        "volume_set",
+        "input_selected",
+        "surround_program"
+      ],
+      "pair": [
+        {
+          "id": "start"
+        },
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_receiver"
+          }
+        },
+        {
+          "id": "add_receiver",
+          "template": "add_devices"
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "General settings",
+            "nl": "Algemene instellingen",
+            "de": "Allgemeine Einstellungen"
+          },
+          "children": [
+            {
+              "id": "ipAddress",
+              "type": "text",
+              "label": {
+                "en": "IP address",
+                "nl": "IP-adres",
+                "de": "IP Adresse"
+              },
+              "value": "0.0.0.0",
+              "hint": {
+                "en": "IP address of your Yamaha receiver.",
+                "nl": "IP-adres van uw Yamaha versterker.",
+                "de": "IP-Adresse Ihres Yamaha-Empfängers."
               }
             },
             {
