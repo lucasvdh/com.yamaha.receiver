@@ -1,6 +1,7 @@
 "use strict";
 
 const Homey = require('homey');
+const Log = require('homey-log').Log;
 const YamahaReceiverClient = require('../../lib/YamahaReceiver/YamahaReceiverClient');
 const SurroundProgramEnum = require('../../lib/YamahaReceiver/Enums/SurroundProgramEnum');
 const InputEnum = require('../../lib/YamahaReceiver/Enums/InputEnum');
@@ -147,12 +148,11 @@ class YamahaReceiverDevice extends Homey.Device {
                 .then(() => {
                     this.runMonitor();
                 })
-                .catch(errors => {
-                    console.log(errors);
-                    for (let i in errors) {
-                        if (errors[i].code !== 'EHOSTUNREACH') {
-                            throw errors[i];
-                        }
+                .catch(error => {
+                    Log.captureException(error);
+
+                    if (error.code !== 'EHOSTUNREACH' && error.code !== 'ECONNREFUSED') {
+                        throw error;
                     }
 
                     this.runMonitor();
@@ -196,7 +196,7 @@ class YamahaReceiverDevice extends Homey.Device {
             this.getClient().getPlayInfo().then(playInfo => {
                 this.syncReceiverPlayIntoToCapabilities(playInfo);
             })
-        ]).catch(error => {
+        ]).catch(errors => {
             this.deviceLog('monitor failed updating device values');
 
             if (this.getAvailable()) {
@@ -204,8 +204,14 @@ class YamahaReceiverDevice extends Homey.Device {
                 this.setUnavailable().catch(this.error);
             }
 
-            if (error.code !== 'EHOSTUNREACH') {
-                throw error;
+            for (let i in errors) {
+                Log.captureException(errors[i]);
+            }
+
+            for (let i in errors) {
+                if (errors[i].code !== 'EHOSTUNREACH' && errors[i].code !== 'ECONNREFUSED') {
+                    throw errors[i];
+                }
             }
         });
     }

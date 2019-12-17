@@ -1,4 +1,8 @@
 {
+  "0.5.2": {
+    "en": "Even more error logging.",
+    "nl": "Nog meer error logging toegevoegd."
+  },
   "0.5.1": {
     "en": "Added better error logging.",
     "nl": "Betere error logging toegevoegd."
