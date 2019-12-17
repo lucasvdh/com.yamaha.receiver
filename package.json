@@ -4,6 +4,7 @@
   "version": "0.1.2",
   "dependencies": {
     "axios": "^0.19.0",
+    "homey-log": "^1.0.6",
     "html-entities": "^1.2.1",
     "xml2js": "^0.4.22"
   },
