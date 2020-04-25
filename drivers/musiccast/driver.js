@@ -41,9 +41,9 @@ class YamahaMusicCastDriver extends Homey.Driver {
             this.getClient(pairingDevice.data.ipAddress).getDeviceInfo().then(deviceInfo => {
                 this.getClient(pairingDevice.data.ipAddress).getName().then(name => {
                     this.getClient(pairingDevice.data.ipAddress).getFeatures().then(features => {
-                        pairingDevice.name = name.text + ': ' + device.model_name;
+                        pairingDevice.name = name.text + ': ' + deviceInfo.model_name;
                         pairingDevice.data.id = deviceInfo.device_id;
-                        pairingDevice.data.name = name.text + ': ' + device.model_name;
+                        pairingDevice.data.name = name.text + ': ' + deviceInfo.model_name;
 
                         callback(null, [pairingDevice]);
                     });
