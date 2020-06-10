@@ -1,7 +1,7 @@
 "use strict";
 
 const Homey = require('homey');
-const Log = require('homey-log').Log;
+const Log = require('../../lib/Log/Log');
 const YamahaReceiverClient = require('../../lib/YamahaReceiver/YamahaReceiverClient');
 const SurroundProgramEnum = require('../../lib/YamahaReceiver/Enums/SurroundProgramEnum');
 const InputEnum = require('../../lib/YamahaReceiver/Enums/InputEnum');
@@ -148,11 +148,30 @@ class YamahaReceiverDevice extends Homey.Device {
                 .then(() => {
                     this.runMonitor();
                 })
-                .catch(error => {
-                    Log.captureException(error);
+                .catch(errors => {
+                    this.deviceLog('monitor failed updating device values');
 
-                    if (error.code !== 'EHOSTUNREACH' && error.code !== 'ECONNREFUSED') {
-                        throw error;
+                    if (this.getAvailable()) {
+                        this.setCapabilityValue('onoff', false).catch(this.error);
+                        this.setUnavailable().catch(this.error);
+                    }
+
+                    if (Array.isArray(errors)) {
+                        for (let i in errors) {
+                            let error = errors[i];
+
+                            Log.captureException(error);
+
+                            if (error.code !== 'EHOSTUNREACH' && error.code !== 'ECONNREFUSED') {
+                                throw error;
+                            }
+                        }
+                    } else {
+                        Log.captureException(errors);
+
+                        if (errors.code !== 'EHOSTUNREACH' && errors.code !== 'ECONNREFUSED') {
+                            throw errors;
+                        }
                     }
 
                     this.runMonitor();
@@ -183,37 +202,29 @@ class YamahaReceiverDevice extends Homey.Device {
     }
 
     updateDevice() {
-        return Promise.all([
-            this.getClient().getState().then((receiverState) => {
-                this.syncReceiverStateToCapabilities(receiverState);
+        return this.getClient().getState().then((receiverState) => {
+            this.syncReceiverStateToCapabilities(receiverState);
 
-                this.deviceLog('monitor updated device values');
+            this.deviceLog('monitor updated device values');
 
-                if (!this.getAvailable()) {
-                    this.setAvailable().catch(this.error)
-                }
-            }),
-            this.getClient().getPlayInfo().then(playInfo => {
-                this.syncReceiverPlayIntoToCapabilities(playInfo);
-            })
-        ]).catch(errors => {
-            this.deviceLog('monitor failed updating device values');
-
-            if (this.getAvailable()) {
-                this.setCapabilityValue('onoff', false).catch(this.error);
-                this.setUnavailable().catch(this.error);
-            }
-
-            for (let i in errors) {
-                Log.captureException(errors[i]);
-            }
-
-            for (let i in errors) {
-                if (errors[i].code !== 'EHOSTUNREACH' && errors[i].code !== 'ECONNREFUSED') {
-                    throw errors[i];
-                }
+            if (!this.getAvailable()) {
+                this.setAvailable().catch(this.error)
             }
         });
+        // return Promise.all([
+        //     this.getClient().getState().then((receiverState) => {
+        //         this.syncReceiverStateToCapabilities(receiverState);
+        //
+        //         this.deviceLog('monitor updated device values');
+        //
+        //         if (!this.getAvailable()) {
+        //             this.setAvailable().catch(this.error)
+        //         }
+        //     }),
+        //     this.getClient().getPlayInfo().then(playInfo => {
+        //         this.syncReceiverPlayIntoToCapabilities(playInfo);
+        //     })
+        // ]);
     }
 
     _onCapabilitiesSet(valueObj, optsObj) {

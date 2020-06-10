@@ -4,6 +4,7 @@ const Homey = require('homey');
 const axios = require('axios');
 const xml2js = require('xml2js');
 const YamahaReceiverClient = require('../../lib/YamahaReceiver/YamahaReceiverClient.js');
+const Log = require('../../lib/Log/Log');
 
 class YamahaReceiverDriver extends Homey.Driver {
     onInit(data) {
@@ -41,7 +42,10 @@ class YamahaReceiverDriver extends Homey.Driver {
                     } else {
                         callback(null, devices);
                     }
-                }).catch(callback);
+                }).catch(error => {
+                    Log.captureException(error);
+                    callback(error);
+                });
             }
         });
 
@@ -84,6 +88,7 @@ class YamahaReceiverDriver extends Homey.Driver {
 
                     socket.showView('list_devices');
                 }).catch(error => {
+                    Log.captureException(error);
                     socket.showView('search_device');
                     socket.emit('error', error);
                 });
@@ -117,6 +122,7 @@ class YamahaReceiverDriver extends Homey.Driver {
             });
             callback(null, true)
         } catch (error) {
+            Log.captureException(error);
             callback(error)
         }
     }
@@ -130,7 +136,7 @@ class YamahaReceiverDriver extends Homey.Driver {
             }).catch(error => {
                 resolve(false);
             });
-        }).catch(this.error);
+        }).catch(Log.captureException);
     }
 
     getDeviceNameFromSSDPDetailsLocation(ssdpDetailsLocation, defaultName) {
@@ -158,10 +164,10 @@ class YamahaReceiverDriver extends Homey.Driver {
                                 resolve(defaultName);
                             }
                         } else {
-                            resolve(false);
+                            reject('The xml does not contain a yamaha:X_device element');
                         }
                     });
-            });
+            }).catch(reject);
         });
     }
 
@@ -188,8 +194,9 @@ class YamahaReceiverDriver extends Homey.Driver {
 
                 resolve(device);
             }).catch((error) => {
+                Log.captureException(error);
                 console.log(error);
-                resolve(device);
+                resolve(null);
             });
         });
     }

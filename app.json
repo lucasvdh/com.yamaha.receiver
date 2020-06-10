@@ -1,6 +1,6 @@
 {
   "id": "martens.yamaha",
-  "version": "0.5.1",
+  "version": "0.5.5",
   "compatibility": ">=3.0.0",
   "sdk": 2,
   "name": {
@@ -461,13 +461,7 @@
         "surround_enhancer",
         "sound_direct",
         "sound_extra_bass",
-        "sound_adaptive_drc",
-        "speaker_playing",
-        "speaker_next",
-        "speaker_prev",
-        "speaker_artist",
-        "speaker_track",
-        "speaker_album"
+        "sound_adaptive_drc"
       ],
       "pair": [
         {

@@ -1,5 +1,26 @@
 'use strict';
 
+
+// const Entities = new (require('html-entities').XmlEntities)();
+//
+// console.log(Entities.decode('test'));
+// console.log(Entities.decode(null));
+//
+// getTrackFromMeta(metaInfoResult) {
+//     let track = null;
+//
+//     if (typeof metaInfoResult['Track'] !== "undefined") {
+//         track = metaInfoResult['Track'][0];
+//     } else if (typeof metaInfoResult['Song'] !== "undefined") {
+//         track = metaInfoResult['Song'][0];
+//     }
+//
+//     return Entities.decode(track);
+// }
+//
+// return;
+
+const YamahaReceiverClient = require('./lib/YamahaReceiver/YamahaReceiverClient');
 // const InputEnum = require('./lib/YamahaReceiver/enums/InputEnum');
 //
 // console.log(Object.values(InputEnum).map(value => {
@@ -9,7 +30,46 @@
 //     };
 // }))
 
-// let client = new YamahaReceiverClient('192.168.1.8', 'Main_Zone');
+let client = new YamahaReceiverClient('192.168.1.8');
+let supportedInputs = {
+    'HDMI1': 'getMainZone',
+    'HDMI2': 'getMainZone',
+    'HDMI3': 'getMainZone',
+    'HDMI4': 'getMainZone',
+    'HDMI5': 'getMainZone',
+    'HDMI6': 'getMainZone',
+    'HDMI7': 'getMainZone',
+    'HDMI8': 'getMainZone',
+    'AV1': 'getMainZone',
+    'AV2': 'getMainZone',
+    'AV3': 'getMainZone',
+    'AV4': 'getMainZone',
+    'AV5': 'getMainZone',
+    'AV6': 'getMainZone',
+    'AUDIO1': 'getMainZone',
+    'AUDIO2': 'getMainZone',
+    'AUDIO3': 'getMainZone',
+    'TUNER': 'getTunerZone',
+    'AirPlay': 'getAirPlayZone',
+    'Spotify': 'getSpotifyZone',
+    'IPOD_USB': 'getIPodUSBZone',
+    'USB': 'getUSBZone',
+    'NET_RADIO': 'getNetRadioZone',
+}
+
+// console.log(supportedInputs['Spotify']);
+//
+client.getState().then(result => {
+    console.log('succes', result);
+});
+
+// client.getPlayInfo().then(result => {
+//     console.log('succes', result);
+// }).catch(error => {
+//    console.error('error', error);
+// });
+
+return;
 //
 // let percentileVolume = 25,
 //     decibelVolume = (((100 - (percentileVolume + 19.5)) * 10) * -1);

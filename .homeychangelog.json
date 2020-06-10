@@ -1,4 +1,16 @@
 {
+  "0.5.5": {
+    "en": "Stability improvements.",
+    "nl": "Stabiliteitsverbeteringen."
+  },
+  "0.5.4": {
+    "en": "Implement new logger.",
+    "nl": "Implementeer nieuwe logger."
+  },
+  "0.5.3": {
+    "en": "Even more error logging.",
+    "nl": "Nog meer error logging toegevoegd."
+  },
   "0.5.2": {
     "en": "Even more error logging.",
     "nl": "Nog meer error logging toegevoegd."
