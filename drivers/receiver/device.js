@@ -162,14 +162,22 @@ class YamahaReceiverDevice extends Homey.Device {
 
                             Log.captureException(error);
 
-                            if (error.code !== 'EHOSTUNREACH' && error.code !== 'ECONNREFUSED') {
+                            if (
+                                error.code !== 'EHOSTUNREACH'
+                                && error.code !== 'ECONNREFUSED'
+                                && error.code !== 'ECONNRESET'
+                            ) {
                                 throw error;
                             }
                         }
                     } else {
                         Log.captureException(errors);
 
-                        if (errors.code !== 'EHOSTUNREACH' && errors.code !== 'ECONNREFUSED') {
+                        if (
+                            errors.code !== 'EHOSTUNREACH'
+                            && errors.code !== 'ECONNREFUSED'
+                            && errors.code !== 'ECONNRESET'
+                        ) {
                             throw errors;
                         }
                     }
