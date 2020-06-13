@@ -1,4 +1,8 @@
 {
+  "0.6.0": {
+    "en": "Stability improvements, fixed input and surround device trigger and improved auto discovery",
+    "nl": "Stabiliteitsverbeteringen, input en surround apparaat triggers gefixt en automatische apparaat detectie verbeterd."
+  },
   "0.5.6": {
     "en": "Fixed connection reset handling.",
     "nl": "Connectie reset bug verholpen."
