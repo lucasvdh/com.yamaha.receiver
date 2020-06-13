@@ -1,4 +1,8 @@
 {
+  "0.6.2": {
+    "en": "Stability improvements.",
+    "nl": "Stabiliteitsverbeteringen."
+  },
   "0.6.1": {
     "en": "Fixed action card trigger issues and added previous, next, play, pause capabilities and flow actions.",
     "nl": "Problemen met flow triggers en acties opgelost en vorige, volgende afspeel-, pauzemogelijkheden en flow acties toegevoegd."

@@ -210,7 +210,7 @@ class YamahaReceiverDevice extends Homey.Device {
                                 && error.code !== 'ECONNRESET'
                                 && error.code !== 'ETIMEDOUT'
                             ) {
-                                throw error;
+                                // throw error;
                             }
                         }
                     } else {
@@ -222,7 +222,7 @@ class YamahaReceiverDevice extends Homey.Device {
                             && errors.code !== 'ECONNRESET'
                             && errors.code !== 'ETIMEDOUT'
                         ) {
-                            throw errors;
+                            // throw errors;
                         }
                     }
 
