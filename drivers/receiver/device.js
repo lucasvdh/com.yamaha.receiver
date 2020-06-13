@@ -13,6 +13,7 @@ const UNAVAILABLE_UPDATE_INTERVAL = 60000;
 class YamahaReceiverDevice extends Homey.Device {
 
     onInit() {
+        this.deleted = false;
         this._data = this.getData();
         this._settings = this.getSettings();
 
@@ -51,19 +52,15 @@ class YamahaReceiverDevice extends Homey.Device {
         });
         this.registerCapabilityListener('input_selected', value => {
             return this.getClient().setInput(value).then(() => {
-                this.inputChangedTrigger.trigger(this, {
-                    input: {
-                        id: value
-                    }
-                }).catch(this.error)
+                return this.inputChangedTrigger.trigger(this, {
+                    input: value
+                }).catch(this.error);
             }).catch(this.error);
         });
         this.registerCapabilityListener('surround_program', value => {
             return this.getClient().setSurroundProgram(value).then(() => {
                 this.surroundProgramChangedTrigger.trigger(this, {
-                    surround_program: {
-                        id: value
-                    }
+                    surround_program: value
                 }).then(this.log).catch(this.error)
             }).catch(this.error);
         })
@@ -108,7 +105,11 @@ class YamahaReceiverDevice extends Homey.Device {
         this.changeInputAction = new Homey.FlowCardAction('change_input').register();
         this.changeInputAction
             .registerRunListener((args, state) => {
-                return this.getClient().setInput(args.input.id).catch(this.error);
+                return this.getClient().setInput(args.input.id).then(() => {
+                    return this.inputChangedTrigger.trigger(this, {
+                        input: args.input.id
+                    });
+                }).catch(this.error);
             });
         this.changeInputAction
             .getArgument('input')
@@ -126,7 +127,11 @@ class YamahaReceiverDevice extends Homey.Device {
         this.changeSurroundProgramAction = new Homey.FlowCardAction('change_surround_program').register();
         this.changeSurroundProgramAction
             .registerRunListener((args, state) => {
-                return this.getClient().setSurroundProgram(args.surround_program.id).catch(this.error);
+                return this.getClient().setSurroundProgram(args.surround_program.id).then(() => {
+                    return this.surroundProgramChangedTrigger.trigger(this, {
+                        surround_program: args.surround_program.id
+                    });
+                }).catch(this.error);
             });
         this.changeSurroundProgramAction
             .getArgument('surround_program')
@@ -143,6 +148,10 @@ class YamahaReceiverDevice extends Homey.Device {
     }
 
     runMonitor() {
+        if (this.deleted) {
+            return;
+        }
+
         setTimeout(() => {
             this.updateDevice()
                 .then(() => {
@@ -166,6 +175,7 @@ class YamahaReceiverDevice extends Homey.Device {
                                 error.code !== 'EHOSTUNREACH'
                                 && error.code !== 'ECONNREFUSED'
                                 && error.code !== 'ECONNRESET'
+                                && error.code !== 'ETIMEDOUT'
                             ) {
                                 throw error;
                             }
@@ -177,6 +187,7 @@ class YamahaReceiverDevice extends Homey.Device {
                             errors.code !== 'EHOSTUNREACH'
                             && errors.code !== 'ECONNREFUSED'
                             && errors.code !== 'ECONNRESET'
+                            && errors.code !== 'ETIMEDOUT'
                         ) {
                             throw errors;
                         }
@@ -279,6 +290,11 @@ class YamahaReceiverDevice extends Homey.Device {
         this.setCapabilityValue('speaker_track', playInfo.track).catch(this.error);
         this.setCapabilityValue('speaker_album', playInfo.album).catch(this.error);
         this.setCapabilityValue('speaker_artist', playInfo.artist).catch(this.error);
+    }
+
+    onDeleted() {
+        console.log('deleted device');
+        this.deleted = true;
     }
 }
 
