@@ -79,20 +79,32 @@ class YamahaReceiverDevice extends Homey.Device {
         this.registerCapabilityListener('sound_adaptive_drc', value => {
             return this.getClient().setSoundAdaptiveDRC(value).catch(this.error);
         });
-        this.registerCapabilityListener('speaker_playing', value => {
-            return value
-                ? this.getClient().play().catch(this.error)
-                : this.getClient().pause().catch(this.error);
+        // this.registerCapabilityListener('speaker_playing', value => {
+        //     return value
+        //         ? this.getClient().play().catch(this.error)
+        //         : this.getClient().pause().catch(this.error);
+        // });
+        // this.registerCapabilityListener('speaker_next', value => {
+        //     return this.getClient().next().then(() => {
+        //         return this.updateDevice();
+        //     }).catch(this.error);
+        // });
+        // this.registerCapabilityListener('speaker_prev', value => {
+        //     return this.getClient().previous().then(() => {
+        //         return this.updateDevice();
+        //     }).catch(this.error);
+        // });
+        this.registerCapabilityListener('media_previous', value => {
+            return this.getClient().previous().catch(this.error);
         });
-        this.registerCapabilityListener('speaker_next', value => {
-            return this.getClient().next().then(() => {
-                return this.updateDevice();
-            }).catch(this.error);
+        this.registerCapabilityListener('media_next', value => {
+            return this.getClient().next().catch(this.error);
         });
-        this.registerCapabilityListener('speaker_prev', value => {
-            return this.getClient().previous().then(() => {
-                return this.updateDevice();
-            }).catch(this.error);
+        this.registerCapabilityListener('media_play', value => {
+            return this.getClient().play().catch(this.error);
+        });
+        this.registerCapabilityListener('media_pause', value => {
+            return this.getClient().pause().catch(this.error);
         });
     }
 
@@ -144,6 +156,27 @@ class YamahaReceiverDevice extends Homey.Device {
                         };
                     })
                 );
+            });
+
+        this.mediaPreviousAction = new Homey.FlowCardAction('media_previous').register();
+        this.mediaPreviousAction
+            .registerRunListener((args, state) => {
+                return this.getClient().previous().catch(this.error);
+            });
+        this.mediaNextAction = new Homey.FlowCardAction('media_next').register();
+        this.mediaNextAction
+            .registerRunListener((args, state) => {
+                return this.getClient().next().catch(this.error);
+            });
+        this.mediaPlayAction = new Homey.FlowCardAction('media_play').register();
+        this.mediaPlayAction
+            .registerRunListener((args, state) => {
+                return this.getClient().play().catch(this.error);
+            });
+        this.mediaPauseAction = new Homey.FlowCardAction('media_pause').register();
+        this.mediaPauseAction
+            .registerRunListener((args, state) => {
+                return this.getClient().pause().catch(this.error);
             });
     }
 
@@ -273,6 +306,26 @@ class YamahaReceiverDevice extends Homey.Device {
     }
 
     syncReceiverStateToCapabilities(state) {
+        if (this.getCapabilityValue('input_selected') !== state.input.selected) {
+            this.inputChangedTrigger.trigger(this, {
+                input: state.input.selected
+            }).catch(this.error);
+        }
+
+        if (this.getCapabilityValue('surround_program') !== state.surround.program) {
+            this.surroundProgramChangedTrigger.trigger(this, {
+                surround_program: state.surround.program
+            }).catch(this.error)
+        }
+
+        if (this.getCapabilityValue('volume_mute') !== state.volume.muted) {
+            if (state.volume.muted) {
+                this.mutedTrigger.trigger(this).catch(this.error);
+            } else {
+                this.unmutedTrigger.trigger(this).catch(this.error);
+            }
+        }
+
         this.setCapabilityValue('onoff', state.power).catch(this.error);
         this.setCapabilityValue('volume_set', state.volume.current / 100).catch(this.error);
         this.setCapabilityValue('volume_mute', state.volume.muted).catch(this.error);
@@ -292,8 +345,13 @@ class YamahaReceiverDevice extends Homey.Device {
         this.setCapabilityValue('speaker_artist', playInfo.artist).catch(this.error);
     }
 
+    onSettings(oldSettings, newSettings, changedKeys, callback) {
+        this._settings = newSettings;
+
+        callback();
+    }
+
     onDeleted() {
-        console.log('deleted device');
         this.deleted = true;
     }
 }

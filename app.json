@@ -1,6 +1,6 @@
 {
   "id": "martens.yamaha",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "compatibility": ">=3.0.0",
   "sdk": 2,
   "name": {
@@ -388,6 +388,18 @@
       "uiComponent": "button",
       "uiQuickAction": true
     },
+    "surround_straight": {
+      "type": "boolean",
+      "title": {
+        "en": "Straight audio",
+        "nl": "Straight audio",
+        "de": "Straight Audio"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "button",
+      "uiQuickAction": true
+    },
     "surround_enhancer": {
       "type": "boolean",
       "title": {
@@ -435,6 +447,54 @@
       "setable": true,
       "uiComponent": "button",
       "uiQuickAction": true
+    },
+    "media_previous": {
+      "type": "boolean",
+      "title": {
+        "en": "Previous",
+        "nl": "Vorige",
+        "de": "Zurück"
+      },
+      "getable": false,
+      "setable": true,
+      "uiComponent": "button",
+      "uiQuickAction": true
+    },
+    "media_next": {
+      "type": "boolean",
+      "title": {
+        "en": "Next",
+        "nl": "Volgende",
+        "de": "Nächster"
+      },
+      "getable": false,
+      "setable": true,
+      "uiComponent": "button",
+      "uiQuickAction": true
+    },
+    "media_play": {
+      "type": "boolean",
+      "title": {
+        "en": "Play",
+        "nl": "Play",
+        "de": "Play"
+      },
+      "getable": false,
+      "setable": true,
+      "uiComponent": "button",
+      "uiQuickAction": true
+    },
+    "media_pause": {
+      "type": "boolean",
+      "title": {
+        "en": "Pause",
+        "nl": "Pauze",
+        "de": "Pause"
+      },
+      "getable": false,
+      "setable": true,
+      "uiComponent": "button",
+      "uiQuickAction": true
     }
   },
   "drivers": [
@@ -461,7 +521,11 @@
         "surround_enhancer",
         "sound_direct",
         "sound_extra_bass",
-        "sound_adaptive_drc"
+        "sound_adaptive_drc",
+        "media_previous",
+        "media_next",
+        "media_play",
+        "media_pause"
       ],
       "pair": [
         {
@@ -848,6 +912,86 @@
               "nl": "Regelnummer",
               "de": "Zeilennummer"
             }
+          }
+        ]
+      },
+      {
+        "id": "media_previous",
+        "title": {
+          "en": "Previous",
+          "nl": "Vorige",
+          "de": "Zurück"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select receiver",
+              "nl": "Selecteer versterker",
+              "de": "Verstärker auswählen"
+            },
+            "filter": "driver_id=receiver"
+          }
+        ]
+      },
+      {
+        "id": "media_next",
+        "title": {
+          "en": "Next",
+          "nl": "Volgende",
+          "de": "Nächster"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select receiver",
+              "nl": "Selecteer versterker",
+              "de": "Verstärker auswählen"
+            },
+            "filter": "driver_id=receiver"
+          }
+        ]
+      },
+      {
+        "id": "media_play",
+        "title": {
+          "en": "Play",
+          "nl": "Play",
+          "de": "Play"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select receiver",
+              "nl": "Selecteer versterker",
+              "de": "Verstärker auswählen"
+            },
+            "filter": "driver_id=receiver"
+          }
+        ]
+      },
+      {
+        "id": "media_pause",
+        "title": {
+          "en": "Pause",
+          "nl": "Pauze",
+          "de": "Pause"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select receiver",
+              "nl": "Selecteer versterker",
+              "de": "Verstärker auswählen"
+            },
+            "filter": "driver_id=receiver"
           }
         ]
       }

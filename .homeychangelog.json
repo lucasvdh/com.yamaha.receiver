@@ -1,4 +1,8 @@
 {
+  "0.6.1": {
+    "en": "Fixed action card trigger issues and added previous, next, play, pause capabilities and flow actions.",
+    "nl": "Problemen met flow triggers en acties opgelost en vorige, volgende afspeel-, pauzemogelijkheden en flow acties toegevoegd."
+  },
   "0.6.0": {
     "en": "Stability improvements, fixed input and surround device trigger and improved auto discovery",
     "nl": "Stabiliteitsverbeteringen, input en surround apparaat triggers gefixt en automatische apparaat detectie verbeterd."
