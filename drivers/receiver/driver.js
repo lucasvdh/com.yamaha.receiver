@@ -4,7 +4,9 @@ const Homey = require('homey');
 const axios = require('axios');
 const xml2js = require('xml2js');
 const YamahaReceiverClient = require('../../lib/YamahaReceiver/YamahaReceiverClient.js');
-const Log = require('../../lib/Log/Log');
+const Log = require('../../lib/Log');
+const {XMLMinifier} = require('../../lib/XMLMinifier')
+const minifier = XMLMinifier();
 
 class YamahaReceiverDriver extends Homey.Driver {
     onInit(data) {
@@ -142,9 +144,24 @@ class YamahaReceiverDriver extends Homey.Driver {
     getDeviceNameFromSSDPDetailsLocation(ssdpDetailsLocation, defaultName) {
         return new Promise((resolve, reject) => {
             axios.get(ssdpDetailsLocation).then(data => {
+                Log.addBreadcrumb(
+                    'ssdp',
+                    'Got SSDP XML response',
+                    {
+                        ssdpXML: minifier.minify(data.data)
+                    }
+                );
+
                 xml2js.parseStringPromise(data.data)
                     .then(result => {
                         if (typeof result.root['yamaha:X_device'] !== "undefined") {
+                            Log.addBreadcrumb(
+                                'ssdp',
+                                'Found yamaha:X_device element in SSDP XML',
+                                {
+                                    'yamaha:X_device': JSON.stringify(result.root['yamaha:X_device'])
+                                }
+                            );
                             if (
                                 typeof result.root !== "undefined"
                                 && typeof result.root.device !== "undefined"
@@ -159,11 +176,33 @@ class YamahaReceiverDriver extends Homey.Driver {
                                     friendlyName = xmlDevice.friendlyName[0],
                                     modelName = xmlDevice.modelName[0];
 
+                                Log.addBreadcrumb(
+                                    'ssdp',
+                                    'Found device in SSDP XML',
+                                    {
+                                        device: JSON.stringify(xmlDevice)
+                                    }
+                                );
+
                                 resolve(friendlyName + ' - ' + modelName);
                             } else {
+                                Log.addBreadcrumb(
+                                    'ssdp',
+                                    'Did not find device name in SSDP XML, returning default name',
+                                    {},
+                                    Log.Severity.Warning
+                                );
+
                                 resolve(defaultName);
                             }
                         } else {
+                            Log.addBreadcrumb(
+                                'ssdp',
+                                'yamaha:X_device not found in SSDP XML',
+                                {},
+                                Log.Severity.Warning
+                            );
+
                             reject('The xml does not contain a yamaha:X_device element');
                         }
                     });
@@ -172,6 +211,22 @@ class YamahaReceiverDriver extends Homey.Driver {
     }
 
     getDeviceByDiscoveryResult(discoveryResult) {
+        Log.addBreadcrumb(
+            'ssdp',
+            'Found discovery result',
+            {
+                discoveryResult: discoveryResult
+            }
+        );
+
+        if (typeof discoveryResult.headers === "undefined"
+            || discoveryResult.headers === null
+            || typeof discoveryResult.headers.location === "undefined"
+            || discoveryResult.headers.location === null
+        ) {
+            Log.captureMessage('Yamaha Receiver discovery result does not contain ssdp details location.');
+        }
+
         let ssdpDetailsLocation = discoveryResult.headers.location,
             device = {
                 id: discoveryResult.id,
@@ -194,8 +249,11 @@ class YamahaReceiverDriver extends Homey.Driver {
 
                 resolve(device);
             }).catch((error) => {
-                Log.captureException(error);
-                console.log(error);
+                if (typeof error === "string") {
+                    Log.captureMessage(error);
+                } else {
+                    Log.captureException(error);
+                }
                 resolve(null);
             });
         });
