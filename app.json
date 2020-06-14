@@ -1,17 +1,17 @@
 {
   "id": "martens.yamaha",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "compatibility": ">=3.0.0",
   "sdk": 2,
   "name": {
-    "en": "Yamaha receiver",
-    "nl": "Yamaha versterker",
-    "de": "Yamaha Verstärker"
+    "en": "Yamaha",
+    "nl": "Yamaha",
+    "de": "Yamaha"
   },
   "description": {
-    "en": "Adds support for Yamaha receivers.",
-    "nl": "Voegt ondersteuning voor Yamaha versterkers.",
-    "de": "Fügt Unterstützung für Yamaha-Verstärker hinzu."
+    "en": "Adds support for Yamaha AV receivers and MusicCast devices.",
+    "nl": "Voegt ondersteuning voor Yamaha AV-ontvangers en MusicCast apparaten.",
+    "de": "Fügt Unterstützung für Yamaha AV-Receiver und MusicCast-Geräte hinzu."
   },
   "category": [
     "music",
@@ -21,12 +21,18 @@
     "en": [
       "receiver",
       "amplifier",
-      "audio"
+      "audio",
+      "musiccast",
+      "music",
+      "cast"
     ],
     "nl": [
       "ontvanger",
       "versterker",
-      "audio"
+      "audio",
+      "musiccast",
+      "music",
+      "cast"
     ]
   },
   "permissions": [],
@@ -584,9 +590,9 @@
     {
       "id": "receiver",
       "name": {
-        "en": "Yamaha receiver",
-        "nl": "Yamaha versterker",
-        "de": "Yamaha Verstärker"
+        "en": "Yamaha AV Receiver",
+        "nl": "Yamaha AV-ontvanger",
+        "de": "Yamaha AV-Receiver"
       },
       "images": {
         "large": "drivers/receiver/assets/images/large.png",
@@ -656,9 +662,9 @@
               },
               "value": "0.0.0.0",
               "hint": {
-                "en": "IP address of your Yamaha receiver.",
-                "nl": "IP-adres van uw Yamaha versterker.",
-                "de": "IP-Adresse Ihres Yamaha-Empfängers."
+                "en": "IP address of your Yamaha AV Receiver.",
+                "nl": "IP-adres van uw Yamaha AV-ontvanger.",
+                "de": "IP-Adresse Ihres Yamaha AV-Receiver."
               }
             },
             {
@@ -791,9 +797,9 @@
             "name": "device",
             "type": "device",
             "placeholder": {
-              "en": "Select receiver",
-              "nl": "Selecteer versterker",
-              "de": "Verstärker auswählen"
+              "en": "Select AV Receiver",
+              "nl": "Selecteer AV-ontvanger",
+              "de": "Wählen Sie AV-Receiver"
             },
             "filter": "driver_id=receiver"
           }
@@ -823,9 +829,9 @@
             "name": "device",
             "type": "device",
             "placeholder": {
-              "en": "Select receiver",
-              "nl": "Selecteer versterker",
-              "de": "Verstärker auswählen"
+              "en": "Select AV Receiver",
+              "nl": "Selecteer AV-ontvanger",
+              "de": "Wählen Sie AV-Receiver"
             },
             "filter": "driver_id=receiver"
           }
@@ -834,18 +840,18 @@
       {
         "id": "muted",
         "title": {
-          "en": "Amplifier was muted",
-          "nl": "Versterker is gedempt",
-          "de": "Verstärker wurde stummgeschaltet"
+          "en": "AV Receiver was muted",
+          "nl": "AV-ontvanger is gedempt",
+          "de": "AV-Receiver ist stummgeschaltet"
         },
         "args": [
           {
             "name": "device",
             "type": "device",
             "placeholder": {
-              "en": "Select receiver",
-              "nl": "Selecteer versterker",
-              "de": "Verstärker auswählen"
+              "en": "Select AV Receiver",
+              "nl": "Selecteer AV-ontvanger",
+              "de": "Wählen Sie AV-Receiver"
             },
             "filter": "driver_id=receiver"
           }
@@ -854,18 +860,18 @@
       {
         "id": "unmuted",
         "title": {
-          "en": "Amplifier was unmuted",
-          "nl": "Versterker is ongedempt",
-          "de": "Verstärker ist ungedämpft"
+          "en": "AV Receiver was unmuted",
+          "nl": "AV-ontvanger is ongedempt",
+          "de": "AV-Receiver ist ungedämpft"
         },
         "args": [
           {
             "name": "device",
             "type": "device",
             "placeholder": {
-              "en": "Select receiver",
-              "nl": "Selecteer versterker",
-              "de": "Verstärker auswählen"
+              "en": "Select AV Receiver",
+              "nl": "Selecteer AV-ontvanger",
+              "de": "Wählen Sie AV-Receiver"
             },
             "filter": "driver_id=receiver"
           }
@@ -885,9 +891,9 @@
             "name": "device",
             "type": "device",
             "placeholder": {
-              "en": "Select receiver",
-              "nl": "Selecteer versterker",
-              "de": "Verstärker auswählen"
+              "en": "Select AV Receiver",
+              "nl": "Selecteer AV-ontvanger",
+              "de": "Wählen Sie AV-Receiver"
             },
             "filter": "driver_id=receiver"
           },
@@ -914,9 +920,9 @@
             "name": "device",
             "type": "device",
             "placeholder": {
-              "en": "Select receiver",
-              "nl": "Selecteer versterker",
-              "de": "Verstärker auswählen"
+              "en": "Select AV Receiver",
+              "nl": "Selecteer AV-ontvanger",
+              "de": "Wählen Sie AV-Receiver"
             },
             "filter": "driver_id=receiver"
           },
@@ -948,9 +954,9 @@
             "name": "device",
             "type": "device",
             "placeholder": {
-              "en": "Select receiver",
-              "nl": "Selecteer versterker",
-              "de": "Verstärker auswählen"
+              "en": "Select AV Receiver",
+              "nl": "Selecteer AV-ontvanger",
+              "de": "Wählen Sie AV-Receiver"
             },
             "filter": "driver_id=receiver"
           },
@@ -1002,9 +1008,9 @@
             "name": "device",
             "type": "device",
             "placeholder": {
-              "en": "Select receiver",
-              "nl": "Selecteer versterker",
-              "de": "Verstärker auswählen"
+              "en": "Select AV Receiver",
+              "nl": "Selecteer AV-ontvanger",
+              "de": "Wählen Sie AV-Receiver"
             },
             "filter": "driver_id=receiver"
           }
@@ -1022,9 +1028,9 @@
             "name": "device",
             "type": "device",
             "placeholder": {
-              "en": "Select receiver",
-              "nl": "Selecteer versterker",
-              "de": "Verstärker auswählen"
+              "en": "Select AV Receiver",
+              "nl": "Selecteer AV-ontvanger",
+              "de": "Wählen Sie AV-Receiver"
             },
             "filter": "driver_id=receiver"
           }
@@ -1042,9 +1048,9 @@
             "name": "device",
             "type": "device",
             "placeholder": {
-              "en": "Select receiver",
-              "nl": "Selecteer versterker",
-              "de": "Verstärker auswählen"
+              "en": "Select AV Receiver",
+              "nl": "Selecteer AV-ontvanger",
+              "de": "Wählen Sie AV-Receiver"
             },
             "filter": "driver_id=receiver"
           }
@@ -1062,9 +1068,9 @@
             "name": "device",
             "type": "device",
             "placeholder": {
-              "en": "Select receiver",
-              "nl": "Selecteer versterker",
-              "de": "Verstärker auswählen"
+              "en": "Select AV Receiver",
+              "nl": "Selecteer AV-ontvanger",
+              "de": "Wählen Sie AV-Receiver"
             },
             "filter": "driver_id=receiver"
           }

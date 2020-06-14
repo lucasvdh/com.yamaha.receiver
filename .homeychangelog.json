@@ -1,4 +1,8 @@
 {
+  "0.7.1": {
+    "en": "New icons and descriptions.",
+    "nl": "Nieuwe iconen en beschrijvingen."
+  },
   "0.7.0": {
     "en": "Added MusicCast device support.",
     "nl": "Ondersteuning voor MusicCast-apparaten toegevoegd."
