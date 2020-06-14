@@ -1,9 +1,11 @@
 "use strict";
 
 const Homey = require('homey');
+const Log = require('../../lib/Log');
 const YamahaExtendedControlClient = require('../../lib/YamahaExtendedControl/YamahaExtendedControlClient.js');
 const SurroundProgramEnum = require('../../lib/YamahaExtendedControl/enums/SurroundProgramEnum.js');
 const InputEnum = require('../../lib/YamahaExtendedControl/enums/InputEnum.js');
+const fetch = require('node-fetch');
 
 const CAPABILITIES_SET_DEBOUNCE = 100;
 const MINIMUM_UPDATE_INTERVAL = 5000;
@@ -21,6 +23,17 @@ class YamahaMusicCastDevice extends Homey.Device {
         this.deviceLog('registering flow card conditions');
         this.registerFlowCards();
 
+        this.setAvailable().catch(this.error);
+
+        this.albumCoverImageUrl = null;
+        this.albumCoverImage = new Homey.Image('jpg');
+        this.albumCoverImage.setUrl(null);
+        this.albumCoverImage.register()
+            .then(() => {
+                return this.setAlbumArtImage(this.albumCoverImage);
+            })
+            .catch(this.error);
+
         this.ready(() => {
             this.deviceLog('initializing monitor');
             this.runMonitor();
@@ -35,32 +48,43 @@ class YamahaMusicCastDevice extends Homey.Device {
             return this.getClient().setPower(value);
         });
         this.registerCapabilityListener('volume_set', value => {
-            return this.getClient().setVolume(value * 100);
+            return this.getClient().setVolume(value * this._settings.maxVolume);
         });
         this.registerCapabilityListener('volume_mute', value => {
             return this.getClient().setMuted(value);
         });
-        this.registerCapabilityListener('input_selected', value => {
+        this.registerCapabilityListener('yxc_input_selected', value => {
             return this.getClient().setInput(value);
         });
-        this.registerCapabilityListener('surround_program', value => {
-            return this.getClient().setSurroundProgram(value);
+        this.registerCapabilityListener('speaker_playing', value => {
+            return (
+                value
+                    ? this.getClient().play()
+                    : this.getClient().pause()
+            ).then(() => {
+                this.updateDevice().catch(this.error);
+            });
         });
-        this.registerCapabilityListener('surround_straight', value => {
-            return this.getClient().setSurroundStraight(value);
+        this.registerCapabilityListener('speaker_shuffle', value => {
+            return this.getClient().setShuffle(value);
         });
-        this.registerCapabilityListener('surround_enhancer', value => {
-            return this.getClient().setSurroundEnhancer(value);
+        this.registerCapabilityListener('speaker_next', value => {
+            this.albumCoverImage.setUrl(null);
+            this.albumCoverImage.update();
+            return this.getClient().next().then(() => {
+                this.updateDevice().catch(this.error);
+            });
         });
-        this.registerCapabilityListener('sound_direct', value => {
-            return this.getClient().setSoundDirect(value);
+        this.registerCapabilityListener('speaker_prev', value => {
+            this.albumCoverImage.setUrl(null);
+            this.albumCoverImage.update();
+            return this.getClient().previous().then(() => {
+                this.updateDevice().catch(this.error);
+            });
         });
-        this.registerCapabilityListener('sound_extra_bass', value => {
-            return this.getClient().setSoundExtraBass(value);
-        });
-        this.registerCapabilityListener('sound_adaptive_drc', value => {
-            return this.getClient().setSoundAdaptiveDRC(value);
-        });
+        // this.registerCapabilityListener('surround_program', value => {
+        //     return this.getClient().setSurroundProgram(value);
+        // });
     }
 
     registerFlowCards() {
@@ -107,13 +131,24 @@ class YamahaMusicCastDevice extends Homey.Device {
         setTimeout(() => {
             this.updateDevice()
                 .then(() => {
+                    this.deviceLog('monitor updated device values');
+
                     this.runMonitor();
                 })
-                .catch(error => {
-                    console.log(error);
+                .catch(errors => {
+                    if (this.getAvailable()) {
+                        this.setCapabilityValue('onoff', false).catch(this.error);
+                        this.setUnavailable().catch(this.error);
+                    }
 
-                    if (error.code !== 'EHOSTUNREACH') {
-                        throw error;
+                    if (Array.isArray(errors)) {
+                        for (let i in errors) {
+                            let error = errors[i];
+
+                            Log.captureException(error);
+                        }
+                    } else {
+                        Log.captureException(errors);
                     }
 
                     this.runMonitor();
@@ -135,29 +170,31 @@ class YamahaMusicCastDevice extends Homey.Device {
         return updateInterval;
     }
 
-    getIPAddress() {
-        return this._settings.ipAddress;
+    getURLBase() {
+        return this._settings.urlBase;
+    }
+
+    getServiceUrl() {
+        return this._settings.serviceUrl;
     }
 
     getZone() {
         return this._settings.zone;
     }
 
-    updateDevice(resolve, reject) {
-        return this.getClient().getState().then((receiverStatus) => {
-            this.syncMusicCastStateToCapabilities(receiverStatus);
-        }).catch(error => {
-            this.deviceLog('monitor failed updating device values');
-
-            if (this.getAvailable()) {
-                this.setCapabilityValue('onoff', false).catch(this.error);
-                this.setUnavailable().catch(this.error);
+    updateDevice() {
+        return Promise.all([
+            this.getClient().getState().then(state => {
+                this.syncMusicCastStateToCapabilities(state);
+            }),
+            this.getClient().getPlayInfo().then(playInfo => {
+                this.syncMusicCastPlayInfoToCapabilities(playInfo);
+            }),
+        ]).then(() => {
+            if (!this.getAvailable()) {
+                this.setAvailable().catch(this.error);
             }
-
-            if (error.code !== 'EHOSTUNREACH') {
-                throw error;
-            }
-        });;
+        });
     }
 
     _onCapabilitiesSet(valueObj, optsObj) {
@@ -191,18 +228,65 @@ class YamahaMusicCastDevice extends Homey.Device {
      */
     getClient() {
         if (typeof this._yamahaExtendedControlClient === "undefined" || this._yamahaExtendedControlClient === null) {
-            this._yamahaExtendedControlClient = new YamahaExtendedControlClient(this.getIPAddress(), this.getZone());
+            this._yamahaExtendedControlClient =
+                new YamahaExtendedControlClient(this.getURLBase(), this.getServiceUrl(), this.getZone());
         }
 
         return this._yamahaExtendedControlClient;
     }
 
     syncMusicCastStateToCapabilities(state) {
+        if (
+            typeof this._settings.maxVolume === "undefined"
+            || this._settings.maxVolume === null
+        ) {
+            this.setSettings({
+                maxVolume: state.max_volume
+            });
+        }
+        this.max_volume = state.max_volume;
         this.setCapabilityValue('onoff', state.power).catch(this.error);
-        this.setCapabilityValue('volume_set', state.volume).catch(this.error);
+        this.setCapabilityValue('volume_set', (Math.round(state.volume / (state.max_volume / 100)) / 100)).catch(error => {
+            console.log('volume set error', (Math.round(state.volume / (state.max_volume / 100)) / 100));
+
+            return this.error(error);
+        });
         this.setCapabilityValue('volume_mute', state.muted).catch(this.error);
-        this.setCapabilityValue('input_selected', state.input).catch(this.error);
-        this.setCapabilityValue('surround_program', state.sound_program).catch(this.error);
+        this.setCapabilityValue('yxc_input_selected', state.input).catch(this.error);
+        // this.setCapabilityValue('surround_program', state.sound_program).catch(this.error);
+    }
+
+    syncMusicCastPlayInfoToCapabilities(playInfo) {
+        this.setCapabilityValue('speaker_playing', playInfo.playing).catch(this.error);
+        this.setCapabilityValue('speaker_shuffle', playInfo.shuffle).catch(this.error);
+        // this.setCapabilityValue('speaker_repeat', playInfo.repeat).catch(this.error);
+        this.setCapabilityValue('speaker_artist', playInfo.artist).catch(this.error);
+        this.setCapabilityValue('speaker_album', playInfo.album).catch(this.error);
+        this.setCapabilityValue('speaker_track', playInfo.track).catch(this.error);
+
+        // Check if the image needs to be updated
+        if (this.albumCoverImageUrl !== playInfo.albumart_url) {
+            this.albumCoverImage.setStream(async (stream) => {
+                const res = await fetch(playInfo.albumart_url);
+                if (!res.ok)
+                    throw new Error('Invalid Response');
+
+                return res.body.pipe(stream);
+            });
+            this.albumCoverImage.update();
+            this.albumCoverImageUrl = playInfo.albumart_url;
+        }
+        // this.setCapabilityValue('surround_program', state.sound_program).catch(this.error);
+    }
+
+    onSettings(oldSettings, newSettings, changedKeys, callback) {
+        this._settings = newSettings;
+
+        callback();
+    }
+
+    onDeleted() {
+        this.deleted = true;
     }
 }
 

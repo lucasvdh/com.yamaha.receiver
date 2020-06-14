@@ -1,6 +1,6 @@
 {
   "id": "martens.yamaha",
-  "version": "0.6.2",
+  "version": "0.7.0",
   "compatibility": ">=3.0.0",
   "sdk": 2,
   "name": {
@@ -70,7 +70,7 @@
   "homepage": "https://github.com/lucasvdh/com.yamaha.receiver",
   "support": "mailto:lucasvdhave@gmail.com",
   "discovery": {
-    "yamaha-receiver-discovery": {
+    "yamaha-discovery": {
       "type": "ssdp",
       "ssdp": {
         "search": "urn:schemas-upnp-org:device:MediaRenderer:1"
@@ -241,6 +241,89 @@
           "id": "AirPlay",
           "title": {
             "en": "AirPlay"
+          }
+        }
+      ]
+    },
+    "yxc_input_selected": {
+      "type": "enum",
+      "title": {
+        "en": "Selected source",
+        "nl": "Geselecteerde bron"
+      },
+      "getable": true,
+      "setable": true,
+      "values": [
+        {
+          "id": "spotify",
+          "title": {
+            "en": "Spotify"
+          }
+        },
+        {
+          "id": "server",
+          "title": {
+            "en": "Server"
+          }
+        },
+        {
+          "id": "net_radio",
+          "title": {
+            "en": "Net Radio"
+          }
+        },
+        {
+          "id": "pandora",
+          "title": {
+            "en": "Pandora"
+          }
+        },
+        {
+          "id": "airplay",
+          "title": {
+            "en": "AirPlay"
+          }
+        },
+        {
+          "id": "napster",
+          "title": {
+            "en": "Napster"
+          }
+        },
+        {
+          "id": "juke",
+          "title": {
+            "en": "Juke"
+          }
+        },
+        {
+          "id": "qobuz",
+          "title": {
+            "en": "Qobuz"
+          }
+        },
+        {
+          "id": "tidal",
+          "title": {
+            "en": "Tidal"
+          }
+        },
+        {
+          "id": "deezer",
+          "title": {
+            "en": "Deezer"
+          }
+        },
+        {
+          "id": "mc_link",
+          "title": {
+            "en": "MC Link"
+          }
+        },
+        {
+          "id": "bluetooth",
+          "title": {
+            "en": "Bluetooth"
           }
         }
       ]
@@ -510,7 +593,7 @@
         "small": "drivers/receiver/assets/images/small.png"
       },
       "class": "amplifier",
-      "discovery": "yamaha-receiver-discovery",
+      "discovery": "yamaha-discovery",
       "capabilities": [
         "onoff",
         "volume_set",
@@ -623,23 +706,30 @@
         "small": "drivers/musiccast/assets/images/small.png"
       },
       "class": "amplifier",
+      "discovery": "yamaha-discovery",
       "capabilities": [
         "onoff",
         "volume_mute",
         "volume_set",
-        "input_selected",
-        "surround_program"
+        "yxc_input_selected",
+        "speaker_playing",
+        "speaker_shuffle",
+        "speaker_artist",
+        "speaker_album",
+        "speaker_track",
+        "speaker_next",
+        "speaker_prev"
       ],
       "pair": [
-        {
-          "id": "start"
-        },
         {
           "id": "list_devices",
           "template": "list_devices",
           "navigation": {
             "next": "add_receiver"
           }
+        },
+        {
+          "id": "search_device"
         },
         {
           "id": "add_receiver",
@@ -655,21 +745,6 @@
             "de": "Allgemeine Einstellungen"
           },
           "children": [
-            {
-              "id": "ipAddress",
-              "type": "text",
-              "label": {
-                "en": "IP address",
-                "nl": "IP-adres",
-                "de": "IP Adresse"
-              },
-              "value": "0.0.0.0",
-              "hint": {
-                "en": "IP address of your Yamaha receiver.",
-                "nl": "IP-adres van uw Yamaha versterker.",
-                "de": "IP-Adresse Ihres Yamaha-Empfängers."
-              }
-            },
             {
               "id": "updateInterval",
               "type": "number",

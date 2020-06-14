@@ -1,7 +1,7 @@
 "use strict";
 
 const Homey = require('homey');
-const Log = require('../../lib/Log/Log');
+const Log = require('../../lib/Log');
 const YamahaReceiverClient = require('../../lib/YamahaReceiver/YamahaReceiverClient');
 const SurroundProgramEnum = require('../../lib/YamahaReceiver/Enums/SurroundProgramEnum');
 const InputEnum = require('../../lib/YamahaReceiver/Enums/InputEnum');

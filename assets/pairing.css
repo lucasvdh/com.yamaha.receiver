@@ -4,6 +4,12 @@ div.container {
     margin-bottom: 5px;
 }
 
+div.container-2 {
+    height: calc(100% - 105px);
+    overflow: auto;
+    margin-bottom: 5px;
+}
+
 table.pairSettings {
     font-size: 16px;
     border: none;
@@ -50,6 +56,10 @@ td.padding-bottom {
     font-size: 100%;
 }
 
+.btn:not(:last-of-type) {
+    margin-bottom: .5rem;
+}
+
 .btn-lg {
     padding: 10px 16px;
     font-size: 18px;
@@ -58,6 +68,12 @@ td.padding-bottom {
 
 .btn-block {
     display: block;
+}
+
+.btn-default {
+    color: #555;
+    background-color: #e7e7e7;
+    border: none;
 }
 
 .btn-success {

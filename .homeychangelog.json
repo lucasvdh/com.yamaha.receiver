@@ -1,4 +1,8 @@
 {
+  "0.7.0": {
+    "en": "Added MusicCast device support.",
+    "nl": "Ondersteuning voor MusicCast-apparaten toegevoegd."
+  },
   "0.6.2": {
     "en": "Stability improvements.",
     "nl": "Stabiliteitsverbeteringen."
