@@ -26,6 +26,7 @@
     "generic": "An error occured",
     "hostUnreachable": "Could not reach the amplifier on this IP address. Is the IP correct and the amplifier turned on?",
     "invalidZone": "Could reach the amplifier but the zone is probably incorrect.",
-    "connectionTimedOut": "The connection to the amplifier timed out. Is the IP correct and the amplifier turned on?"
+    "connectionTimedOut": "The connection to the amplifier timed out. Is the IP correct and the amplifier turned on?",
+    "invalidInput": "The input \"__input__\" is not supported by this device"
   }
 }

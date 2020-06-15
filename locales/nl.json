@@ -26,6 +26,7 @@
     "generic": "Er is een fout opgetreden",
     "hostUnreachable": "Kon de versterker niet bereiken op dit IP-adres. Is het IP juist en staat de versterker aan?",
     "invalidZone": "Kon de versterker bereiken maar waarschijnlijk is de zone onjuist.",
-    "connectionTimedOut": "Kon de versterker niet bereiken op dit IP-adres. Is het IP juist en staat de versterker aan?"
+    "connectionTimedOut": "Kon de versterker niet bereiken op dit IP-adres. Is het IP juist en staat de versterker aan?",
+    "invalidInput": "De input \"__input__\" wordt niet door dit apparaat ondersteund"
   }
 }

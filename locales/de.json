@@ -8,12 +8,25 @@
       "zone": "Zone",
       "zoneDescription": "Sie müssen die Zone des Geräts nur ändern, wenn Sie sie über die Yamaha-App bewusst geändert haben",
       "saveSettings": "Einstellungen speichern"
+    },
+    "search_device": {
+      "intro": "Es wurden keine Geräte gefunden. Suchen Sie manuell nach Ihrem Gerät oder versuchen Sie es erneut.",
+      "title": "Suchgerät ...",
+      "ipAddress": "IP-Adresse",
+      "ipAddressDescription": "Stellen Sie sicher, dass sich die IP-Adresse Ihres Verstärkers nicht ändert, indem Sie ihm eine statische Adresse zuweisen. <br/> <br/> Sie können dies in den Einstellungen Ihres Verstärkers unter \"Setup\" > \"Network Setup\" > \"IP Address\" oder in Ihrem Router, indem Sie die MAC-Adresse Ihres Verstärkers einer IP-Adresse zuweisen.",
+      "ipAddressDescriptionRouter": "Stellen Sie sicher, dass sich die IP-Adresse Ihres Geräts nicht ändert, indem Sie ihm eine statische Adresse zuweisen. <br/> <br/> Sie können dies in Ihrem Router tun, indem Sie die MAC-Adresse Ihres Geräts ändern. eine IP-Adresse zuweisen. ",
+      "zone": "Zone",
+      "zoneDescription": "Sie müssen die Zone des Geräts nur ändern, wenn Sie sie selbst über die Yamaha-App geändert haben",
+      "search_again": "Neue Suche",
+      "manual_search": "Manuelle Suche",
+      "submit": "Suchgerät"
     }
   },
   "error": {
     "generic": "Ein Fehler ist aufgetreten",
     "hostUnreachable": "Konnte den Verstärker unter dieser IP-Adresse nicht erreichen. Ist die IP korrekt und der Verstärker eingeschaltet?",
     "invalidZone": "Konnte den Verstärker erreichen, aber die Zone ist wahrscheinlich falsch.",
-    "connectionTimedOut": "Zeitüberschreitung bei der Verbindung zum Verstärker. Ist die IP korrekt und der Verstärker eingeschaltet?"
+    "connectionTimedOut": "Zeitüberschreitung bei der Verbindung zum Verstärker. Ist die IP korrekt und der Verstärker eingeschaltet?",
+    "invalidInput": "Die Eingabe \"__input__\" wird von diesem Gerät nicht unterstützt"
   }
 }
