@@ -185,9 +185,27 @@ class YamahaMusicCastDevice extends Homey.Device {
                         for (let i in errors) {
                             let error = errors[i];
 
-                            Log.captureException(error);
+                            if (
+                                typeof error.code === "undefined"
+                                || (
+                                    error.code !== 'EHOSTUNREACH'
+                                    && error.code !== 'ECONNREFUSED'
+                                    && error.code !== 'ECONNRESET'
+                                    && error.code !== 'ETIMEDOUT'
+                                )
+                            ) {
+                                Log.captureException(error);
+                            }
                         }
-                    } else {
+                    } else if (
+                        typeof errors.code === "undefined"
+                        || (
+                            errors.code !== 'EHOSTUNREACH'
+                            && errors.code !== 'ECONNREFUSED'
+                            && errors.code !== 'ECONNRESET'
+                            && errors.code !== 'ETIMEDOUT'
+                        )
+                    ) {
                         Log.captureException(errors);
                     }
 
@@ -332,20 +350,20 @@ class YamahaMusicCastDevice extends Homey.Device {
             });
         }
         this.max_volume = state.max_volume;
-        this.setCapabilityValue('onoff', state.power).catch(this.error);
-        this.setCapabilityValue('volume_set', (Math.round(state.volume / (state.max_volume / 100)) / 100)).catch(this.error);
-        this.setCapabilityValue('volume_mute', state.muted).catch(this.error);
-        this.setCapabilityValue('yxc_input_selected', state.input).catch(this.error);
-        // this.setCapabilityValue('surround_program', state.sound_program).catch(this.error);
+        this.setCapabilityValueSafe('onoff', state.power).catch(this.error);
+        this.setCapabilityValueSafe('volume_set', (Math.round(state.volume / (state.max_volume / 100)) / 100)).catch(this.error);
+        this.setCapabilityValueSafe('volume_mute', state.muted).catch(this.error);
+        this.setCapabilityValueSafe('yxc_input_selected', state.input).catch(this.error);
+        // this.setCapabilityValueSafe('surround_program', state.sound_program).catch(this.error);
     }
 
     syncMusicCastPlayInfoToCapabilities(playInfo) {
-        this.setCapabilityValue('speaker_playing', playInfo.playing).catch(this.error);
-        this.setCapabilityValue('speaker_shuffle', playInfo.shuffle).catch(this.error);
-        // this.setCapabilityValue('speaker_repeat', playInfo.repeat).catch(this.error);
-        this.setCapabilityValue('speaker_artist', playInfo.artist).catch(this.error);
-        this.setCapabilityValue('speaker_album', playInfo.album).catch(this.error);
-        this.setCapabilityValue('speaker_track', playInfo.track).catch(this.error);
+        this.setCapabilityValueSafe('speaker_playing', playInfo.playing).catch(this.error);
+        this.setCapabilityValueSafe('speaker_shuffle', playInfo.shuffle).catch(this.error);
+        // this.setCapabilityValueSafe('speaker_repeat', playInfo.repeat).catch(this.error);
+        this.setCapabilityValueSafe('speaker_artist', playInfo.artist).catch(this.error);
+        this.setCapabilityValueSafe('speaker_album', playInfo.album).catch(this.error);
+        this.setCapabilityValueSafe('speaker_track', playInfo.track).catch(this.error);
 
         // Check if the image needs to be updated
         if (this.albumCoverImageUrl !== playInfo.albumart_url) {
@@ -360,6 +378,23 @@ class YamahaMusicCastDevice extends Homey.Device {
             this.albumCoverImageUrl = playInfo.albumart_url;
         }
         // this.setCapabilityValue('surround_program', state.sound_program).catch(this.error);
+    }
+
+    setCapabilityValueSafe(capabilityId, value) {
+        return this.setCapabilityValue(capabilityId, value).catch(error => {
+            Log.addBreadcrumb(
+                'musiccast_device',
+                'Could not set capability value',
+                {
+                    capabilityId: capabilityId,
+                    value: value
+                },
+                Log.Severity.Error
+            );
+            Log.captureException(error);
+
+            return error;
+        })
     }
 
     onSettings(oldSettings, newSettings, changedKeys, callback) {

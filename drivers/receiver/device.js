@@ -240,28 +240,28 @@ class YamahaReceiverDevice extends Homey.Device {
                         for (let i in errors) {
                             let error = errors[i];
 
-                            Log.captureException(error);
-
                             if (
-                                error.code !== 'EHOSTUNREACH'
-                                && error.code !== 'ECONNREFUSED'
-                                && error.code !== 'ECONNRESET'
-                                && error.code !== 'ETIMEDOUT'
+                                typeof error.code === "undefined"
+                                || (
+                                    error.code !== 'EHOSTUNREACH'
+                                    && error.code !== 'ECONNREFUSED'
+                                    && error.code !== 'ECONNRESET'
+                                    && error.code !== 'ETIMEDOUT'
+                                )
                             ) {
-                                // throw error;
+                                Log.captureException(error);
                             }
                         }
-                    } else {
-                        Log.captureException(errors);
-
-                        if (
+                    } else if (
+                        typeof errors.code === "undefined"
+                        || (
                             errors.code !== 'EHOSTUNREACH'
                             && errors.code !== 'ECONNREFUSED'
                             && errors.code !== 'ECONNRESET'
                             && errors.code !== 'ETIMEDOUT'
-                        ) {
-                            // throw errors;
-                        }
+                        )
+                    ) {
+                        Log.captureException(errors);
                     }
 
                     this.runMonitor();
@@ -399,23 +399,40 @@ class YamahaReceiverDevice extends Homey.Device {
             }
         }
 
-        this.setCapabilityValue('onoff', state.power).catch(this.error);
-        this.setCapabilityValue('volume_set', state.volume.current / 100).catch(this.error);
-        this.setCapabilityValue('volume_mute', state.volume.muted).catch(this.error);
-        this.setCapabilityValue('input_selected', state.input.selected).catch(this.error);
-        this.setCapabilityValue('surround_program', state.surround.program).catch(this.error);
-        this.setCapabilityValue('surround_straight', state.surround.straight).catch(this.error);
-        this.setCapabilityValue('surround_enhancer', state.surround.enhancer).catch(this.error);
-        this.setCapabilityValue('sound_direct', state.sound.direct).catch(this.error);
-        this.setCapabilityValue('sound_extra_bass', state.sound.extraBass).catch(this.error);
-        this.setCapabilityValue('sound_adaptive_drc', state.sound.adaptiveDynamicRangeControl).catch(this.error);
+        this.setCapabilityValueSafe('onoff', state.power).catch(this.error);
+        this.setCapabilityValueSafe('volume_set', state.volume.current / 100).catch(this.error);
+        this.setCapabilityValueSafe('volume_mute', state.volume.muted).catch(this.error);
+        this.setCapabilityValueSafe('input_selected', state.input.selected).catch(this.error);
+        this.setCapabilityValueSafe('surround_program', state.surround.program).catch(this.error);
+        this.setCapabilityValueSafe('surround_straight', state.surround.straight).catch(this.error);
+        this.setCapabilityValueSafe('surround_enhancer', state.surround.enhancer).catch(this.error);
+        this.setCapabilityValueSafe('sound_direct', state.sound.direct).catch(this.error);
+        this.setCapabilityValueSafe('sound_extra_bass', state.sound.extraBass).catch(this.error);
+        this.setCapabilityValueSafe('sound_adaptive_drc', state.sound.adaptiveDynamicRangeControl).catch(this.error);
     }
 
     syncReceiverPlayIntoToCapabilities(playInfo) {
-        this.setCapabilityValue('speaker_playing', playInfo.playing).catch(this.error);
-        this.setCapabilityValue('speaker_track', playInfo.track).catch(this.error);
-        this.setCapabilityValue('speaker_album', playInfo.album).catch(this.error);
-        this.setCapabilityValue('speaker_artist', playInfo.artist).catch(this.error);
+        this.setCapabilityValueSafe('speaker_playing', playInfo.playing).catch(this.error);
+        this.setCapabilityValueSafe('speaker_track', playInfo.track).catch(this.error);
+        this.setCapabilityValueSafe('speaker_album', playInfo.album).catch(this.error);
+        this.setCapabilityValueSafe('speaker_artist', playInfo.artist).catch(this.error);
+    }
+
+    setCapabilityValueSafe(capabilityId, value) {
+        return this.setCapabilityValue(capabilityId, value).catch(error => {
+            Log.addBreadcrumb(
+                'receiver_device',
+                'Could not set capability value',
+                {
+                    capabilityId: capabilityId,
+                    value: value
+                },
+                Log.Severity.Error
+            );
+            Log.captureException(error);
+
+            return error;
+        })
     }
 
     onSettings(oldSettings, newSettings, changedKeys, callback) {
