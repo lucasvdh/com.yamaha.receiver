@@ -17,6 +17,8 @@ class YamahaReceiverDevice extends Homey.Device {
         this._data = this.getData();
         this._settings = this.getSettings();
 
+        this.fixCapabilities();
+
         this.deviceLog('registering listeners');
         this.registerListeners();
 
@@ -30,6 +32,42 @@ class YamahaReceiverDevice extends Homey.Device {
             this.runMonitor();
             this.deviceLog('initialized');
         });
+    }
+
+    fixCapabilities() {
+        let deprecatedCapabilities = [
+                'source_selected',
+                'soundprogram_selected'
+            ],
+            newCapabilities = [
+                'input_selected',
+                'surround_program',
+                'surround_straight',
+                'surround_enhancer',
+                'sound_direct',
+                'sound_extra_bass',
+                'sound_adaptive_drc',
+                'media_previous',
+                'media_next',
+                'media_play',
+                'media_pause'
+            ];
+
+        for (let i in deprecatedCapabilities) {
+            let deprecatedCapability = deprecatedCapabilities[i];
+
+            if (this.hasCapability(deprecatedCapability)) {
+                this.removeCapability(deprecatedCapability);
+            }
+        }
+
+        for (let i in newCapabilities) {
+            let newCapability = newCapabilities[i];
+
+            if (!this.hasCapability(newCapability)) {
+                this.addCapability(newCapability);
+            }
+        }
     }
 
     registerListeners() {
@@ -185,7 +223,7 @@ class YamahaReceiverDevice extends Homey.Device {
             return;
         }
 
-        setTimeout(() => {
+        this.monitorTimeout = setTimeout(() => {
             this.updateDevice()
                 .then(() => {
                     this.runMonitor();
@@ -246,11 +284,48 @@ class YamahaReceiverDevice extends Homey.Device {
     }
 
     getIPAddress() {
-        return this._settings.ipAddress;
+        if (typeof this._settings.ipaddress !== "undefined" && this._settings.ipaddress !== null) {
+            return this._settings.ipaddress;
+        }
+
+        if (typeof this._data.ipaddress !== "undefined" && this._data.ipaddress !== null) {
+            return this._data.ipaddress;
+        }
+
+        if (typeof this._settings.ipAddress !== "undefined" && this._settings.ipAddress !== null) {
+            return this._settings.ipAddress;
+        }
+
+        throw new Error('IP address (old and new) could not be found in device');
     }
 
-    getZone() {
-        return this._settings.zone;
+    getURLBase() {
+        if ((typeof this._settings.urlBase === "undefined" || this._settings.urlBase === null)
+            && typeof this.getIPAddress() !== "undefined" && this.getIPAddress() !== null) {
+            let urlBase = 'http://' + this.getIPAddress() + '/';
+
+            this.setSettings({
+                urlBase: urlBase
+            });
+
+            return urlBase;
+        }
+
+        return this._settings.urlBase;
+    }
+
+    getControlURL() {
+        if (typeof this._settings.controlURL === "undefined" || this._settings.controlURL === null) {
+            let controlURL = '/YamahaRemoteControl/ctrl';
+
+            this.setSettings({
+                controlURL: controlURL
+            });
+
+            return controlURL;
+        }
+
+        return this._settings.controlURL;
     }
 
     updateDevice() {
@@ -263,6 +338,8 @@ class YamahaReceiverDevice extends Homey.Device {
                 this.setAvailable().catch(this.error)
             }
         });
+
+        // TODO: could look at enabling play info again
         // return Promise.all([
         //     this.getClient().getState().then((receiverState) => {
         //         this.syncReceiverStateToCapabilities(receiverState);
@@ -285,10 +362,6 @@ class YamahaReceiverDevice extends Homey.Device {
         return true;
     }
 
-    onClientSuccess(error) {
-        // We got a success so the device is available, check if we need to re-enable it
-    }
-
     deviceLog(...message) {
         // console.log('data',this.getData(), 'state', this.getState(), 'settings', this.getSettings());
         this.log('Yamaha Device [' + this._data.id + ']', ...message);
@@ -299,7 +372,7 @@ class YamahaReceiverDevice extends Homey.Device {
      */
     getClient() {
         if (typeof this._yamahaReceiverClient === "undefined" || this._yamahaReceiverClient === null) {
-            this._yamahaReceiverClient = new YamahaReceiverClient(this.getIPAddress(), this.getZone());
+            this._yamahaReceiverClient = new YamahaReceiverClient(this.getURLBase(), this.getControlURL());
         }
 
         return this._yamahaReceiverClient;
@@ -353,6 +426,10 @@ class YamahaReceiverDevice extends Homey.Device {
 
     onDeleted() {
         this.deleted = true;
+
+        if (typeof this.monitorTimeout !== "undefined") {
+            clearTimeout(this.monitorTimeout)
+        }
     }
 }
 

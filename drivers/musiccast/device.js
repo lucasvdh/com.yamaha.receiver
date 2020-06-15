@@ -2,8 +2,8 @@
 
 const Homey = require('homey');
 const Log = require('../../lib/Log');
-const YamahaExtendedControlClient = require('../../lib/YamahaExtendedControl/YamahaExtendedControlClient.js');
-const SurroundProgramEnum = require('../../lib/YamahaExtendedControl/enums/SurroundProgramEnum.js');
+const YamahaExtendedControlClient = require('../../lib/YamahaExtendedControl/YamahaExtendedControlClient');
+const SurroundProgramEnum = require('../../lib/YamahaExtendedControl/enums/SurroundProgramEnum');
 const InputEnum = require('../../lib/YamahaExtendedControl/enums/InputEnum.js');
 const fetch = require('node-fetch');
 
@@ -14,8 +14,11 @@ const UNAVAILABLE_UPDATE_INTERVAL = 60000;
 class YamahaMusicCastDevice extends Homey.Device {
 
     onInit() {
+        this.deleted = false;
         this._data = this.getData();
         this._settings = this.getSettings();
+
+        this.fixCapabilities();
 
         this.deviceLog('registering listeners');
         this.registerListeners();
@@ -39,6 +42,39 @@ class YamahaMusicCastDevice extends Homey.Device {
             this.runMonitor();
             this.deviceLog('initialized');
         });
+    }
+
+    fixCapabilities() {
+        let deprecatedCapabilities = [
+                'source_selected',
+                'soundprogram_selected'
+            ],
+            newCapabilities = [
+                'yxc_input_selected',
+                'speaker_playing',
+                'speaker_shuffle',
+                'speaker_artist',
+                'speaker_album',
+                'speaker_track',
+                'speaker_next',
+                'speaker_prev'
+            ];
+
+        for (let i in deprecatedCapabilities) {
+            let deprecatedCapability = deprecatedCapabilities[i];
+
+            if (this.hasCapability(deprecatedCapability)) {
+                this.removeCapability(deprecatedCapability);
+            }
+        }
+
+        for (let i in newCapabilities) {
+            let newCapability = newCapabilities[i];
+
+            if (!this.hasCapability(newCapability)) {
+                this.addCapability(newCapability);
+            }
+        }
     }
 
     registerListeners() {
@@ -128,7 +164,11 @@ class YamahaMusicCastDevice extends Homey.Device {
     }
 
     runMonitor() {
-        setTimeout(() => {
+        if (this.deleted) {
+            return;
+        }
+
+        this.monitorTimeout = setTimeout(() => {
             this.updateDevice()
                 .then(() => {
                     this.deviceLog('monitor updated device values');
@@ -170,15 +210,62 @@ class YamahaMusicCastDevice extends Homey.Device {
         return updateInterval;
     }
 
+    getIPAddress() {
+        if (typeof this._settings.ipaddress !== "undefined" && this._settings.ipaddress !== null) {
+            return this._settings.ipaddress;
+        }
+
+        if (typeof this._data.ipaddress !== "undefined" && this._data.ipaddress !== null) {
+            return this._data.ipaddress;
+        }
+
+        if (typeof this._settings.ipAddress !== "undefined" && this._settings.ipAddress !== null) {
+            return this._settings.ipAddress;
+        }
+
+        throw new Error('IP address (old and new) could not be found in device');
+    }
+
     getURLBase() {
+        if ((typeof this._settings.urlBase === "undefined" || this._settings.urlBase === null)
+            && typeof this.getIPAddress() !== "undefined" && this.getIPAddress() !== null) {
+            let urlBase = 'http://' + this.getIPAddress() + '/';
+
+            this.setSettings({
+                urlBase: urlBase
+            });
+
+            return urlBase;
+        }
+
         return this._settings.urlBase;
     }
 
     getServiceUrl() {
+        if (typeof this._settings.serviceUrl === "undefined" || this._settings.serviceUrl === null) {
+            let serviceUrl = '/YamahaExtendedControl/v1/';
+
+            this.setSettings({
+                serviceUrl: serviceUrl
+            });
+
+            return serviceUrl;
+        }
+
         return this._settings.serviceUrl;
     }
 
     getZone() {
+        if (typeof this._settings.zone === "undefined" || this._settings.zone === null) {
+            let zone = 'main';
+
+            this.setSettings({
+                zone: zone
+            });
+
+            return zone;
+        }
+
         return this._settings.zone;
     }
 
@@ -246,11 +333,7 @@ class YamahaMusicCastDevice extends Homey.Device {
         }
         this.max_volume = state.max_volume;
         this.setCapabilityValue('onoff', state.power).catch(this.error);
-        this.setCapabilityValue('volume_set', (Math.round(state.volume / (state.max_volume / 100)) / 100)).catch(error => {
-            console.log('volume set error', (Math.round(state.volume / (state.max_volume / 100)) / 100));
-
-            return this.error(error);
-        });
+        this.setCapabilityValue('volume_set', (Math.round(state.volume / (state.max_volume / 100)) / 100)).catch(this.error);
         this.setCapabilityValue('volume_mute', state.muted).catch(this.error);
         this.setCapabilityValue('yxc_input_selected', state.input).catch(this.error);
         // this.setCapabilityValue('surround_program', state.sound_program).catch(this.error);
@@ -287,6 +370,10 @@ class YamahaMusicCastDevice extends Homey.Device {
 
     onDeleted() {
         this.deleted = true;
+
+        if (typeof this.monitorTimeout !== "undefined") {
+            clearTimeout(this.monitorTimeout)
+        }
     }
 }
 

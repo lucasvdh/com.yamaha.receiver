@@ -2,7 +2,7 @@
 
 const Homey = require('homey');
 const Log = require('../../lib/Log');
-const YamahaExtendedControlClient = require('../../lib/YamahaExtendedControl/YamahaExtendedControlClient.js');
+const YamahaExtendedControlClient = require('../../lib/YamahaExtendedControl/YamahaExtendedControlClient');
 const axios = require('axios');
 const xml2js = require('xml2js');
 const {XMLMinifier} = require('../../lib/XMLMinifier')
@@ -24,8 +24,6 @@ class YamahaMusicCastDriver extends Homey.Driver {
                 callback(null, [pairingDevice]);
             } else {
                 const discoveryResults = discoveryStrategy.getDiscoveryResults();
-
-                console.log(discoveryResults);
 
                 let existingDevices = this.getDevices();
 
@@ -74,21 +72,23 @@ class YamahaMusicCastDriver extends Homey.Driver {
                 socket.showView('list_devices');
             } else {
                 client.getName().then(name => {
-                    pairingDevice = {
-                        id: data.ipAddress,
-                        name: name,
-                        data: {
+                    return client.getDeviceInfo().then(deviceInfo => {
+                        pairingDevice = {
                             id: data.ipAddress,
-                            driver: "musiccast",
-                        },
-                        settings: {
-                            urlBase: 'http://' + data.ipAddress + ':80/',
-                            serviceUrl: serviceUrl,
-                            zone: 'main',
-                        },
-                    };
+                            name: name + ' - ' + deviceInfo.model_name,
+                            data: {
+                                id: data.ipAddress,
+                                driver: "musiccast",
+                            },
+                            settings: {
+                                urlBase: 'http://' + data.ipAddress + ':80/',
+                                serviceUrl: serviceUrl,
+                                zone: 'main',
+                            },
+                        };
 
-                    socket.showView('list_devices');
+                        socket.showView('list_devices');
+                    })
                 }).catch(error => {
                     Log.captureException(error);
                     socket.showView('search_device');
