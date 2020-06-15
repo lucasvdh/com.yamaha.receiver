@@ -9,4 +9,4 @@ https://uk.yamaha.com/en/products/audio_visual/apps/av_controller/index.html
 
 ### Links
 [Github repository](https://github.com/lucasvdh/com.yamaha.receiver) -
-[Homey app](https://apps.athom.com/app/com.yamaha.receiver)
+[Homey app](https://homey.app/en-gb/app/martens.yamaha/Yamaha)
