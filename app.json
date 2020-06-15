@@ -1,6 +1,6 @@
 {
   "id": "martens.yamaha",
-  "version": "0.7.1",
+  "version": "1.0.0",
   "compatibility": ">=3.0.0",
   "sdk": 2,
   "name": {
@@ -9,9 +9,9 @@
     "de": "Yamaha"
   },
   "description": {
-    "en": "Adds support for Yamaha AV receivers and MusicCast devices.",
-    "nl": "Voegt ondersteuning voor Yamaha AV-ontvangers en MusicCast apparaten.",
-    "de": "Fügt Unterstützung für Yamaha AV-Receiver und MusicCast-Geräte hinzu."
+    "en": "Control your Yamaha AV receivers and MusicCast devices.",
+    "nl": "Bedien uw Yamaha AV-ontvangers en MusicCast apparaten.",
+    "de": "Steuern Sie Ihre Yamaha AV-Receiver und MusicCast-Geräte"
   },
   "category": [
     "music",
