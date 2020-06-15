@@ -1,22 +1,40 @@
 {
-  "id": "com.yamaha.receiver",
-  "version": "0.0.1",
-  "compatibility": "3.0.0",
+  "id": "martens.yamaha",
+  "version": "1.0.0",
+  "compatibility": ">=3.0.0",
   "sdk": 2,
   "name": {
-    "en": "Yamaha receiver",
-    "nl": "Yamaha versterker",
-    "de": "Yamaha Verstärker"
+    "en": "Yamaha",
+    "nl": "Yamaha",
+    "de": "Yamaha"
   },
   "description": {
-    "en": "Adds support for Yamaha receivers.",
-    "nl": "Voegt ondersteuning voor Yamaha versterkers.",
-    "de": "Fügt Unterstützung für Yamaha-Verstärker hinzu."
+    "en": "Control your Yamaha AV receivers and MusicCast devices.",
+    "nl": "Bedien uw Yamaha AV-ontvangers en MusicCast apparaten.",
+    "de": "Steuern Sie Ihre Yamaha AV-Receiver und MusicCast-Geräte"
   },
   "category": [
     "music",
     "appliances"
   ],
+  "tags": {
+    "en": [
+      "receiver",
+      "amplifier",
+      "audio",
+      "musiccast",
+      "music",
+      "cast"
+    ],
+    "nl": [
+      "ontvanger",
+      "versterker",
+      "audio",
+      "musiccast",
+      "music",
+      "cast"
+    ]
+  },
   "permissions": [],
   "images": {
     "large": "/assets/images/large.png",
@@ -25,6 +43,57 @@
   "author": {
     "name": "Lucas van der Have",
     "email": "lucasvdhave@gmail.com"
+  },
+  "contributing": {
+    "donate": {
+      "paypal": {
+        "username": "lucasvdh"
+      }
+    }
+  },
+  "contributors": {
+    "developers": [
+      {
+        "name": "Lucas van der Have",
+        "email": "lucasvdhave@gmail.com"
+      },
+      {
+        "name": "Koen Martens",
+        "email": "koen-martens@hotmail.com"
+      }
+    ],
+    "translators": [
+      {
+        "name": "Lucas van der Have",
+        "email": "lucasvdhave@gmail.com"
+      }
+    ]
+  },
+  "bugs": {
+    "url": "https://github.com/lucasvdh/com.yamaha.receiver/issues"
+  },
+  "source": "https://github.com/lucasvdh/com.yamaha.receiver",
+  "homepage": "https://github.com/lucasvdh/com.yamaha.receiver",
+  "support": "mailto:lucasvdhave@gmail.com",
+  "discovery": {
+    "yamaha-discovery": {
+      "type": "ssdp",
+      "ssdp": {
+        "search": "urn:schemas-upnp-org:device:MediaRenderer:1"
+      },
+      "id": "{{headers.usn}}",
+      "conditions": [
+        [
+          {
+            "field": "headers.st",
+            "match": {
+              "type": "string",
+              "value": "urn:schemas-upnp-org:device:MediaRenderer:1"
+            }
+          }
+        ]
+      ]
+    }
   },
   "capabilities": {
     "input_selected": {
@@ -182,6 +251,89 @@
         }
       ]
     },
+    "yxc_input_selected": {
+      "type": "enum",
+      "title": {
+        "en": "Selected source",
+        "nl": "Geselecteerde bron"
+      },
+      "getable": true,
+      "setable": true,
+      "values": [
+        {
+          "id": "spotify",
+          "title": {
+            "en": "Spotify"
+          }
+        },
+        {
+          "id": "server",
+          "title": {
+            "en": "Server"
+          }
+        },
+        {
+          "id": "net_radio",
+          "title": {
+            "en": "Net Radio"
+          }
+        },
+        {
+          "id": "pandora",
+          "title": {
+            "en": "Pandora"
+          }
+        },
+        {
+          "id": "airplay",
+          "title": {
+            "en": "AirPlay"
+          }
+        },
+        {
+          "id": "napster",
+          "title": {
+            "en": "Napster"
+          }
+        },
+        {
+          "id": "juke",
+          "title": {
+            "en": "Juke"
+          }
+        },
+        {
+          "id": "qobuz",
+          "title": {
+            "en": "Qobuz"
+          }
+        },
+        {
+          "id": "tidal",
+          "title": {
+            "en": "Tidal"
+          }
+        },
+        {
+          "id": "deezer",
+          "title": {
+            "en": "Deezer"
+          }
+        },
+        {
+          "id": "mc_link",
+          "title": {
+            "en": "MC Link"
+          }
+        },
+        {
+          "id": "bluetooth",
+          "title": {
+            "en": "Bluetooth"
+          }
+        }
+      ]
+    },
     "surround_program": {
       "type": "enum",
       "title": {
@@ -325,6 +477,18 @@
       "uiComponent": "button",
       "uiQuickAction": true
     },
+    "surround_straight": {
+      "type": "boolean",
+      "title": {
+        "en": "Straight audio",
+        "nl": "Straight audio",
+        "de": "Straight Audio"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "button",
+      "uiQuickAction": true
+    },
     "surround_enhancer": {
       "type": "boolean",
       "title": {
@@ -372,21 +536,70 @@
       "setable": true,
       "uiComponent": "button",
       "uiQuickAction": true
+    },
+    "media_previous": {
+      "type": "boolean",
+      "title": {
+        "en": "Previous",
+        "nl": "Vorige",
+        "de": "Zurück"
+      },
+      "getable": false,
+      "setable": true,
+      "uiComponent": "button",
+      "uiQuickAction": true
+    },
+    "media_next": {
+      "type": "boolean",
+      "title": {
+        "en": "Next",
+        "nl": "Volgende",
+        "de": "Nächster"
+      },
+      "getable": false,
+      "setable": true,
+      "uiComponent": "button",
+      "uiQuickAction": true
+    },
+    "media_play": {
+      "type": "boolean",
+      "title": {
+        "en": "Play",
+        "nl": "Play",
+        "de": "Play"
+      },
+      "getable": false,
+      "setable": true,
+      "uiComponent": "button",
+      "uiQuickAction": true
+    },
+    "media_pause": {
+      "type": "boolean",
+      "title": {
+        "en": "Pause",
+        "nl": "Pauze",
+        "de": "Pause"
+      },
+      "getable": false,
+      "setable": true,
+      "uiComponent": "button",
+      "uiQuickAction": true
     }
   },
   "drivers": [
     {
       "id": "receiver",
       "name": {
-        "en": "Yamaha receiver",
-        "nl": "Yamaha versterker",
-        "de": "Yamaha Verstärker"
+        "en": "Yamaha AV Receiver",
+        "nl": "Yamaha AV-ontvanger",
+        "de": "Yamaha AV-Receiver"
       },
       "images": {
-        "large": "drivers/receiver/assets/images/large.jpg",
-        "small": "drivers/receiver/assets/images/small.jpg"
+        "large": "drivers/receiver/assets/images/large.png",
+        "small": "drivers/receiver/assets/images/small.png"
       },
-      "class": "other",
+      "class": "amplifier",
+      "discovery": "yamaha-discovery",
       "capabilities": [
         "onoff",
         "volume_set",
@@ -397,18 +610,29 @@
         "surround_enhancer",
         "sound_direct",
         "sound_extra_bass",
-        "sound_adaptive_drc"
+        "sound_adaptive_drc",
+        "media_previous",
+        "media_next",
+        "media_play",
+        "media_pause"
       ],
       "pair": [
         {
-          "id": "start"
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_receiver"
+          }
         },
         {
-          "id": "validate",
+          "id": "search_device"
+        },
+        {
+          "id": "loading",
           "template": "loading"
         },
         {
-          "id": "list_devices",
+          "id": "list_manual_devices",
           "template": "list_devices",
           "navigation": {
             "next": "add_receiver"
@@ -438,9 +662,9 @@
               },
               "value": "0.0.0.0",
               "hint": {
-                "en": "IP address of your Yamaha receiver.",
-                "nl": "IP-adres van uw Yamaha versterker.",
-                "de": "IP-Adresse Ihres Yamaha-Empfängers."
+                "en": "IP address of your Yamaha AV Receiver.",
+                "nl": "IP-adres van uw Yamaha AV-ontvanger.",
+                "de": "IP-Adresse Ihres Yamaha AV-Receiver."
               }
             },
             {
@@ -475,9 +699,185 @@
           ]
         }
       ]
+    },
+    {
+      "id": "musiccast",
+      "name": {
+        "en": "Yamaha MusicCast",
+        "nl": "Yamaha MusicCast",
+        "de": "Yamaha MusicCast"
+      },
+      "images": {
+        "large": "drivers/musiccast/assets/images/large.png",
+        "small": "drivers/musiccast/assets/images/small.png"
+      },
+      "class": "amplifier",
+      "discovery": "yamaha-discovery",
+      "capabilities": [
+        "onoff",
+        "volume_mute",
+        "volume_set",
+        "yxc_input_selected",
+        "speaker_playing",
+        "speaker_shuffle",
+        "speaker_artist",
+        "speaker_album",
+        "speaker_track",
+        "speaker_next",
+        "speaker_prev"
+      ],
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_receiver"
+          }
+        },
+        {
+          "id": "search_device"
+        },
+        {
+          "id": "add_receiver",
+          "template": "add_devices"
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "General settings",
+            "nl": "Algemene instellingen",
+            "de": "Allgemeine Einstellungen"
+          },
+          "children": [
+            {
+              "id": "updateInterval",
+              "type": "number",
+              "label": {
+                "en": "Update interval in seconds",
+                "nl": "Update interval in seconden",
+                "de": "Aktualisierungsintervall in Sekunden"
+              },
+              "value": 5,
+              "hint": {
+                "en": "The interval in which Homey should check if anything has changed. The minimum value if 5.",
+                "nl": "De interval waarin Homey moet controleren of er iets is veranderd. De minimumwaarde is 5.",
+                "de": "Das Intervall, in dem Homey prüfen muss, ob sich etwas geändert hat. Der Mindestwert ist 5."
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "flow": {
+    "triggers": [
+      {
+        "id": "input_changed",
+        "title": {
+          "en": "Input was changed",
+          "nl": "Input is gewijzigd",
+          "de": "Eingabe wurde geändert"
+        },
+        "tokens": [
+          {
+            "name": "input",
+            "type": "string",
+            "title": {
+              "en": "Selected input",
+              "nl": "Geselecteerde input",
+              "de": "Ausgewählter Eingang"
+            },
+            "example": "HDMI1"
+          }
+        ],
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select AV Receiver",
+              "nl": "Selecteer AV-ontvanger",
+              "de": "Wählen Sie AV-Receiver"
+            },
+            "filter": "driver_id=receiver"
+          }
+        ]
+      },
+      {
+        "id": "surround_program_changed",
+        "title": {
+          "en": "Surround program was changed",
+          "nl": "Surround-programma is gewijzigd",
+          "de": "Surround-Programm wurde geändert"
+        },
+        "tokens": [
+          {
+            "name": "surround_program",
+            "type": "string",
+            "title": {
+              "en": "Selected surround program",
+              "nl": "Geselecteerde surround-programma",
+              "de": "Ausgewähltes Surround-Programm"
+            },
+            "example": "5ch Stereo"
+          }
+        ],
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select AV Receiver",
+              "nl": "Selecteer AV-ontvanger",
+              "de": "Wählen Sie AV-Receiver"
+            },
+            "filter": "driver_id=receiver"
+          }
+        ]
+      },
+      {
+        "id": "muted",
+        "title": {
+          "en": "AV Receiver was muted",
+          "nl": "AV-ontvanger is gedempt",
+          "de": "AV-Receiver ist stummgeschaltet"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select AV Receiver",
+              "nl": "Selecteer AV-ontvanger",
+              "de": "Wählen Sie AV-Receiver"
+            },
+            "filter": "driver_id=receiver"
+          }
+        ]
+      },
+      {
+        "id": "unmuted",
+        "title": {
+          "en": "AV Receiver was unmuted",
+          "nl": "AV-ontvanger is ongedempt",
+          "de": "AV-Receiver ist ungedämpft"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select AV Receiver",
+              "nl": "Selecteer AV-ontvanger",
+              "de": "Wählen Sie AV-Receiver"
+            },
+            "filter": "driver_id=receiver"
+          }
+        ]
+      }
+    ],
     "actions": [
       {
         "id": "change_input",
@@ -491,9 +891,9 @@
             "name": "device",
             "type": "device",
             "placeholder": {
-              "en": "Select receiver",
-              "nl": "Selecteer versterker",
-              "de": "Selecteer Verstärker auswählen"
+              "en": "Select AV Receiver",
+              "nl": "Selecteer AV-ontvanger",
+              "de": "Wählen Sie AV-Receiver"
             },
             "filter": "driver_id=receiver"
           },
@@ -512,7 +912,7 @@
         "id": "change_surround_program",
         "title": {
           "en": "Change surround program",
-          "nl": "Wijzig surround programma",
+          "nl": "Wijzig surround-programma",
           "de": "Ändern Sie das Surround-Programm"
         },
         "args": [
@@ -520,9 +920,9 @@
             "name": "device",
             "type": "device",
             "placeholder": {
-              "en": "Select receiver",
-              "nl": "Selecteer versterker",
-              "de": "Selecteer Verstärker auswählen"
+              "en": "Select AV Receiver",
+              "nl": "Selecteer AV-ontvanger",
+              "de": "Wählen Sie AV-Receiver"
             },
             "filter": "driver_id=receiver"
           },
@@ -531,7 +931,7 @@
             "type": "autocomplete",
             "placeholder": {
               "en": "Surround program",
-              "nl": "Surround programma",
+              "nl": "Surround-programma",
               "de": "Surround-Programm"
             }
           }
@@ -554,9 +954,9 @@
             "name": "device",
             "type": "device",
             "placeholder": {
-              "en": "Select receiver",
-              "nl": "Selecteer versterker",
-              "de": "Selecteer Verstärker auswählen"
+              "en": "Select AV Receiver",
+              "nl": "Selecteer AV-ontvanger",
+              "de": "Wählen Sie AV-Receiver"
             },
             "filter": "driver_id=receiver"
           },
@@ -593,6 +993,86 @@
               "nl": "Regelnummer",
               "de": "Zeilennummer"
             }
+          }
+        ]
+      },
+      {
+        "id": "media_previous",
+        "title": {
+          "en": "Previous",
+          "nl": "Vorige",
+          "de": "Zurück"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select AV Receiver",
+              "nl": "Selecteer AV-ontvanger",
+              "de": "Wählen Sie AV-Receiver"
+            },
+            "filter": "driver_id=receiver"
+          }
+        ]
+      },
+      {
+        "id": "media_next",
+        "title": {
+          "en": "Next",
+          "nl": "Volgende",
+          "de": "Nächster"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select AV Receiver",
+              "nl": "Selecteer AV-ontvanger",
+              "de": "Wählen Sie AV-Receiver"
+            },
+            "filter": "driver_id=receiver"
+          }
+        ]
+      },
+      {
+        "id": "media_play",
+        "title": {
+          "en": "Play",
+          "nl": "Play",
+          "de": "Play"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select AV Receiver",
+              "nl": "Selecteer AV-ontvanger",
+              "de": "Wählen Sie AV-Receiver"
+            },
+            "filter": "driver_id=receiver"
+          }
+        ]
+      },
+      {
+        "id": "media_pause",
+        "title": {
+          "en": "Pause",
+          "nl": "Pauze",
+          "de": "Pause"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select AV Receiver",
+              "nl": "Selecteer AV-ontvanger",
+              "de": "Wählen Sie AV-Receiver"
+            },
+            "filter": "driver_id=receiver"
           }
         ]
       }

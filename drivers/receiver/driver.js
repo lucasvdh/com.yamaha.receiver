@@ -1,108 +1,117 @@
 'use strict';
 
 const Homey = require('homey');
-const YamahaReceiverClient = require('../../lib/YamahaReceiverClient.js');
-
-// A list of devices, with their 'id' as key
-// it is generally advisable to keep a list of
-// paired and active devices in your driver's memory.
-let devices = {};
+const axios = require('axios');
+const xml2js = require('xml2js');
+const YamahaReceiverClient = require('../../lib/YamahaReceiver/YamahaReceiverClient');
+const Log = require('../../lib/Log');
+const {XMLMinifier} = require('../../lib/XMLMinifier')
+const minifier = XMLMinifier();
 
 class YamahaReceiverDriver extends Homey.Driver {
-
-    init(devices_data, callback) {
-        devices_data.forEach((device_data) => {
-            try {
-                this.initDevice(device_data);
-            } catch (e) {
-                //Nothing here, just catching errors
-            }
-        });
-
-        callback();
-    }
-
-    onInit() {
+    onInit(data) {
         this.log('YamahaReceiverDriver has been inited');
     }
 
-    // a helper method to add a device to the devices list
-    initDevice(device_data) {
-        devices[device_data.id] = {};
-        devices[device_data.id].state = {onoff: false};
-        devices[device_data.id].data = device_data;
-    }
-
     onPair(socket) {
+        const discoveryStrategy = this.getDiscoveryStrategy();
+
         let defaultIP = '192.168.1.2',
             defaultZone = 'Main_Zone',
-            pairingDevice = {
-                name: 'Yamaha amplifier',
-                data: {
-                    driver: "receiver",
-                    ipAddress: defaultIP,
-                    zone: defaultZone
-                },
-                settings: {
-                    ipAddress: defaultIP,
-                    zone: defaultZone
-                },
-            };
+            pairingDevice = null;
 
         // this method is run when Homey.emit('list_devices') is run on the front-end
         // which happens when you use the template `list_devices`
         socket.on('list_devices', (data, callback) => {
-            callback(null, [pairingDevice]);
+            if (pairingDevice !== null) {
+                callback(null, [pairingDevice]);
+            } else {
+                const discoveryResults = discoveryStrategy.getDiscoveryResults();
+
+                let existingDevices = this.getDevices();
+
+                Promise.all(Object.values(discoveryResults).map(discoveryResult => {
+                    return this.getDeviceByDiscoveryResult(discoveryResult);
+                })).then((devices) => {
+                    devices = devices.filter(item => {
+                        return item !== null && existingDevices.filter(existingDevice => {
+                            return item.id === existingDevice.getData().id;
+                        }).length === 0;
+                    });
+
+                    if (devices.length === 0) {
+                        socket.showView('search_device');
+                    } else {
+                        callback(null, devices);
+                    }
+                }).catch(error => {
+                    Log.captureException(error);
+                    callback(error);
+                });
+            }
         });
 
-        // this is called when the user presses save settings button in start.html
-        socket.on('get_devices', (data, callback) => {
+        socket.on('validate_data', (data, callback) => {
             // Continue to next view
-            socket.showView('validate');
+            socket.showView('loading');
 
-            this.validateIPAddress(data.ipAddress, data.zone).then(() => {
-                pairingDevice.id = data.ipAddress + '[' + data.zone + ']';
-                pairingDevice.data.ipAddress = data.ipAddress;
-                pairingDevice.data.zone = data.zone;
-                pairingDevice.settings = {
-                    ipAddress: data.ipAddress,
-                    zone: data.zone,
-                    updateInterval: 5
+            let urlBase = 'http://' + data.ipAddress + ':80',
+                controlURL = '/YamahaRemoteControl/ctrl',
+                descriptionUrl = '/YamahaRemoteControl/desc.xml',
+                client = new YamahaReceiverClient(urlBase, controlURL);
+
+            if (data.validate === false) {
+                pairingDevice = {
+                    id: data.ipAddress,
+                    name: 'Yamaha AV Receiver [' + data.ipAddress + ']',
+                    data: {
+                        id: data.ipAddress,
+                        driver: "receiver",
+                    },
+                    settings: {
+                        urlBase: urlBase,
+                        controlURL: controlURL
+                    },
                 };
 
                 socket.showView('list_devices');
-            }).catch((error) => {
-                console.log(error);
-                socket.showView('start');
+            } else {
+                client.getNetworkName().then(name => {
+                    return this.getDeviceModelNameByServiceDescription(urlBase + descriptionUrl).then(modelName => {
+                        if (modelName !== null) {
+                            name = name + ' - ' + modelName;
+                        }
 
-                if (error.code === 'EHOSTUNREACH') {
-                    socket.emit('error', 'host_unreachable');
-                } else if (parseInt(error.statusCode) === 400) {
-                    socket.emit('error', 'invalid_zone');
-                } else {
-                    socket.emit('error', 'error');
-                }
-            });
+                        pairingDevice = {
+                            id: data.ipAddress,
+                            name: name,
+                            data: {
+                                id: data.ipAddress,
+                                driver: "receiver",
+                            },
+                            settings: {
+                                urlBase: urlBase,
+                                controlURL: controlURL
+                            },
+                        };
+
+                        socket.showView('list_devices');
+                    });
+                }).catch(error => {
+                    Log.captureException(error);
+                    socket.showView('search_device');
+                    socket.emit('error', error);
+                })
+            }
         });
 
-
-        socket.on('get_device', (data, callback) => {
-            callback(null, pairingDevice);
-        });
+        // socket.on('get_device', (data, callback) => {
+        //     callback(null, pairingDevice);
+        // });
 
         socket.on('disconnect', () => {
             this.log("Yamaha receiver app - User aborted pairing, or pairing is finished");
-        })
-    }
-
-    added(device_data, callback) {
-        this.initDevice(device_data);
-        callback(null, true);
-    }
-
-    deleted(device_data, callback) {
-        delete devices[device_data.id];
-        callback(null, true);
+        });
     }
 
     settings(device_data, newSettingsObj, oldSettingsObj, changedKeysArr, callback) {
@@ -113,23 +122,226 @@ class YamahaReceiverDriver extends Homey.Driver {
             changedKeysArr.forEach(function (key) {
                 switch (key) {
                     case 'ipAddress':
-                        Homey.log('Yamaha - IP address changed to ' + newSettingsObj.ipAddress);
+                        this.log('Yamaha - IP address changed to ' + newSettingsObj.ipAddress);
                         // FIXME: check if IP is valid, otherwise return callback with an error
                         break;
                     case 'zone':
-                        Homey.log('Yamaha - Zone changed to ' + newSettingsObj.zone);
+                        this.log('Yamaha - Zone changed to ' + newSettingsObj.zone);
                         break;
                 }
-            })
+            });
             callback(null, true)
         } catch (error) {
+            Log.captureException(error);
             callback(error)
         }
     }
 
-    validateIPAddress(ipAddress, zone) {
-        let client = new YamahaReceiverClient(ipAddress, zone);
-        return client.getState();
+    getDeviceModelNameByServiceDescription(serviceDescriptionUrl) {
+        return new Promise((resolve, reject) => {
+            axios.get(serviceDescriptionUrl).then(data => {
+                Log.addBreadcrumb(
+                    'pairing',
+                    'Got service description XML response',
+                    {
+                        ssdpXML: minifier.minify(data.data)
+                    }
+                );
+
+                xml2js.parseStringPromise(data.data)
+                    .then(result => {
+                        if (
+                            typeof result.Unit_Description !== "undefined"
+                            && typeof result.Unit_Description['$'] !== "undefined"
+                            && typeof result.Unit_Description['$'].Unit_Name !== "undefined"
+                        ) {
+                            resolve(result.Unit_Description['$'].Unit_Name);
+                        } else {
+                            resolve(null);
+                        }
+                    }).catch(error => {
+                    resolve(null);
+                });
+            }).catch(error => {
+                resolve(null);
+            })
+        });
+    }
+
+    getDeviceByDiscoveryResult(discoveryResult) {
+        Log.addBreadcrumb(
+            'ssdp',
+            'Found discovery result',
+            {
+                discoveryResult: discoveryResult
+            }
+        );
+
+        if (typeof discoveryResult.headers === "undefined"
+            || discoveryResult.headers === null
+            || typeof discoveryResult.headers.location === "undefined"
+            || discoveryResult.headers.location === null
+        ) {
+            Log.captureMessage('Yamaha Receiver discovery result does not contain ssdp details location.');
+        }
+
+        let ssdpDetailsLocation = discoveryResult.headers.location,
+            defaultDevice = {
+                id: discoveryResult.id,
+                name: 'Yamaha amplifier [' + discoveryResult.address + ']',
+                data: {
+                    id: discoveryResult.id,
+                    driver: "receiver",
+                },
+                settings: {
+                    ipAddress: discoveryResult.address,
+                    zone: 'Main_Zone'
+                },
+            };
+
+        return new Promise((resolve, reject) => {
+            this.getDeviceBySSDPDetailsLocation(ssdpDetailsLocation, defaultDevice).then(device => {
+                resolve(device);
+            }).catch((error) => {
+                if (typeof error === "string") {
+                    Log.captureMessage(error, false);
+                } else {
+                    Log.captureException(error, false);
+                }
+                resolve(null);
+            });
+        });
+    }
+
+    getDeviceBySSDPDetailsLocation(ssdpDetailsLocation, device) {
+        return new Promise((resolve, reject) => {
+            axios.get(ssdpDetailsLocation).then(data => {
+                Log.addBreadcrumb(
+                    'ssdp',
+                    'Got SSDP XML response',
+                    {
+                        ssdpXML: minifier.minify(data.data)
+                    }
+                );
+
+                xml2js.parseStringPromise(data.data)
+                    .then(result => {
+                        if (
+                            typeof result.root.device === "undefined"
+                            || typeof result.root.device[0].modelDescription[0] === "undefined"
+                            || result.root.device[0].modelDescription[0] !== "AV Receiver"
+                        ) {
+                            Log.addBreadcrumb(
+                                'ssdp',
+                                'Could not verify that this device is an AV Receiver device',
+                                {
+                                    device: JSON.stringify(
+                                        (result.root.device === "undefined")
+                                            ? result.root
+                                            : result.root.device
+                                    )
+                                },
+                                Log.Severity.Warning
+                            );
+
+                            reject('Could not verify that this device is an AV Receiver device');
+                        } else if (typeof result.root['yamaha:X_device'] === "undefined") {
+                            Log.addBreadcrumb(
+                                'ssdp',
+                                'yamaha:X_device not found in SSDP XML',
+                                {},
+                                Log.Severity.Warning
+                            );
+
+                            reject('The xml does not contain a yamaha:X_device element');
+                        } else if (typeof result.root['yamaha:X_device'][0]['yamaha:X_URLBase'] === "undefined") {
+                            Log.addBreadcrumb(
+                                'ssdp',
+                                'yamaha:X_URLBase not found in yamaha:X_device element in SSDP XML',
+                                {
+                                    'yamaha:X_device': JSON.stringify(result.root['yamaha:X_device'])
+                                },
+                                Log.Severity.Warning
+                            );
+
+                            reject('yamaha:X_URLBase not found in yamaha:X_device element in SSDP XML');
+                        } else if (
+                            typeof result.root['yamaha:X_device'][0]['yamaha:X_serviceList'] === "undefined"
+                            || typeof result.root['yamaha:X_device'][0]['yamaha:X_serviceList'][0]['yamaha:X_service'] === "undefined"
+                        ) {
+                            Log.addBreadcrumb(
+                                'ssdp',
+                                'yamaha:X_serviceList not found in yamaha:X_device element in SSDP XML',
+                                {
+                                    'yamaha:X_device': JSON.stringify(result.root['yamaha:X_device'])
+                                },
+                                Log.Severity.Warning
+                            );
+
+                            reject('yamaha:X_serviceList not found in yamaha:X_device element in SSDP XML');
+                        } else {
+                            let controlURL = null;
+
+                            device.settings.urlBase = result.root['yamaha:X_device'][0]['yamaha:X_URLBase'][0];
+
+                            for (let i in result.root['yamaha:X_device'][0]['yamaha:X_serviceList'][0]['yamaha:X_service']) {
+                                let service = result.root['yamaha:X_device'][0]['yamaha:X_serviceList'][0]['yamaha:X_service'][i];
+
+                                if (
+                                    typeof service['yamaha:X_specType'] !== "undefined"
+                                    && typeof service['yamaha:X_specType'][0] !== "undefined"
+                                    && service['yamaha:X_specType'][0] === "urn:schemas-yamaha-com:service:X_YamahaRemoteControl:1"
+                                ) {
+                                    Log.addBreadcrumb(
+                                        'ssdp',
+                                        'Found a YamahaRemoteControl service in the yamaha:X_serviceList element in SSDP XML',
+                                        {
+                                            specType: service['yamaha:X_specType'][0],
+                                            controlURL: service['yamaha:X_controlURL'][0]
+                                        },
+                                        Log.Severity.Info
+                                    );
+
+                                    controlURL = service['yamaha:X_controlURL'][0];
+                                }
+                            }
+
+                            if (
+                                typeof result.root.device !== "undefined"
+                                && typeof result.root.device[0] !== "undefined"
+                                && typeof result.root.device[0].friendlyName !== "undefined"
+                                && typeof result.root.device[0].friendlyName[0] !== "undefined"
+                                && typeof result.root.device[0].modelName !== "undefined"
+                                && typeof result.root.device[0].modelName[0] !== "undefined"
+                            ) {
+                                let xmlDevices = result.root.device,
+                                    xmlDevice = xmlDevices[0],
+                                    friendlyName = xmlDevice.friendlyName[0],
+                                    modelName = xmlDevice.modelName[0];
+
+                                device.name = friendlyName + ' - ' + modelName;
+                            }
+
+                            if (controlURL === null) {
+                                reject('Could not find the YamahaRemoteControl service in SSDP XML');
+                            } else {
+                                device.settings.controlURL = controlURL;
+
+                                Log.addBreadcrumb(
+                                    'ssdp',
+                                    'Got all necessary information from SSDP resolving device',
+                                    {
+                                        device: device
+                                    },
+                                    Log.Severity.Info
+                                );
+
+                                resolve(device);
+                            }
+                        }
+                    });
+            }).catch(reject);
+        });
     }
 }
 

@@ -1,0 +1,94 @@
+{
+  "1.0.0": {
+    "en": "First stable release after major app rewrite. This update contains lots of stability improvements, fixes and new features such as flow actions and triggers.",
+    "nl": "Eerste stabiele versie na het volledig herschrijven van de app. De update bevat veel stabiliteitsverbeteringen, fixes en nieuwe functies zoals flow acties en triggers."
+  },
+  "0.7.1": {
+    "en": "New icons and descriptions.",
+    "nl": "Nieuwe iconen en beschrijvingen."
+  },
+  "0.7.0": {
+    "en": "Added MusicCast device support.",
+    "nl": "Ondersteuning voor MusicCast-apparaten toegevoegd."
+  },
+  "0.6.2": {
+    "en": "Stability improvements.",
+    "nl": "Stabiliteitsverbeteringen."
+  },
+  "0.6.1": {
+    "en": "Fixed action card trigger issues and added previous, next, play, pause capabilities and flow actions.",
+    "nl": "Problemen met flow triggers en acties opgelost en vorige, volgende afspeel-, pauzemogelijkheden en flow acties toegevoegd."
+  },
+  "0.6.0": {
+    "en": "Stability improvements, fixed input and surround device trigger and improved auto discovery",
+    "nl": "Stabiliteitsverbeteringen, input en surround apparaat triggers gefixt en automatische apparaat detectie verbeterd."
+  },
+  "0.5.6": {
+    "en": "Fixed connection reset handling.",
+    "nl": "Connectie reset bug verholpen."
+  },
+  "0.5.5": {
+    "en": "Stability improvements.",
+    "nl": "Stabiliteitsverbeteringen."
+  },
+  "0.5.4": {
+    "en": "Implement new logger.",
+    "nl": "Implementeer nieuwe logger."
+  },
+  "0.5.3": {
+    "en": "Even more error logging.",
+    "nl": "Nog meer error logging toegevoegd."
+  },
+  "0.5.2": {
+    "en": "Even more error logging.",
+    "nl": "Nog meer error logging toegevoegd."
+  },
+  "0.5.1": {
+    "en": "Added better error logging.",
+    "nl": "Betere error logging toegevoegd."
+  },
+  "0.5.0": {
+    "en": "Initial version of MusicCast device driver.",
+    "nl": "Eerste versie van MusicCast apparaat driver."
+  },
+  "0.4.1": {
+    "en": "Fix adding unvalidated device.",
+    "nl": "Toevoegen van niet-gevalideerd apparaat gefixt."
+  },
+  "0.4.0": {
+    "en": "Fixed mute/unmute. Fixed syncing of receiver values to buttons. Fixed flow card triggers and actions. Added a new way to parse responses from the receiver. Removed error suppression, the app might completely crash now but it does give me a better insight into the errors so I can resolve them faster.",
+    "nl": "Mute/unmute gefixt. Syncen van versterker waardes naar knoppen gefixt. Flow triggers en acties gefixt. Een nieuwe manier toegevoegd om de reactie van de versterker te parsen. Foutonderdrukking verwijderd, de app kan nu volledig crashen, maar dit geeft me een beter inzicht in de fouten, zodat ik ze sneller kan oplossen."
+  },
+  "0.3.6": {
+    "en": "Added Fallback to manually search for your amplifier when it could not be found automatically",
+    "nl": "Fallback toegevoegd om handmatig naar je versterker te zoeken wanneer deze niet automatisch kon worden gevonden"
+  },
+  "0.3.5": {
+    "en": "Needed to increase version due to app store restriction",
+    "nl": "De versie moest verhoogd worden vanwege een beperking van de app store"
+  },
+  "0.1.2": {
+    "en": "Fix set input",
+    "nl": "Fix input selecteren"
+  },
+  "0.1.1": {
+    "en": "Added app store description changes",
+    "nl": "App store omschrijving wijzigingen"
+  },
+  "0.1.0": {
+    "en": "Added track controls and info",
+    "nl": "Track-besturing en info toegevoegd"
+  },
+  "0.0.3": {
+    "en": "New app images",
+    "nl": "Nieuwe app afbeeldingen"
+  },
+  "0.0.2": {
+    "en": "Update app store details",
+    "nl": "App store gegevens geüpdatet"
+  },
+  "0.0.1": {
+    "en": "Initial version",
+    "nl": "Eerste versie"
+  }
+}
