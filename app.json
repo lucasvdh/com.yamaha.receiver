@@ -1,6 +1,6 @@
 {
   "id": "martens.yamaha",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "compatibility": ">=3.0.0",
   "sdk": 2,
   "name": {
@@ -154,6 +154,12 @@
           }
         },
         {
+          "id": "HDMI",
+          "title": {
+            "en": "HDMI"
+          }
+        },
+        {
           "id": "AV1",
           "title": {
             "en": "AV1"
@@ -190,6 +196,24 @@
           }
         },
         {
+          "id": "AV7",
+          "title": {
+            "en": "AV7"
+          }
+        },
+        {
+          "id": "AV8",
+          "title": {
+            "en": "AV8"
+          }
+        },
+        {
+          "id": "AV",
+          "title": {
+            "en": "AV"
+          }
+        },
+        {
           "id": "AUDIO1",
           "title": {
             "en": "AUDIO1"
@@ -208,9 +232,51 @@
           }
         },
         {
+          "id": "AUDIO4",
+          "title": {
+            "en": "AUDIO4"
+          }
+        },
+        {
+          "id": "AUDIO5",
+          "title": {
+            "en": "AUDIO5"
+          }
+        },
+        {
+          "id": "AUDIO6",
+          "title": {
+            "en": "AUDIO6"
+          }
+        },
+        {
+          "id": "AUDIO7",
+          "title": {
+            "en": "AUDIO7"
+          }
+        },
+        {
+          "id": "AUDIO8",
+          "title": {
+            "en": "AUDIO8"
+          }
+        },
+        {
+          "id": "AUDIO",
+          "title": {
+            "en": "AUDIO"
+          }
+        },
+        {
           "id": "TUNER",
           "title": {
             "en": "TUNER"
+          }
+        },
+        {
+          "id": "AUX",
+          "title": {
+            "en": "AUX"
           }
         },
         {
@@ -247,6 +313,18 @@
           "id": "AirPlay",
           "title": {
             "en": "AirPlay"
+          }
+        },
+        {
+          "id": "Bluetooth",
+          "title": {
+            "en": "Bluetooth"
+          }
+        },
+        {
+          "id": "Deezer",
+          "title": {
+            "en": "Deezer"
           }
         }
       ]
@@ -728,6 +806,12 @@
           }
         },
         {
+          "id": "Church in Royaumont",
+          "title": {
+            "en": "Church in Royaumont"
+          }
+        },
+        {
           "id": "The Roxy Theatre",
           "title": {
             "en": "The Roxy Theatre"
@@ -767,6 +851,12 @@
           "id": "7ch Stereo",
           "title": {
             "en": "7ch Stereo"
+          }
+        },
+        {
+          "id": "9ch Stereo",
+          "title": {
+            "en": "9ch Stereo"
           }
         },
         {

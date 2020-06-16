@@ -1,4 +1,8 @@
 {
+  "1.0.2": {
+    "en": "Added missing AV Receiver inputs and surround programs and fixed some minor bugs.",
+    "nl": "Ontbrekende AV-receiver inputs en surroundprogramma's toegevoegd en enkele kleine bugs opgelost."
+  },
   "1.0.1": {
     "en": "First stable release after major app rewrite. This update contains lots of stability improvements, fixes and new features such as flow actions and triggers.",
     "nl": "Eerste stabiele versie na het volledig herschrijven van de app. De update bevat veel stabiliteitsverbeteringen, fixes en nieuwe functies zoals flow acties en triggers."
