@@ -502,7 +502,7 @@ class YamahaMusicCastDevice extends Unicast.Device {
                 })
             }
 
-            if ((zoneInfo.input || null) !== null && YamahaExtendedControlClient.validateInput(zoneInfo.input)) {
+            if ((zoneInfo.input || null) !== null && this.getClient().validateInput(zoneInfo.input)) {
                 this.syncMusicCastStateToCapabilities({
                     input: zoneInfo.input
                 })
