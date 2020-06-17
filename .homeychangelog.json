@@ -1,4 +1,8 @@
 {
+  "1.1.1": {
+    "en": "MusicCast devices now push their status updates to the Homey. Added MusicCast flow triggers and actions. New triggers: \"input was changed\", \"device was muted\" and \"device was unmuted\". New actions: \"change input\", \"change surround program\", \"volume up\" and \"volume down\"",
+    "nl": "MusicCast-apparaten pushen nu hun statusupdates naar de Homey. Er zijn MusicCast flow triggers en -acties toegevoegd. Nieuwe triggers: \"invoer is gewijzigd\", \"apparaat is gedempt\" en \"apparaat niet langer gedempt\". Nieuwe acties: \"invoer wijzigen\", \"surroundprogramma wijzigen\", \"zet geluid harder\" en \"zet geluid harder\""
+  },
   "1.1.0": {
     "en": "MusicCast devices now push their status updates to the Homey. Added MusicCast flow triggers and actions. New triggers: \"input was changed\", \"device was muted\" and \"device was unmuted\". New actions: \"change input\", \"change surround program\", \"volume up\" and \"volume down\"",
     "nl": "MusicCast-apparaten pushen nu hun statusupdates naar de Homey. Er zijn MusicCast flow triggers en -acties toegevoegd. Nieuwe triggers: \"invoer is gewijzigd\", \"apparaat is gedempt\" en \"apparaat niet langer gedempt\". Nieuwe acties: \"invoer wijzigen\", \"surroundprogramma wijzigen\", \"zet geluid harder\" en \"zet geluid harder\""
