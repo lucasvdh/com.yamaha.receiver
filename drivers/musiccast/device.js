@@ -1,6 +1,7 @@
 "use strict";
 
 const Homey = require('homey');
+const Unicast = require('../../lib/Unicast');
 const Log = require('../../lib/Log');
 const YamahaExtendedControlClient = require('../../lib/YamahaExtendedControl/YamahaExtendedControlClient');
 const SurroundProgramEnum = require('../../lib/YamahaExtendedControl/enums/SurroundProgramEnum');
@@ -8,10 +9,10 @@ const InputEnum = require('../../lib/YamahaExtendedControl/enums/InputEnum.js');
 const fetch = require('node-fetch');
 
 const CAPABILITIES_SET_DEBOUNCE = 100;
-const MINIMUM_UPDATE_INTERVAL = 5000;
+const MINIMUM_UPDATE_INTERVAL = 8 * 60 * 1000;
 const UNAVAILABLE_UPDATE_INTERVAL = 60000;
 
-class YamahaMusicCastDevice extends Homey.Device {
+class YamahaMusicCastDevice extends Unicast.Device {
 
     onInit() {
         this.deleted = false;
@@ -38,9 +39,17 @@ class YamahaMusicCastDevice extends Homey.Device {
             .catch(this.error);
 
         this.ready(() => {
-            this.deviceLog('initializing monitor');
-            this.runMonitor();
-            this.deviceLog('initialized');
+            this.syncNetworkId().then(() => {
+                this.deviceLog('network id synced');
+            }).catch(error => {
+                this.deviceLog('network id could not bne synced');
+                Log.captureException(error);
+            });
+
+            this.deviceLog('initializing heartbeat monitor');
+            this.heartbeat();
+
+            this.deviceLog('device initialized');
         });
     }
 
@@ -77,6 +86,26 @@ class YamahaMusicCastDevice extends Homey.Device {
         }
     }
 
+    getNetworkId() {
+        return this._settings.networkId || null;
+    }
+
+    syncNetworkId() {
+        return new Promise((resolve, reject) => {
+            if (this.getNetworkId() === null) {
+                this.getClient().getDeviceInfo().then(device => {
+                    this._settings.networkId = device.device_id;
+
+                    return this.setSettings({
+                        networkId: device.device_id
+                    }).then(resolve);
+                }).catch(reject);
+            } else {
+                resolve();
+            }
+        });
+    }
+
     registerListeners() {
         this._onCapabilitiesSet = this._onCapabilitiesSet.bind(this);
 
@@ -93,13 +122,9 @@ class YamahaMusicCastDevice extends Homey.Device {
             return this.getClient().setInput(value);
         });
         this.registerCapabilityListener('speaker_playing', value => {
-            return (
-                value
-                    ? this.getClient().play()
-                    : this.getClient().pause()
-            ).then(() => {
-                this.updateDevice().catch(this.error);
-            });
+            return value
+                ? this.getClient().play()
+                : this.getClient().pause();
         });
         this.registerCapabilityListener('speaker_shuffle', value => {
             return this.getClient().setShuffle(value);
@@ -107,30 +132,31 @@ class YamahaMusicCastDevice extends Homey.Device {
         this.registerCapabilityListener('speaker_next', value => {
             this.albumCoverImage.setUrl(null);
             this.albumCoverImage.update();
-            return this.getClient().next().then(() => {
-                this.updateDevice().catch(this.error);
-            });
+            return this.getClient().next();
         });
         this.registerCapabilityListener('speaker_prev', value => {
             this.albumCoverImage.setUrl(null);
             this.albumCoverImage.update();
-            return this.getClient().previous().then(() => {
-                this.updateDevice().catch(this.error);
-            });
+            return this.getClient().previous();
         });
-        // this.registerCapabilityListener('surround_program', value => {
-        //     return this.getClient().setSurroundProgram(value);
-        // });
+        this.registerCapabilityListener('surround_program', value => {
+            return this.getClient().setSurroundProgram(value);
+        });
     }
 
     registerFlowCards() {
-        let changeInputAction = new Homey.FlowCardAction('change_input');
-        changeInputAction
+        this.inputChangedTrigger = new Homey.FlowCardTriggerDevice('input_changed').register();
+        this.surroundProgramChangedTrigger = new Homey.FlowCardTriggerDevice('surround_program_changed').register();
+        this.mutedTrigger = new Homey.FlowCardTriggerDevice('muted').register();
+        this.unmutedTrigger = new Homey.FlowCardTriggerDevice('unmuted').register();
+
+        this.changeInputAction = new Homey.FlowCardAction('change_input');
+        this.changeInputAction
             .register()
             .registerRunListener((args, state) => {
                 return this.getClient().setInput(args.input.id);
             });
-        changeInputAction
+        this.changeInputAction
             .getArgument('input')
             .registerAutocompleteListener((query, args) => {
                 return Promise.resolve(
@@ -143,13 +169,13 @@ class YamahaMusicCastDevice extends Homey.Device {
                 );
             });
 
-        let changeSurroundProgramAction = new Homey.FlowCardAction('change_surround_program');
-        changeSurroundProgramAction
+        this.changeSurroundProgramAction = new Homey.FlowCardAction('change_surround_program');
+        this.changeSurroundProgramAction
             .register()
             .registerRunListener((args, state) => {
                 return this.getClient().setSurroundProgram(args.surround_program.id);
             });
-        changeSurroundProgramAction
+        this.changeSurroundProgramAction
             .getArgument('surround_program')
             .registerAutocompleteListener((query, args) => {
                 return Promise.resolve(
@@ -161,71 +187,64 @@ class YamahaMusicCastDevice extends Homey.Device {
                     })
                 );
             });
+
+        this.volumeUpAction = new Homey.FlowCardAction('volume_up');
+        this.volumeUpAction
+            .register()
+            .registerRunListener((args, state) => {
+                return this.getClient().volumeUp(args.volume);
+            });
+
+        this.volumeDownAction = new Homey.FlowCardAction('volume_down');
+        this.volumeDownAction
+            .register()
+            .registerRunListener((args, state) => {
+                return this.getClient().volumeDown(args.volume);
+            });
     }
 
-    runMonitor() {
+    heartbeat() {
         if (this.deleted) {
             return;
+        } else if (typeof this.heartbeatTimeout !== "undefined") {
+            clearTimeout(this.heartbeatTimeout)
         }
 
-        this.monitorTimeout = setTimeout(() => {
-            this.updateDevice()
+        this.heartbeatTimeout = setTimeout(() => {
+            this.updateDeviceStatus()
                 .then(() => {
-                    this.deviceLog('monitor updated device values');
-
-                    this.runMonitor();
+                    this.deviceLog('heartbeat updated device values');
+                    this.heartbeat();
                 })
-                .catch(errors => {
+                .catch(error => {
                     if (this.getAvailable()) {
                         this.setCapabilityValue('onoff', false).catch(this.error);
                         this.setUnavailable().catch(this.error);
                     }
 
-                    if (Array.isArray(errors)) {
-                        for (let i in errors) {
-                            let error = errors[i];
-
-                            if (
-                                typeof error.code === "undefined"
-                                || (
-                                    error.code !== 'EHOSTUNREACH'
-                                    && error.code !== 'ECONNREFUSED'
-                                    && error.code !== 'ECONNRESET'
-                                    && error.code !== 'ETIMEDOUT'
-                                )
-                            ) {
-                                Log.captureException(error);
-                            }
-                        }
-                    } else if (
-                        typeof errors.code === "undefined"
+                    if (
+                        typeof error.code === "undefined"
                         || (
-                            errors.code !== 'EHOSTUNREACH'
-                            && errors.code !== 'ECONNREFUSED'
-                            && errors.code !== 'ECONNRESET'
-                            && errors.code !== 'ETIMEDOUT'
+                            error.code !== 'EHOSTUNREACH'
+                            && error.code !== 'ECONNREFUSED'
+                            && error.code !== 'ECONNRESET'
+                            && error.code !== 'ETIMEDOUT'
                         )
                     ) {
-                        Log.captureException(errors);
+                        Log.captureException(error);
                     }
 
-                    this.runMonitor();
+                    this.heartbeat();
                 });
-        }, this.getUpdateInterval());
+        }, this.getHeartbeatInterval());
     }
 
-    getUpdateInterval() {
+    getHeartbeatInterval() {
         if (!this.getAvailable()) {
             return UNAVAILABLE_UPDATE_INTERVAL;
         }
 
-        let updateInterval = (this._settings.updateInterval * 1000);
-
-        if (updateInterval < MINIMUM_UPDATE_INTERVAL) {
-            return MINIMUM_UPDATE_INTERVAL;
-        }
-
-        return updateInterval;
+        return MINIMUM_UPDATE_INTERVAL;
     }
 
     getIPAddress() {
@@ -287,18 +306,27 @@ class YamahaMusicCastDevice extends Homey.Device {
         return this._settings.zone;
     }
 
-    updateDevice() {
-        return Promise.all([
-            this.getClient().getState().then(state => {
-                this.syncMusicCastStateToCapabilities(state);
-            }),
-            this.getClient().getPlayInfo().then(playInfo => {
-                this.syncMusicCastPlayInfoToCapabilities(playInfo);
-            }),
-        ]).then(() => {
+    updateDeviceStatus() {
+        return this.getClient().getState().then(state => {
+            this.syncMusicCastStateToCapabilities(state);
+        }).then(() => {
             if (!this.getAvailable()) {
                 this.setAvailable().catch(this.error);
             }
+
+            this.heartbeat();
+        });
+    }
+
+    updateDevicePlayInfo() {
+        return this.getClient().getPlayInfo().then(playInfo => {
+            this.syncMusicCastPlayInfoToCapabilities(playInfo);
+        }).then(() => {
+            if (!this.getAvailable()) {
+                this.setAvailable().catch(this.error);
+            }
+
+            this.heartbeat();
         });
     }
 
@@ -334,7 +362,13 @@ class YamahaMusicCastDevice extends Homey.Device {
     getClient() {
         if (typeof this._yamahaExtendedControlClient === "undefined" || this._yamahaExtendedControlClient === null) {
             this._yamahaExtendedControlClient =
-                new YamahaExtendedControlClient(this.getURLBase(), this.getServiceUrl(), this.getZone());
+                new YamahaExtendedControlClient(
+                    this.getURLBase(),
+                    this.getServiceUrl(),
+                    this.getZone(),
+                    this.getUnicastName(),
+                    this.getUnicastPort()
+                );
         }
 
         return this._yamahaExtendedControlClient;
@@ -342,19 +376,49 @@ class YamahaMusicCastDevice extends Homey.Device {
 
     syncMusicCastStateToCapabilities(state) {
         if (
-            typeof this._settings.maxVolume === "undefined"
-            || this._settings.maxVolume === null
+            (
+                typeof this._settings.maxVolume === "undefined"
+                || this._settings.maxVolume === null
+            ) && (state.max_volume || null) !== null
         ) {
+            this._settings.maxVolume = state.max_volume;
             this.setSettings({
                 maxVolume: state.max_volume
             });
         }
-        this.max_volume = state.max_volume;
-        this.setCapabilityValueSafe('onoff', state.power).catch(this.error);
-        this.setCapabilityValueSafe('volume_set', (Math.round(state.volume / (state.max_volume / 100)) / 100)).catch(this.error);
-        this.setCapabilityValueSafe('volume_mute', state.muted).catch(this.error);
-        this.setCapabilityValueSafe('yxc_input_selected', state.input).catch(this.error);
+
+        if (typeof state.power !== "undefined") {
+            this.setCapabilityValueSafe('onoff', state.power).catch(this.error);
+        }
+        if (typeof state.volume !== "undefined") {
+            this.setCapabilityValueSafe('volume_set', (Math.round(state.volume / (this._settings.maxVolume / 100)) / 100)).catch(this.error);
+        }
+        if (typeof state.muted !== "undefined") {
+            if (this.getCapabilityValue('volume_mute') !== state.muted) {
+                if (state.muted) {
+                    this.mutedTrigger.trigger(this).catch(this.error);
+                } else {
+                    this.unmutedTrigger.trigger(this).catch(this.error);
+                }
+            }
+
+            this.setCapabilityValueSafe('volume_mute', state.muted).catch(this.error);
+        }
+        if (typeof state.input !== "undefined") {
+            if (this.getCapabilityValue('yxc_input_selected') !== state.input) {
+                this.inputChangedTrigger.trigger(this, {
+                    input: state.input
+                }).catch(this.error);
+            }
+
+            this.setCapabilityValueSafe('yxc_input_selected', state.input).catch(this.error);
+        }
         // this.setCapabilityValueSafe('surround_program', state.sound_program).catch(this.error);
+        // if (this.getCapabilityValue('surround_program') !== state.surround.program) {
+        //     this.surroundProgramChangedTrigger.trigger(this, {
+        //         surround_program: state.surround.program
+        //     }).catch(this.error)
+        // }
     }
 
     syncMusicCastPlayInfoToCapabilities(playInfo) {
@@ -406,9 +470,143 @@ class YamahaMusicCastDevice extends Homey.Device {
     onDeleted() {
         this.deleted = true;
 
-        if (typeof this.monitorTimeout !== "undefined") {
-            clearTimeout(this.monitorTimeout)
+        if (typeof this.heartbeatTimeout !== "undefined") {
+            clearTimeout(this.heartbeatTimeout)
         }
+    }
+
+    onUnicastEvent(event, remote) {
+        this.deviceLog("Received Unicast event from", remote.address);
+
+        let statusUpdated = false,
+            playInfoUpdated = false,
+            signalInfoUpdated = false,
+            presetInfoUpdated = false,
+            distInfoUpdated = false,
+            settingsUpdated = false;
+
+        if (event.hasSystemInfo()) {
+            // TODO: systemInfo.bluetooth_info_updated /system/getBluetoothInfo
+            // TODO: systemInfo.func_status_updated /system/getFuncStatus
+            // TODO: systemInfo.func_status_updated /system/getFuncStatus
+            // TODO: systemInfo.name_text_updated /system/getNameText
+            // TODO: systemInfo.location_info_updated /system/getLocationInfo
+        }
+
+        if (event.hasZoneInfo()) {
+            let zoneInfo = event.getZoneInfo();
+
+            if ((zoneInfo.power || null) !== null) {
+                this.syncMusicCastStateToCapabilities({
+                    power: zoneInfo.power === "on"
+                })
+            }
+
+            if ((zoneInfo.input || null) !== null && YamahaExtendedControlClient.validateInput(zoneInfo.input)) {
+                this.syncMusicCastStateToCapabilities({
+                    input: zoneInfo.input
+                })
+            }
+
+            if ((zoneInfo.volume || null) !== null) {
+                this.syncMusicCastStateToCapabilities({
+                    volume: zoneInfo.volume
+                })
+            }
+
+            if ((zoneInfo.mute || null) !== null) {
+                this.syncMusicCastStateToCapabilities({
+                    muted: zoneInfo.mute
+                })
+            }
+
+            if ((zoneInfo.status_updated || null) !== null && zoneInfo.status_updated) {
+                statusUpdated = true;
+            }
+            if ((zoneInfo.signal_info_updated || null) !== null && zoneInfo.signal_info_updated) {
+                signalInfoUpdated = true;
+            }
+        }
+
+        if (event.hasTunerInfo()) {
+            let tunerInfo = event.getTunerInfo();
+
+            if ((tunerInfo.play_info_updated || null) !== null && tunerInfo.play_info_updated) {
+                playInfoUpdated = true;
+            }
+
+            if ((tunerInfo.preset_info_updated || null) !== null && tunerInfo.preset_info_updated) {
+                presetInfoUpdated = true;
+            }
+        }
+
+        if (event.hasNetUSBInfo()) {
+            let netUSBInfo = event.getNetUSBInfo();
+
+            if ((netUSBInfo.play_info_updated || null) !== null && netUSBInfo.play_info_updated) {
+                playInfoUpdated = true;
+            }
+
+            if ((netUSBInfo.preset_info_updated || null) !== null && netUSBInfo.preset_info_updated) {
+                presetInfoUpdated = true;
+            }
+        }
+
+        if (event.hasCDInfo()) {
+            let cdInfo = event.getCDInfo();
+
+            if ((cdInfo.play_info_updated || null) !== null && cdInfo.play_info_updated) {
+                playInfoUpdated = true;
+            }
+        }
+
+        if (event.hasDistInfo()) {
+            let distInfo = event.getDistInfo();
+
+            if ((distInfo.dist_info_updated || null) !== null && distInfo.dist_info_updated) {
+                distInfoUpdated = true;
+            }
+        }
+
+        if (event.hasClockInfo()) {
+            let clockInfo = event.getClockInfo();
+
+            if ((clockInfo.settings_updated || null) !== null && clockInfo.settings_updated) {
+                settingsUpdated = true;
+            }
+        }
+
+        if (statusUpdated) {
+            this.updateDeviceStatus().catch(error => {
+                this.deviceLog('could not update device status by unicast event');
+
+                return this.error(error);
+            });
+        }
+        if (playInfoUpdated) {
+            this.updateDevicePlayInfo().catch(error => {
+                this.deviceLog('could not update device play info by unicast event');
+
+                return this.error(error);
+            });
+        }
+        if (signalInfoUpdated) {
+            // TODO this.updateDeviceSignalInfo()
+        }
+        if (presetInfoUpdated) {
+            // TODO this.updateDevicePresetInfo()
+        }
+        if (distInfoUpdated) {
+            // TODO this.updateDeviceDistInfo()
+        }
+        if (settingsUpdated) {
+            // TODO this.updateDeviceSettings()
+        }
+    }
+
+
+    attributeExists(object, attribute) {
+        return typeof object[attribute] !== "undefined";
     }
 }
 

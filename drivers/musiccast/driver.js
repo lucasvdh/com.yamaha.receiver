@@ -2,17 +2,14 @@
 
 const Homey = require('homey');
 const Log = require('../../lib/Log');
+const Unicast = require('../../lib/Unicast');
 const YamahaExtendedControlClient = require('../../lib/YamahaExtendedControl/YamahaExtendedControlClient');
 const axios = require('axios');
 const xml2js = require('xml2js');
 const {XMLMinifier} = require('../../lib/XMLMinifier')
 const minifier = XMLMinifier();
 
-class YamahaMusicCastDriver extends Homey.Driver {
-
-    onInit() {
-        this.log('YamahaMusicCastDriver has been inited');
-    }
+class YamahaMusicCastDriver extends Unicast.Driver {
 
     onPair(socket) {
         const discoveryStrategy = this.getDiscoveryStrategy();
