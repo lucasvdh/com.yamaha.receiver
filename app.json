@@ -1,6 +1,6 @@
 {
   "id": "martens.yamaha",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "compatibility": ">=3.0.0",
   "sdk": 2,
   "name": {
@@ -1055,21 +1055,6 @@
           },
           "children": [
             {
-              "id": "ipAddress",
-              "type": "text",
-              "label": {
-                "en": "IP address",
-                "nl": "IP-adres",
-                "de": "IP Adresse"
-              },
-              "value": "0.0.0.0",
-              "hint": {
-                "en": "IP address of your Yamaha AV Receiver.",
-                "nl": "IP-adres van uw Yamaha AV-ontvanger.",
-                "de": "IP-Adresse Ihres Yamaha AV-Receiver."
-              }
-            },
-            {
               "id": "zone",
               "type": "text",
               "label": {
@@ -1152,23 +1137,7 @@
             "nl": "Algemene instellingen",
             "de": "Allgemeine Einstellungen"
           },
-          "children": [
-            {
-              "id": "updateInterval",
-              "type": "number",
-              "label": {
-                "en": "Update interval in seconds",
-                "nl": "Update interval in seconden",
-                "de": "Aktualisierungsintervall in Sekunden"
-              },
-              "value": 5,
-              "hint": {
-                "en": "The interval in which Homey should check if anything has changed. The minimum value if 5.",
-                "nl": "De interval waarin Homey moet controleren of er iets is veranderd. De minimumwaarde is 5.",
-                "de": "Das Intervall, in dem Homey prüfen muss, ob sich etwas geändert hat. Der Mindestwert ist 5."
-              }
-            }
-          ]
+          "children": []
         }
       ]
     }
@@ -1276,6 +1245,110 @@
               "de": "Wählen Sie AV-Receiver"
             },
             "filter": "driver_id=receiver"
+          }
+        ]
+      },
+      {
+        "id": "input_changed",
+        "title": {
+          "en": "Input was changed",
+          "nl": "Input is gewijzigd",
+          "de": "Eingabe wurde geändert"
+        },
+        "tokens": [
+          {
+            "name": "input",
+            "type": "string",
+            "title": {
+              "en": "Selected input",
+              "nl": "Geselecteerde input",
+              "de": "Ausgewählter Eingang"
+            },
+            "example": "HDMI1"
+          }
+        ],
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select MusicCast device",
+              "nl": "Selecteer MusicCast apparaat",
+              "de": "Wählen Sie MusicCast-Gerät"
+            },
+            "filter": "driver_id=musiccast"
+          }
+        ]
+      },
+      {
+        "id": "surround_program_changed",
+        "title": {
+          "en": "Surround program was changed",
+          "nl": "Surround-programma is gewijzigd",
+          "de": "Surround-Programm wurde geändert"
+        },
+        "tokens": [
+          {
+            "name": "surround_program",
+            "type": "string",
+            "title": {
+              "en": "Selected surround program",
+              "nl": "Geselecteerde surround-programma",
+              "de": "Ausgewähltes Surround-Programm"
+            },
+            "example": "5ch Stereo"
+          }
+        ],
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select MusicCast device",
+              "nl": "Selecteer MusicCast apparaat",
+              "de": "Wählen Sie MusicCast-Gerät"
+            },
+            "filter": "driver_id=musiccast"
+          }
+        ]
+      },
+      {
+        "id": "muted",
+        "title": {
+          "en": "Device was muted",
+          "nl": "Apparaat is gedempt",
+          "de": "Gerät wurde stummgeschaltet"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select MusicCast device",
+              "nl": "Selecteer MusicCast apparaat",
+              "de": "Wählen Sie MusicCast-Gerät"
+            },
+            "filter": "driver_id=musiccast"
+          }
+        ]
+      },
+      {
+        "id": "unmuted",
+        "title": {
+          "en": "Device was unmuted",
+          "nl": "Apparaat niet langer gedempt",
+          "de": "Gerät war nicht stummgeschaltet"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select MusicCast device",
+              "nl": "Selecteer MusicCast apparaat",
+              "de": "Wählen Sie MusicCast-Gerät"
+            },
+            "filter": "driver_id=musiccast"
           }
         ]
       }
@@ -1399,6 +1472,64 @@
         ]
       },
       {
+        "id": "change_input",
+        "title": {
+          "en": "Change input",
+          "nl": "Wijzig bron",
+          "de": "Quelle ändern"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select MusicCast device",
+              "nl": "Selecteer MusicCast apparaat",
+              "de": "Wählen Sie MusicCast-Gerät"
+            },
+            "filter": "driver_id=musiccast"
+          },
+          {
+            "name": "input",
+            "type": "autocomplete",
+            "placeholder": {
+              "en": "Input",
+              "nl": "Input",
+              "de": "Eingang"
+            }
+          }
+        ]
+      },
+      {
+        "id": "change_surround_program",
+        "title": {
+          "en": "Change surround program",
+          "nl": "Wijzig surround-programma",
+          "de": "Ändern Sie das Surround-Programm"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select MusicCast device",
+              "nl": "Selecteer MusicCast apparaat",
+              "de": "Wählen Sie MusicCast-Gerät"
+            },
+            "filter": "driver_id=musiccast"
+          },
+          {
+            "name": "surround_program",
+            "type": "autocomplete",
+            "placeholder": {
+              "en": "Surround program",
+              "nl": "Surround-programma",
+              "de": "Surround-Programm"
+            }
+          }
+        ]
+      },
+      {
         "id": "media_previous",
         "title": {
           "en": "Previous",
@@ -1475,6 +1606,60 @@
               "de": "Wählen Sie AV-Receiver"
             },
             "filter": "driver_id=receiver"
+          }
+        ]
+      },
+      {
+        "id": "volume_up",
+        "title": {
+          "en": "Raise volume",
+          "nl": "Zet geluid harder"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select MusicCast device",
+              "nl": "Selecteer MusicCast apparaat",
+              "de": "Wählen Sie MusicCast-Gerät"
+            },
+            "filter": "driver_id=musiccast"
+          },
+          {
+            "name": "volume",
+            "type": "range",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "label": "dB"
+          }
+        ]
+      },
+      {
+        "id": "volume_down",
+        "title": {
+          "en": "Lower volume",
+          "nl": "Zet geluid zachter"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select MusicCast device",
+              "nl": "Selecteer MusicCast apparaat",
+              "de": "Wählen Sie MusicCast-Gerät"
+            },
+            "filter": "driver_id=musiccast"
+          },
+          {
+            "name": "volume",
+            "type": "range",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "label": "dB"
           }
         ]
       }
