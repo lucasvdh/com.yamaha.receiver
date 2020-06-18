@@ -1,4 +1,8 @@
 {
+  "1.1.2": {
+    "en": "Added more input types and surround programs, added more debug logging and fixed some minor issues in both the AV Receiver and MusicCast devices.",
+    "nl": "Meer invoertypes en surroundprogramma's toegevoegd, meer debug informatie voor foutopsporing toegevoegd en enkele kleine problemen opgelost in zowel de AV-ontvanger als MusicCast-apparaten."
+  },
   "1.1.1": {
     "en": "Fixed issue with MusicCast device not updating after input change",
     "nl": "Probleem opgelost waarbij MusicCast-apparaat niet werd bijgewerkt na invoerwijziging"
