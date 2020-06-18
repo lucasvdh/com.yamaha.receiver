@@ -290,6 +290,11 @@ class YamahaMusicCastDriver extends Unicast.Driver {
                                     modelName = xmlDevice.modelName[0];
 
                                 device.name = friendlyName + ' - ' + modelName;
+                                device.data.modelName = friendlyName + ' - ' + modelName;
+
+                                Log.setTags({
+                                    model: modelName,
+                                });
                             }
 
                             if (serviceUrl === null) {

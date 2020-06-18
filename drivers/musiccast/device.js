@@ -38,6 +38,16 @@ class YamahaMusicCastDevice extends Unicast.Device {
             })
             .catch(this.error);
 
+        Log.setTags({
+            name: this.getName(),
+        });
+
+        if (typeof this._data.id !== "undefined") {
+            Log.setTags({
+                id: this._data.id,
+            });
+        }
+
         this.ready(() => {
             this.syncNetworkId().then(() => {
                 this.deviceLog('network id synced');
