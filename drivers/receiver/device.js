@@ -247,6 +247,8 @@ class YamahaReceiverDevice extends Homey.Device {
                                     && error.code !== 'ECONNREFUSED'
                                     && error.code !== 'ECONNRESET'
                                     && error.code !== 'ETIMEDOUT'
+                                    && error.code !== 'ENOTFOUND' // dns not resolvable
+                                    && error.code !== 'ENETUNREACH' // there's no internet
                                 )
                             ) {
                                 Log.captureException(error);
@@ -259,6 +261,8 @@ class YamahaReceiverDevice extends Homey.Device {
                             && errors.code !== 'ECONNREFUSED'
                             && errors.code !== 'ECONNRESET'
                             && errors.code !== 'ETIMEDOUT'
+                            && errors.code !== 'ENOTFOUND' // dns not resolvable
+                            && errors.code !== 'ENETUNREACH' // there's no internet
                         )
                     ) {
                         Log.captureException(errors);
