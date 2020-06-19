@@ -1,4 +1,8 @@
 {
+  "1.1.3": {
+    "en": "Fixed MusicCast device not updated and AV Receiver volume not updated for some models.",
+    "nl": "Gefixt dat MusicCast-apparaat niet geupdate werden en gefixt dat AV-ontvanger volume voor sommige modellen niet werd bijgewerkt"
+  },
   "1.1.2": {
     "en": "Added more input types and surround programs, added more debug logging and fixed some minor issues in both the AV Receiver and MusicCast devices.",
     "nl": "Meer invoertypes en surroundprogramma's toegevoegd, meer debug informatie voor foutopsporing toegevoegd en enkele kleine problemen opgelost in zowel de AV-ontvanger als MusicCast-apparaten."
