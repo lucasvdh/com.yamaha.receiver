@@ -96,6 +96,76 @@
     }
   },
   "capabilities": {
+    "receiver_zone": {
+      "type": "enum",
+      "title": {
+        "en": "Selected zone",
+        "nl": "Geselecteerde zone"
+      },
+      "getable": true,
+      "setable": true,
+      "values": [
+        {
+          "id": "Main_Zone",
+          "title": {
+            "en": "Main zone"
+          }
+        },
+        {
+          "id": "Zone_2",
+          "title": {
+            "en": "Zone 2"
+          }
+        },
+        {
+          "id": "Zone_3",
+          "title": {
+            "en": "Zone 3"
+          }
+        },
+        {
+          "id": "Zone_4",
+          "title": {
+            "en": "Zone 4"
+          }
+        }
+      ]
+    },
+    "musiccast_zone": {
+      "type": "enum",
+      "title": {
+        "en": "Selected zone",
+        "nl": "Geselecteerde zone"
+      },
+      "getable": true,
+      "setable": true,
+      "values": [
+        {
+          "id": "main",
+          "title": {
+            "en": "Main"
+          }
+        },
+        {
+          "id": "zone2",
+          "title": {
+            "en": "Zone 2"
+          }
+        },
+        {
+          "id": "zone3",
+          "title": {
+            "en": "Zone 3"
+          }
+        },
+        {
+          "id": "zone4",
+          "title": {
+            "en": "Zone 4"
+          }
+        }
+      ]
+    },
     "input_selected": {
       "type": "enum",
       "title": {
@@ -1007,6 +1077,7 @@
         "volume_set",
         "volume_mute",
         "input_selected",
+        "receiver_zone",
         "surround_program",
         "surround_straight",
         "surround_enhancer",
@@ -1105,6 +1176,7 @@
         "volume_mute",
         "volume_set",
         "yxc_input_selected",
+        "musiccast_zone",
         "speaker_playing",
         "speaker_shuffle",
         "speaker_artist",
@@ -1472,6 +1544,61 @@
         ]
       },
       {
+        "id": "change_zone",
+        "title": {
+          "en": "Change zone",
+          "nl": "Wijzig zone",
+          "de": "Zone wechseln"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select MusicCast device",
+              "nl": "Selecteer MusicCast apparaat",
+              "de": "Wählen Sie MusicCast-Gerät"
+            },
+            "filter": "driver_id=musiccast"
+          },
+          {
+            "type": "dropdown",
+            "name": "zone",
+            "title": {
+              "en": "Select which zone you want to control",
+              "nl": "Selecteer welke zone je wilt bedienen",
+              "de": "Wählen Sie die Zone aus, die Sie steuern möchten"
+            },
+            "values": [
+              {
+                "id": "main",
+                "label": {
+                  "en": "Main"
+                }
+              },
+              {
+                "id": "zone2",
+                "label": {
+                  "en": "Zone 2"
+                }
+              },
+              {
+                "id": "zone3",
+                "label": {
+                  "en": "Zone 3"
+                }
+              },
+              {
+                "id": "zone4",
+                "label": {
+                  "en": "Zone 4"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
         "id": "change_input",
         "title": {
           "en": "Change input",
@@ -1492,7 +1619,7 @@
           {
             "name": "input",
             "type": "autocomplete",
-            "placeholder": {
+            "title": {
               "en": "Input",
               "nl": "Input",
               "de": "Eingang"
@@ -1521,7 +1648,7 @@
           {
             "name": "surround_program",
             "type": "autocomplete",
-            "placeholder": {
+            "title": {
               "en": "Surround program",
               "nl": "Surround-programma",
               "de": "Surround-Programm"
@@ -1629,6 +1756,11 @@
           {
             "name": "volume",
             "type": "range",
+            "title": {
+              "en": "Volume",
+              "nl": "Volume",
+              "de": "Volumen"
+            },
             "min": 0,
             "max": 100,
             "step": 1,
@@ -1656,6 +1788,11 @@
           {
             "name": "volume",
             "type": "range",
+            "title": {
+              "en": "Volume",
+              "nl": "Volume",
+              "de": "Volumen"
+            },
             "min": 0,
             "max": 100,
             "step": 1,

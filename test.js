@@ -33,7 +33,7 @@ client.send(message, 0, message.length, PORT, HOST, function(err, bytes) {
 // return;
 
 // const YamahaReceiverClient = require('./lib/YamahaReceiver/YamahaReceiverClient');
-// const InputEnum = require('./lib/YamahaReceiver/enums/InputEnum');
+// const InputEnum = require('./lib/YamahaReceiver/Enums/InputEnum');
 //
 // console.log(Object.values(InputEnum).map(value => {
 //     return {

@@ -25,8 +25,9 @@
   "error": {
     "generic": "Ein Fehler ist aufgetreten",
     "hostUnreachable": "Konnte den Verstärker unter dieser IP-Adresse nicht erreichen. Ist die IP korrekt und der Verstärker eingeschaltet?",
-    "invalidZone": "Konnte den Verstärker erreichen, aber die Zone ist wahrscheinlich falsch.",
     "connectionTimedOut": "Zeitüberschreitung bei der Verbindung zum Verstärker. Ist die IP korrekt und der Verstärker eingeschaltet?",
+    "invalidZone": "Die Zone \"__zone__\" wird von diesem Gerät nicht unterstützt",
+    "invalidSurroundProgram": "Das Surround-Programm \"__program__\" wird von diesem Gerät nicht unterstützt",
     "invalidInput": "Die Eingabe \"__input__\" wird von diesem Gerät nicht unterstützt"
   }
 }

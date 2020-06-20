@@ -3,9 +3,9 @@
 const Homey = require('homey');
 const Unicast = require('../../lib/Unicast');
 const Log = require('../../lib/Log');
-const YamahaExtendedControlClient = require('../../lib/YamahaExtendedControl/YamahaExtendedControlClient');
-const SurroundProgramEnum = require('../../lib/YamahaExtendedControl/enums/SurroundProgramEnum');
-const InputEnum = require('../../lib/YamahaExtendedControl/enums/InputEnum.js');
+const YamahaReceiverControl = require('../../lib/YamahaExtendedControl');
+const SurroundProgramEnum = require('../../lib/YamahaExtendedControl/Enums/SurroundProgramEnum');
+const InputEnum = require('../../lib/YamahaExtendedControl/Enums/InputEnum.js');
 const fetch = require('node-fetch');
 
 const CAPABILITIES_SET_DEBOUNCE = 100;
@@ -69,6 +69,7 @@ class YamahaMusicCastDevice extends Unicast.Device {
                 'soundprogram_selected'
             ],
             newCapabilities = [
+                'musiccast_zone',
                 'yxc_input_selected',
                 'speaker_playing',
                 'speaker_shuffle',
@@ -120,37 +121,34 @@ class YamahaMusicCastDevice extends Unicast.Device {
         this._onCapabilitiesSet = this._onCapabilitiesSet.bind(this);
 
         this.registerCapabilityListener('onoff', value => {
-            return this.getClient().setPower(value);
+            return this.setPower(value);
         });
         this.registerCapabilityListener('volume_set', value => {
-            return this.getClient().setVolume(value * this._settings.maxVolume);
+            return this.setVolume(value * this._settings.maxVolume);
         });
         this.registerCapabilityListener('volume_mute', value => {
-            return this.getClient().setMuted(value);
+            return this.setMuted(value);
         });
         this.registerCapabilityListener('yxc_input_selected', value => {
-            return this.getClient().setInput(value);
+            return this.setInput(value);
+        });
+        this.registerCapabilityListener('musiccast_zone', zone => {
+            return this.setZone(zone);
         });
         this.registerCapabilityListener('speaker_playing', value => {
-            return value
-                ? this.getClient().play()
-                : this.getClient().pause();
+            return this.setPlaying(value);
         });
         this.registerCapabilityListener('speaker_shuffle', value => {
-            return this.getClient().setShuffle(value);
+            return this.setShuffle(value);
         });
         this.registerCapabilityListener('speaker_next', value => {
-            this.albumCoverImage.setUrl(null);
-            this.albumCoverImage.update();
-            return this.getClient().next();
+            return this.next();
         });
         this.registerCapabilityListener('speaker_prev', value => {
-            this.albumCoverImage.setUrl(null);
-            this.albumCoverImage.update();
-            return this.getClient().previous();
+            return this.previous();
         });
         this.registerCapabilityListener('surround_program', value => {
-            return this.getClient().setSurroundProgram(value);
+            return this.setSurroundProgram(value);
         });
     }
 
@@ -160,11 +158,28 @@ class YamahaMusicCastDevice extends Unicast.Device {
         this.mutedTrigger = new Homey.FlowCardTriggerDevice('muted').register();
         this.unmutedTrigger = new Homey.FlowCardTriggerDevice('unmuted').register();
 
+        this.changeZoneAction = new Homey.FlowCardAction('change_zone');
+        this.changeZoneAction
+            .register()
+            .registerRunListener((args, state) => {
+                return new Promise(((resolve, reject) => {
+                    this.setZone(args.zone).then(resolve).catch(error => {
+                        Log.captureException(error);
+                        reject(error);
+                    })
+                }));
+            });
+
         this.changeInputAction = new Homey.FlowCardAction('change_input');
         this.changeInputAction
             .register()
             .registerRunListener((args, state) => {
-                return this.getClient().setInput(args.input.id);
+                return new Promise(((resolve, reject) => {
+                    this.setInput(args.input.id).then(resolve).catch(error => {
+                        Log.captureException(error);
+                        reject(error);
+                    })
+                }));
             });
         this.changeInputAction
             .getArgument('input')
@@ -183,7 +198,12 @@ class YamahaMusicCastDevice extends Unicast.Device {
         this.changeSurroundProgramAction
             .register()
             .registerRunListener((args, state) => {
-                return this.getClient().setSurroundProgram(args.surround_program.id);
+                return new Promise(((resolve, reject) => {
+                    this.setSurroundProgram(args.surround_program.id).then(resolve).catch(error => {
+                        Log.captureException(error);
+                        reject(error);
+                    })
+                }));
             });
         this.changeSurroundProgramAction
             .getArgument('surround_program')
@@ -202,14 +222,24 @@ class YamahaMusicCastDevice extends Unicast.Device {
         this.volumeUpAction
             .register()
             .registerRunListener((args, state) => {
-                return this.getClient().volumeUp(args.volume);
+                return new Promise(((resolve, reject) => {
+                    this.getClient().volumeUp(args.volume).then(resolve).catch(error => {
+                        Log.captureException(error);
+                        reject(error);
+                    })
+                }));
             });
 
         this.volumeDownAction = new Homey.FlowCardAction('volume_down');
         this.volumeDownAction
             .register()
             .registerRunListener((args, state) => {
-                return this.getClient().volumeDown(args.volume);
+                return new Promise(((resolve, reject) => {
+                    this.getClient().volumeDown(args.volume).then(resolve).catch(error => {
+                        Log.captureException(error);
+                        reject(error);
+                    })
+                }));
             });
     }
 
@@ -303,17 +333,7 @@ class YamahaMusicCastDevice extends Unicast.Device {
     }
 
     getZone() {
-        if (typeof this._settings.zone === "undefined" || this._settings.zone === null) {
-            let zone = 'main';
-
-            this.setSettings({
-                zone: zone
-            });
-
-            return zone;
-        }
-
-        return this._settings.zone;
+        return this.getCapabilityValue('musiccast_zone') || 'main';
     }
 
     updateDeviceStatus() {
@@ -367,12 +387,12 @@ class YamahaMusicCastDevice extends Unicast.Device {
     }
 
     /**
-     * @returns YamahaExtendedControlClient
+     * @returns YamahaExtendedControl.Client
      */
     getClient() {
         if (typeof this._yamahaExtendedControlClient === "undefined" || this._yamahaExtendedControlClient === null) {
             this._yamahaExtendedControlClient =
-                new YamahaExtendedControlClient(
+                new YamahaReceiverControl.Client(
                     this.getURLBase(),
                     this.getServiceUrl(),
                     this.getZone(),
@@ -456,7 +476,7 @@ class YamahaMusicCastDevice extends Unicast.Device {
 
     setCapabilityValue(capabilityId, value) {
         return new Promise((resolve, reject) => {
-            this.setCapabilityValue(capabilityId, value).then(resolve).catch(error => {
+            super.setCapabilityValue(capabilityId, value).then(resolve).catch(error => {
                 Log.addBreadcrumb(
                     'musiccast_device',
                     'Could not set capability value',
@@ -635,9 +655,146 @@ class YamahaMusicCastDevice extends Unicast.Device {
         }
     }
 
+    setPower(power) {
+        return new Promise((resolve, reject) => {
+            this.getClient().setPower(power).then(resolve).catch(error => {
+                if (error instanceof YamahaReceiverControl.Errors.GuardedError) {
+                    reject(new Error(Homey.__('error.uncontrollable')));
+                } else {
+                    reject(new Error(Homey.__('error.generic')));
+                }
+            });
+        });
+    }
 
-    attributeExists(object, attribute) {
-        return typeof object[attribute] !== "undefined";
+    setVolume(volume) {
+        return new Promise((resolve, reject) => {
+            this.getClient().setVolume(volume).then(resolve).catch(error => {
+                if (error instanceof YamahaReceiverControl.Errors.GuardedError) {
+                    reject(new Error(Homey.__('error.uncontrollable')));
+                } else {
+                    reject(new Error(Homey.__('error.generic')));
+                }
+            });
+        });
+    }
+
+    setMuted(muted) {
+        return new Promise((resolve, reject) => {
+            this.getClient().setMuted(muted).then(resolve).catch(error => {
+                if (error instanceof YamahaReceiverControl.Errors.GuardedError) {
+                    reject(new Error(Homey.__('error.uncontrollable')));
+                } else {
+                    reject(new Error(Homey.__('error.generic')));
+                }
+            });
+        });
+    }
+
+    setInput(input) {
+        return new Promise((resolve, reject) => {
+            this.getClient().setInput(input).then(resolve).catch(error => {
+                if (error instanceof YamahaReceiverControl.Errors.InvalidParameter) {
+                    reject(new Error(Homey.__('error.invalidInput', {input: input})));
+                } else if (error instanceof YamahaReceiverControl.Errors.GuardedError) {
+                    reject(new Error(Homey.__('error.uncontrollable')));
+                } else {
+                    reject(new Error(Homey.__('error.generic')));
+                }
+            });
+        });
+    }
+
+    setZone(zone) {
+        return new Promise((resolve, reject) => {
+            this.getClient().setZone(zone).then(resolve).catch(error => {
+                if (error instanceof YamahaReceiverControl.Errors.InvalidZone) {
+                    reject(new Error(Homey.__('error.invalidZone', {zone: zone})));
+                } else if (error instanceof YamahaReceiverControl.Errors.GuardedError) {
+                    reject(new Error(Homey.__('error.uncontrollable')));
+                } else {
+                    reject(new Error(Homey.__('error.generic')));
+                }
+            });
+        });
+    }
+
+    setPlaying(playing) {
+        return new Promise((resolve, reject) => {
+            if (this.getCapabilityValue('onoff') === false) {
+                this.setPower(true).then(() => {
+                    (playing ? this.getClient().play() : this.getClient().pause()).then(resolve).catch(error => {
+                        if (error instanceof YamahaReceiverControl.Errors.GuardedError) {
+                            reject(new Error(Homey.__('error.uncontrollable')));
+                        } else {
+                            reject(new Error(Homey.__('error.generic')));
+                        }
+                    });
+                }).catch(reject);
+            } else {
+                (playing ? this.getClient().play() : this.getClient().pause()).then(resolve).catch(error => {
+                    if (error instanceof YamahaReceiverControl.Errors.GuardedError) {
+                        reject(new Error(Homey.__('error.uncontrollable')));
+                    } else {
+                        reject(new Error(Homey.__('error.generic')));
+                    }
+                });
+            }
+        });
+    }
+
+    setShuffle(shuffle) {
+        return new Promise((resolve, reject) => {
+            this.getClient().setShuffle(shuffle).then(resolve).catch(error => {
+                if (error instanceof YamahaReceiverControl.Errors.GuardedError) {
+                    reject(new Error(Homey.__('error.uncontrollable')));
+                } else {
+                    reject(new Error(Homey.__('error.generic')));
+                }
+            });
+        });
+    }
+
+    next() {
+        return new Promise((resolve, reject) => {
+            this.albumCoverImage.setUrl(null);
+            this.albumCoverImage.update();
+            this.getClient().next().then(resolve).catch(error => {
+                if (error instanceof YamahaReceiverControl.Errors.GuardedError) {
+                    reject(new Error(Homey.__('error.uncontrollable')));
+                } else {
+                    reject(new Error(Homey.__('error.generic')));
+                }
+            });
+        });
+    }
+
+    previous() {
+        return new Promise((resolve, reject) => {
+            this.albumCoverImage.setUrl(null);
+            this.albumCoverImage.update();
+            this.getClient().previous().then(resolve).catch(error => {
+                if (error instanceof YamahaReceiverControl.Errors.GuardedError) {
+                    reject(new Error(Homey.__('error.uncontrollable')));
+                } else {
+                    reject(new Error(Homey.__('error.generic')));
+                }
+            });
+        });
+    }
+
+    setSurroundProgram(surroundProgram) {
+        return new Promise((resolve, reject) => {
+            this.getClient().setSurroundProgram(surroundProgram).then(resolve).catch(error => {
+                if (error instanceof YamahaReceiverControl.Errors.InvalidParameter) {
+                    reject(new Error(Homey.__('error.invalidSurroundProgram', {program: surroundProgram})));
+                } else if (error instanceof YamahaReceiverControl.Errors.GuardedError) {
+                    reject(new Error(Homey.__('error.uncontrollable')));
+                } else {
+                    reject(new Error(Homey.__('error.generic')));
+                }
+            });
+        });
     }
 }
 

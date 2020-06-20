@@ -93,7 +93,7 @@ class YamahaReceiverDevice extends Homey.Device {
                 return this.triggerFlowCard(this.inputChangedTrigger, {
                     input: value
                 }).catch(this.error);
-            }).catch(this.error);
+            });
         });
         this.registerCapabilityListener('surround_program', value => {
             return this.getClient().setSurroundProgram(value).then(() => {
@@ -445,7 +445,7 @@ class YamahaReceiverDevice extends Homey.Device {
     }
 
     setCapabilityValue(capabilityId, value) {
-        return this.setCapabilityValue(capabilityId, value).catch(error => {
+        return super.setCapabilityValue(capabilityId, value).catch(error => {
             Log.addBreadcrumb(
                 'receiver_device',
                 'Could not set capability value',

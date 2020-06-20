@@ -49,7 +49,7 @@ class YamahaMusicCastDriver extends Unicast.Driver {
 
             let urlBase = 'http://' + data.ipAddress + ':80/',
                 serviceUrl = '/YamahaExtendedControl/v1/',
-                client = new YamahaExtendedControlClient(urlBase, serviceUrl, 'main');
+                client = new YamahaExtendedControlClient(urlBase, serviceUrl);
 
             if (data.validate === false) {
                 pairingDevice = {
@@ -119,17 +119,6 @@ class YamahaMusicCastDriver extends Unicast.Driver {
         } catch (error) {
             callback(error)
         }
-    }
-
-    /**
-     * @returns YamahaExtendedControlClient
-     */
-    getClient(ipAddress, zone = 'main') {
-        if (typeof this._yamahaExtendedControlClient === "undefined" || this._yamahaExtendedControlClient === null) {
-            this._yamahaExtendedControlClient = new YamahaExtendedControlClient(ipAddress, zone);
-        }
-
-        return this._yamahaExtendedControlClient;
     }
 
     getDeviceByDiscoveryResult(discoveryResult) {
