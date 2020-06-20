@@ -132,11 +132,6 @@ class YamahaMusicCastDriver extends Unicast.Driver {
         return this._yamahaExtendedControlClient;
     }
 
-    validateIPAddress(ipAddress, zone) {
-        let client = new YamahaReceiverClient(ipAddress, zone);
-        return client.getState();
-    }
-
     getDeviceByDiscoveryResult(discoveryResult) {
         Log.addBreadcrumb(
             'ssdp',

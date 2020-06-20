@@ -383,36 +383,58 @@ class YamahaReceiverDevice extends Homey.Device {
     }
 
     syncReceiverStateToCapabilities(state) {
-        if (this.getCapabilityValue('input_selected') !== state.input.selected) {
-            this.inputChangedTrigger.trigger(this, {
-                input: state.input.selected
-            }).catch(this.error);
-        }
+        this.setCapabilityValueSafe('onoff', state.power || false).catch(this.error);
 
-        if (this.getCapabilityValue('surround_program') !== state.surround.program) {
-            this.surroundProgramChangedTrigger.trigger(this, {
-                surround_program: state.surround.program
-            }).catch(this.error)
-        }
-
-        if (this.getCapabilityValue('volume_mute') !== state.volume.muted) {
-            if (state.volume.muted) {
-                this.mutedTrigger.trigger(this).catch(this.error);
-            } else {
-                this.unmutedTrigger.trigger(this).catch(this.error);
+        if (typeof state.input.selected !== "undefined") {
+            if (this.getCapabilityValue('input_selected') !== state.input.selected) {
+                this.inputChangedTrigger.trigger(this, {
+                    input: state.input.selected
+                }).catch(this.error);
             }
+
+            this.setCapabilityValueSafe('input_selected', state.input.selected).catch(this.error);
         }
 
-        this.setCapabilityValueSafe('onoff', state.power).catch(this.error);
-        this.setCapabilityValueSafe('volume_set', state.volume.current / 100).catch(this.error);
-        this.setCapabilityValueSafe('volume_mute', state.volume.muted).catch(this.error);
-        this.setCapabilityValueSafe('input_selected', state.input.selected).catch(this.error);
-        this.setCapabilityValueSafe('surround_program', state.surround.program).catch(this.error);
-        this.setCapabilityValueSafe('surround_straight', state.surround.straight).catch(this.error);
-        this.setCapabilityValueSafe('surround_enhancer', state.surround.enhancer).catch(this.error);
-        this.setCapabilityValueSafe('sound_direct', state.sound.direct).catch(this.error);
-        this.setCapabilityValueSafe('sound_extra_bass', state.sound.extraBass).catch(this.error);
-        this.setCapabilityValueSafe('sound_adaptive_drc', state.sound.adaptiveDynamicRangeControl).catch(this.error);
+        if (typeof state.surround.program !== "undefined") {
+            if (this.getCapabilityValue('surround_program') !== state.surround.program) {
+                this.surroundProgramChangedTrigger.trigger(this, {
+                    surround_program: state.surround.program
+                }).catch(this.error)
+            }
+
+            this.setCapabilityValueSafe('surround_program', state.surround.program).catch(this.error);
+        }
+
+        if (typeof state.volume.muted !== "undefined") {
+            if (this.getCapabilityValue('volume_mute') !== state.volume.muted) {
+                if (state.volume.muted) {
+                    this.mutedTrigger.trigger(this).catch(this.error);
+                } else {
+                    this.unmutedTrigger.trigger(this).catch(this.error);
+                }
+            }
+
+            this.setCapabilityValueSafe('volume_mute', state.volume.muted).catch(this.error);
+        }
+
+        if (typeof state.volume.current !== "undefined") {
+            this.setCapabilityValueSafe('volume_set', state.volume.current / 100).catch(this.error);
+        }
+        if (typeof state.surround.straight !== "undefined") {
+            this.setCapabilityValueSafe('surround_straight', state.surround.straight).catch(this.error);
+        }
+        if (typeof state.surround.enhancer !== "undefined") {
+            this.setCapabilityValueSafe('surround_enhancer', state.surround.enhancer).catch(this.error);
+        }
+        if (typeof state.sound.direct !== "undefined") {
+            this.setCapabilityValueSafe('sound_direct', state.sound.direct).catch(this.error);
+        }
+        if (typeof state.sound.extraBass !== "undefined") {
+            this.setCapabilityValueSafe('sound_extra_bass', state.sound.extraBass).catch(this.error);
+        }
+        if (typeof state.sound.adaptiveDynamicRangeControl !== "undefined") {
+            this.setCapabilityValueSafe('sound_adaptive_drc', state.sound.adaptiveDynamicRangeControl).catch(this.error);
+        }
     }
 
     syncReceiverPlayIntoToCapabilities(playInfo) {

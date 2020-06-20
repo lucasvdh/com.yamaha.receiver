@@ -1,4 +1,8 @@
 {
+  "1.1.4": {
+    "en": "Fixed Yahama AV Receiver devices which do not support surround sound selection.",
+    "nl": "Yahama AV-receiver apparaten die geen ondersteuning bieden voor surround sound gefixt."
+  },
   "1.1.3": {
     "en": "Fixed MusicCast device not updated and AV Receiver volume not updated for some models.",
     "nl": "Gefixt dat MusicCast-apparaat niet geupdate werden en gefixt dat AV-ontvanger volume voor sommige modellen niet werd bijgewerkt"
