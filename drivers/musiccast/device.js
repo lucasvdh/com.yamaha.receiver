@@ -398,46 +398,46 @@ class YamahaMusicCastDevice extends Unicast.Device {
         }
 
         if (typeof state.power !== "undefined") {
-            this.setCapabilityValueSafe('onoff', state.power).catch(this.error);
+            this.setCapabilityValue('onoff', state.power).catch(this.error);
         }
         if (typeof state.volume !== "undefined") {
-            this.setCapabilityValueSafe('volume_set', (Math.round(state.volume / (this._settings.maxVolume / 100)) / 100)).catch(this.error);
+            this.setCapabilityValue('volume_set', (Math.round(state.volume / (this._settings.maxVolume / 100)) / 100)).catch(this.error);
         }
         if (typeof state.muted !== "undefined") {
             if (this.getCapabilityValue('volume_mute') !== state.muted) {
                 if (state.muted) {
-                    this.mutedTrigger.trigger(this).catch(this.error);
+                    this.triggerFlowCard(this.mutedTrigger).catch(this.error);
                 } else {
-                    this.unmutedTrigger.trigger(this).catch(this.error);
+                    this.triggerFlowCard(this.unmutedTrigger).catch(this.error);
                 }
             }
 
-            this.setCapabilityValueSafe('volume_mute', state.muted).catch(this.error);
+            this.setCapabilityValue('volume_mute', state.muted).catch(this.error);
         }
         if (typeof state.input !== "undefined") {
             if (this.getCapabilityValue('yxc_input_selected') !== state.input) {
-                this.inputChangedTrigger.trigger(this, {
+                this.triggerFlowCard(this.inputChangedTrigger, {
                     input: state.input
                 }).catch(this.error);
             }
 
-            this.setCapabilityValueSafe('yxc_input_selected', state.input).catch(this.error);
+            this.setCapabilityValue('yxc_input_selected', state.input).catch(this.error);
         }
         // this.setCapabilityValueSafe('surround_program', state.sound_program).catch(this.error);
         // if (this.getCapabilityValue('surround_program') !== state.surround.program) {
-        //     this.surroundProgramChangedTrigger.trigger(this, {
+        //     this.triggerFlowCard(this.surroundProgramChangedTrigger, {
         //         surround_program: state.surround.program
         //     }).catch(this.error)
         // }
     }
 
     syncMusicCastPlayInfoToCapabilities(playInfo) {
-        this.setCapabilityValueSafe('speaker_playing', playInfo.playing).catch(this.error);
-        this.setCapabilityValueSafe('speaker_shuffle', playInfo.shuffle).catch(this.error);
+        this.setCapabilityValue('speaker_playing', playInfo.playing).catch(this.error);
+        this.setCapabilityValue('speaker_shuffle', playInfo.shuffle).catch(this.error);
         // this.setCapabilityValueSafe('speaker_repeat', playInfo.repeat).catch(this.error);
-        this.setCapabilityValueSafe('speaker_artist', playInfo.artist).catch(this.error);
-        this.setCapabilityValueSafe('speaker_album', playInfo.album).catch(this.error);
-        this.setCapabilityValueSafe('speaker_track', playInfo.track).catch(this.error);
+        this.setCapabilityValue('speaker_artist', playInfo.artist).catch(this.error);
+        this.setCapabilityValue('speaker_album', playInfo.album).catch(this.error);
+        this.setCapabilityValue('speaker_track', playInfo.track).catch(this.error);
 
         // Check if the image needs to be updated
         if (this.albumCoverImageUrl !== playInfo.albumart_url) {
@@ -454,22 +454,43 @@ class YamahaMusicCastDevice extends Unicast.Device {
         // this.setCapabilityValue('surround_program', state.sound_program).catch(this.error);
     }
 
-    setCapabilityValueSafe(capabilityId, value) {
-        return this.setCapabilityValue(capabilityId, value).catch(error => {
-            Log.addBreadcrumb(
-                'musiccast_device',
-                'Could not set capability value',
-                {
-                    capabilityId: capabilityId,
-                    value: value
-                },
-                Log.Severity.Error
-            );
-            Log.captureException(error);
+    setCapabilityValue(capabilityId, value) {
+        return new Promise((resolve, reject) => {
+            this.setCapabilityValue(capabilityId, value).then(resolve).catch(error => {
+                Log.addBreadcrumb(
+                    'musiccast_device',
+                    'Could not set capability value',
+                    {
+                        capabilityId: capabilityId,
+                        value: value
+                    },
+                    Log.Severity.Error
+                );
+                Log.captureException(error);
 
-            return error;
-        })
+                reject(error);
+            })
+        });
     }
+
+    triggerFlowCard(flowCardObject, args = {}) {
+        return new Promise((resolve, reject) => {
+            flowCardObject.trigger(this, args).then(resolve).catch(error => {
+                Log.addBreadcrumb(
+                    'musiccast_device',
+                    'Could not trigger flow card ' + flowCardObject.type,
+                    {
+                        flowCardActionId: flowCardObject.id,
+                        args: args
+                    },
+                    Log.Severity.Error
+                );
+                Log.captureException(error);
+
+                reject(error);
+            });
+        })
+    };
 
     onSettings(oldSettings, newSettings, changedKeys, callback) {
         this._settings = newSettings;

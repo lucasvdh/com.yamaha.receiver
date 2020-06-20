@@ -82,24 +82,24 @@ class YamahaReceiverDevice extends Homey.Device {
         this.registerCapabilityListener('volume_mute', value => {
             return this.getClient().setMuted(value).then(() => {
                 if (value) {
-                    this.mutedTrigger.trigger(this).catch(this.error);
+                    this.triggerFlowCard(this.mutedTrigger).catch(this.error);
                 } else {
-                    this.unmutedTrigger.trigger(this).catch(this.error);
+                    this.triggerFlowCard(this.unmutedTrigger).catch(this.error);
                 }
             }).catch(this.error);
         });
         this.registerCapabilityListener('input_selected', value => {
             return this.getClient().setInput(value).then(() => {
-                return this.inputChangedTrigger.trigger(this, {
+                return this.triggerFlowCard(this.inputChangedTrigger, {
                     input: value
                 }).catch(this.error);
             }).catch(this.error);
         });
         this.registerCapabilityListener('surround_program', value => {
             return this.getClient().setSurroundProgram(value).then(() => {
-                this.surroundProgramChangedTrigger.trigger(this, {
+                this.triggerFlowCard(this.surroundProgramChangedTrigger, {
                     surround_program: value
-                }).then(this.log).catch(this.error)
+                }).catch(this.error)
             }).catch(this.error);
         })
         this.registerCapabilityListener('surround_straight', value => {
@@ -156,7 +156,7 @@ class YamahaReceiverDevice extends Homey.Device {
         this.changeInputAction
             .registerRunListener((args, state) => {
                 return this.getClient().setInput(args.input.id).then(() => {
-                    return this.inputChangedTrigger.trigger(this, {
+                    return this.triggerFlowCard(this.inputChangedTrigger, {
                         input: args.input.id
                     });
                 }).catch(this.error);
@@ -178,7 +178,7 @@ class YamahaReceiverDevice extends Homey.Device {
         this.changeSurroundProgramAction
             .registerRunListener((args, state) => {
                 return this.getClient().setSurroundProgram(args.surround_program.id).then(() => {
-                    return this.surroundProgramChangedTrigger.trigger(this, {
+                    return this.triggerFlowCard(this.surroundProgramChangedTrigger, {
                         surround_program: args.surround_program.id
                     });
                 }).catch(this.error);
@@ -383,68 +383,68 @@ class YamahaReceiverDevice extends Homey.Device {
     }
 
     syncReceiverStateToCapabilities(state) {
-        this.setCapabilityValueSafe('onoff', state.power || false).catch(this.error);
+        this.setCapabilityValue('onoff', state.power || false).catch(this.error);
 
         if (typeof state.input.selected !== "undefined") {
             if (this.getCapabilityValue('input_selected') !== state.input.selected) {
-                this.inputChangedTrigger.trigger(this, {
+                this.triggerFlowCard(this.inputChangedTrigger, {
                     input: state.input.selected
                 }).catch(this.error);
             }
 
-            this.setCapabilityValueSafe('input_selected', state.input.selected).catch(this.error);
+            this.setCapabilityValue('input_selected', state.input.selected).catch(this.error);
         }
 
         if (typeof state.surround.program !== "undefined") {
             if (this.getCapabilityValue('surround_program') !== state.surround.program) {
-                this.surroundProgramChangedTrigger.trigger(this, {
+                this.triggerFlowCard(this.surroundProgramChangedTrigger, {
                     surround_program: state.surround.program
                 }).catch(this.error)
             }
 
-            this.setCapabilityValueSafe('surround_program', state.surround.program).catch(this.error);
+            this.setCapabilityValue('surround_program', state.surround.program).catch(this.error);
         }
 
         if (typeof state.volume.muted !== "undefined") {
             if (this.getCapabilityValue('volume_mute') !== state.volume.muted) {
                 if (state.volume.muted) {
-                    this.mutedTrigger.trigger(this).catch(this.error);
+                    this.triggerFlowCard(this.mutedTrigger).catch(this.error);
                 } else {
-                    this.unmutedTrigger.trigger(this).catch(this.error);
+                    this.triggerFlowCard(this.unmutedTrigger).catch(this.error);
                 }
             }
 
-            this.setCapabilityValueSafe('volume_mute', state.volume.muted).catch(this.error);
+            this.setCapabilityValue('volume_mute', state.volume.muted).catch(this.error);
         }
 
         if (typeof state.volume.current !== "undefined") {
-            this.setCapabilityValueSafe('volume_set', state.volume.current / 100).catch(this.error);
+            this.setCapabilityValue('volume_set', state.volume.current / 100).catch(this.error);
         }
         if (typeof state.surround.straight !== "undefined") {
-            this.setCapabilityValueSafe('surround_straight', state.surround.straight).catch(this.error);
+            this.setCapabilityValue('surround_straight', state.surround.straight).catch(this.error);
         }
         if (typeof state.surround.enhancer !== "undefined") {
-            this.setCapabilityValueSafe('surround_enhancer', state.surround.enhancer).catch(this.error);
+            this.setCapabilityValue('surround_enhancer', state.surround.enhancer).catch(this.error);
         }
         if (typeof state.sound.direct !== "undefined") {
-            this.setCapabilityValueSafe('sound_direct', state.sound.direct).catch(this.error);
+            this.setCapabilityValue('sound_direct', state.sound.direct).catch(this.error);
         }
         if (typeof state.sound.extraBass !== "undefined") {
-            this.setCapabilityValueSafe('sound_extra_bass', state.sound.extraBass).catch(this.error);
+            this.setCapabilityValue('sound_extra_bass', state.sound.extraBass).catch(this.error);
         }
         if (typeof state.sound.adaptiveDynamicRangeControl !== "undefined") {
-            this.setCapabilityValueSafe('sound_adaptive_drc', state.sound.adaptiveDynamicRangeControl).catch(this.error);
+            this.setCapabilityValue('sound_adaptive_drc', state.sound.adaptiveDynamicRangeControl).catch(this.error);
         }
     }
 
     syncReceiverPlayIntoToCapabilities(playInfo) {
-        this.setCapabilityValueSafe('speaker_playing', playInfo.playing).catch(this.error);
-        this.setCapabilityValueSafe('speaker_track', playInfo.track).catch(this.error);
-        this.setCapabilityValueSafe('speaker_album', playInfo.album).catch(this.error);
-        this.setCapabilityValueSafe('speaker_artist', playInfo.artist).catch(this.error);
+        this.setCapabilityValue('speaker_playing', playInfo.playing).catch(this.error);
+        this.setCapabilityValue('speaker_track', playInfo.track).catch(this.error);
+        this.setCapabilityValue('speaker_album', playInfo.album).catch(this.error);
+        this.setCapabilityValue('speaker_artist', playInfo.artist).catch(this.error);
     }
 
-    setCapabilityValueSafe(capabilityId, value) {
+    setCapabilityValue(capabilityId, value) {
         return this.setCapabilityValue(capabilityId, value).catch(error => {
             Log.addBreadcrumb(
                 'receiver_device',
@@ -460,6 +460,25 @@ class YamahaReceiverDevice extends Homey.Device {
             return error;
         })
     }
+
+    triggerFlowCard(flowCardObject, args = {}) {
+        return new Promise((resolve, reject) => {
+            flowCardObject.trigger(this, args).then(resolve).catch(error => {
+                Log.addBreadcrumb(
+                    'receiver_device',
+                    'Could not trigger flow card ' + flowCardObject.type,
+                    {
+                        flowCardActionId: flowCardObject.id,
+                        args: args
+                    },
+                    Log.Severity.Error
+                );
+                Log.captureException(error);
+
+                reject(error);
+            });
+        })
+    };
 
     onSettings(oldSettings, newSettings, changedKeys, callback) {
         this._settings = newSettings;
