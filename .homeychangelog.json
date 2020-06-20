@@ -1,4 +1,8 @@
 {
+  "1.2.0": {
+    "en": "Added MusicCast multi zone support. Select the active zone in the device or change it via a flow action.",
+    "nl": "MusicCast ondersteuning toegevoegd voor meerdere zones. Selecteer de actieve zone in het apparaat of wijzig deze via een flow actie."
+  },
   "1.1.4": {
     "en": "Fixed Yahama AV Receiver devices which do not support surround sound selection.",
     "nl": "Yahama AV-receiver apparaten die geen ondersteuning bieden voor surround sound gefixt."
