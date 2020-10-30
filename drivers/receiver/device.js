@@ -2,7 +2,7 @@
 
 const Homey = require('homey');
 const Log = require('../../lib/Log');
-const YamahaReceiverClient = require('../../lib/YamahaReceiver/YamahaReceiverClient');
+const YamahaReceiverClient = require('../../lib/YamahaReceiver/Client');
 const SurroundProgramEnum = require('../../lib/YamahaReceiver/Enums/SurroundProgramEnum');
 const InputEnum = require('../../lib/YamahaReceiver/Enums/InputEnum');
 
@@ -376,7 +376,7 @@ class YamahaReceiverDevice extends Homey.Device {
      */
     getClient() {
         if (typeof this._yamahaReceiverClient === "undefined" || this._yamahaReceiverClient === null) {
-            this._yamahaReceiverClient = new YamahaReceiverClient(this.getURLBase(), this.getControlURL());
+            this._yamahaReceiverClient = new YamahaReceiverClient(this.getURLBase(), this.getControlURL(), this.getZone());
         }
 
         return this._yamahaReceiverClient;

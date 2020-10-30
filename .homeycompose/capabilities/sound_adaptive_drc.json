@@ -1,0 +1,12 @@
+{
+  "type": "boolean",
+  "title": {
+    "en": "Adaptive DRC",
+    "nl": "Adaptieve DRC",
+    "de": "Adaptive DRC"
+  },
+  "getable": true,
+  "setable": true,
+  "uiComponent": "button",
+  "uiQuickAction": true
+}

@@ -20,6 +20,10 @@
       "search_again": "Search again",
       "manual_search": "Manual search",
       "submit": "Search device"
+    },
+    "zone": {
+      "default": "Default",
+      "custom": "Configure manually"
     }
   },
   "error": {
@@ -29,6 +33,7 @@
     "invalidZone": "The zone \"__zone__\" is not supported by this device",
     "invalidInput": "The input \"__input__\" is not supported by this device",
     "invalidSurroundProgram": "The surround program \"__program__\" is not supported by this device",
-    "uncontrollable": "Unable to control the device, maybe it's turned off?"
+    "uncontrollable": "Unable to control the device, maybe it's turned off?",
+    "badRequest": "Device could not process the request. Is the zone correct?"
   }
 }

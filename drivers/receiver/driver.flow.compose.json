@@ -1,0 +1,189 @@
+{
+  "triggers": [
+    {
+      "id": "input_changed",
+      "title": {
+        "en": "Input was changed",
+        "nl": "Input is gewijzigd",
+        "de": "Eingabe wurde geändert"
+      },
+      "tokens": [
+        {
+          "name": "input",
+          "type": "string",
+          "title": {
+            "en": "Selected input",
+            "nl": "Geselecteerde input",
+            "de": "Ausgewählter Eingang"
+          },
+          "example": "HDMI1"
+        }
+      ],
+      "args": []
+    },
+    {
+      "id": "surround_program_changed",
+      "title": {
+        "en": "Surround program was changed",
+        "nl": "Surround-programma is gewijzigd",
+        "de": "Surround-Programm wurde geändert"
+      },
+      "tokens": [
+        {
+          "name": "surround_program",
+          "type": "string",
+          "title": {
+            "en": "Selected surround program",
+            "nl": "Geselecteerde surround-programma",
+            "de": "Ausgewähltes Surround-Programm"
+          },
+          "example": "5ch Stereo"
+        }
+      ],
+      "args": []
+    },
+    {
+      "id": "muted",
+      "title": {
+        "en": "AV Receiver was muted",
+        "nl": "AV-ontvanger is gedempt",
+        "de": "AV-Receiver ist stummgeschaltet"
+      },
+      "args": []
+    },
+    {
+      "id": "unmuted",
+      "title": {
+        "en": "AV Receiver was unmuted",
+        "nl": "AV-ontvanger is ongedempt",
+        "de": "AV-Receiver ist ungedämpft"
+      },
+      "args": []
+    }
+  ],
+  "actions": [
+    {
+      "id": "change_input",
+      "title": {
+        "en": "Change input",
+        "nl": "Wijzig bron",
+        "de": "Quelle ändern"
+      },
+      "args": [
+        {
+          "name": "input",
+          "type": "autocomplete",
+          "placeholder": {
+            "en": "Input",
+            "nl": "Input",
+            "de": "Eingang"
+          }
+        }
+      ]
+    },
+    {
+      "id": "change_surround_program",
+      "title": {
+        "en": "Change surround program",
+        "nl": "Wijzig surround-programma",
+        "de": "Ändern Sie das Surround-Programm"
+      },
+      "args": [
+        {
+          "name": "surround_program",
+          "type": "autocomplete",
+          "placeholder": {
+            "en": "Surround program",
+            "nl": "Surround-programma",
+            "de": "Surround-Programm"
+          }
+        }
+      ]
+    },
+    {
+      "id": "change_line_input",
+      "title": {
+        "en": "Select line input",
+        "nl": "Selecteer regelnummer",
+        "de": "Zeilennummer auswählen"
+      },
+      "hint": {
+        "en": "Select a specific line within a menu (only for menu based inputs like Net Radio, Server, USB).",
+        "nl": "Selecteer een specifieke regelnummer binnen een menu (alleen voor menu gebaseerde inputs zoals Net Radio, Server, USB).",
+        "de": "Wählen Sie eine bestimmte Zeilennummer innerhalb eines Menüs (nur für menübasierte Eingänge wie Net Radio, Server, USB)."
+      },
+      "args": [
+        {
+          "name": "input",
+          "type": "dropdown",
+          "values": [
+            {
+              "id": "NET_RADIO",
+              "label": {
+                "en": "NET RADIO"
+              }
+            },
+            {
+              "id": "USB",
+              "label": {
+                "en": "USB"
+              }
+            },
+            {
+              "id": "SERVER",
+              "label": {
+                "en": "SERVER"
+              }
+            }
+          ]
+        },
+        {
+          "name": "line",
+          "type": "number",
+          "min": 1,
+          "placeholder": {
+            "en": "Line number",
+            "nl": "Regelnummer",
+            "de": "Zeilennummer"
+          }
+        }
+      ]
+    },
+    {
+      "id": "media_previous",
+      "title": {
+        "en": "Previous",
+        "nl": "Vorige",
+        "de": "Zurück"
+      },
+      "args": []
+    },
+    {
+      "id": "media_next",
+      "title": {
+        "en": "Next",
+        "nl": "Volgende",
+        "de": "Nächster"
+      },
+      "args": []
+    },
+    {
+      "id": "media_play",
+      "title": {
+        "en": "Play",
+        "nl": "Play",
+        "de": "Play"
+      },
+      "args": []
+    },
+    {
+      "id": "media_pause",
+      "title": {
+        "en": "Pause",
+        "nl": "Pauze",
+        "de": "Pause"
+      },
+      "args": []
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "name": {
+    "en": "Yamaha MusicCast",
+    "nl": "Yamaha MusicCast",
+    "de": "Yamaha MusicCast"
+  },
+  "images": {
+    "large": "drivers/musiccast/assets/images/large.png",
+    "small": "drivers/musiccast/assets/images/small.png"
+  },
+  "class": "amplifier",
+  "discovery": "yamaha-discovery",
+  "capabilities": [
+    "onoff",
+    "volume_mute",
+    "volume_set",
+    "yxc_input_selected",
+    "musiccast_zone",
+    "speaker_playing",
+    "speaker_shuffle",
+    "speaker_artist",
+    "speaker_album",
+    "speaker_track",
+    "speaker_next",
+    "speaker_prev"
+  ],
+  "pair": [
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_receiver"
+      }
+    },
+    {
+      "id": "search_device"
+    },
+    {
+      "id": "add_receiver",
+      "template": "add_devices"
+    }
+  ],
+  "settings": [
+    {
+      "type": "group",
+      "label": {
+        "en": "General settings",
+        "nl": "Algemene instellingen",
+        "de": "Allgemeine Einstellungen"
+      },
+      "children": []
+    }
+  ]
+}

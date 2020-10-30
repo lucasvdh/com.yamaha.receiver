@@ -75,97 +75,1340 @@
   "source": "https://github.com/lucasvdh/com.yamaha.receiver",
   "homepage": "https://github.com/lucasvdh/com.yamaha.receiver",
   "support": "mailto:lucasvdhave@gmail.com",
-  "discovery": {
-    "yamaha-discovery": {
-      "type": "ssdp",
-      "ssdp": {
-        "search": "urn:schemas-upnp-org:device:MediaRenderer:1"
-      },
-      "id": "{{headers.usn}}",
-      "conditions": [
-        [
+  "flow": {
+    "triggers": [
+      {
+        "id": "input_changed",
+        "title": {
+          "en": "Input was changed",
+          "nl": "Input is gewijzigd",
+          "de": "Eingabe wurde geändert"
+        },
+        "tokens": [
           {
-            "field": "headers.st",
-            "match": {
-              "type": "string",
-              "value": "urn:schemas-upnp-org:device:MediaRenderer:1"
+            "name": "input",
+            "type": "string",
+            "title": {
+              "en": "Selected input",
+              "nl": "Geselecteerde input",
+              "de": "Ausgewählter Eingang"
+            },
+            "example": "HDMI1"
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=musiccast"
+          }
+        ]
+      },
+      {
+        "id": "surround_program_changed",
+        "title": {
+          "en": "Surround program was changed",
+          "nl": "Surround-programma is gewijzigd",
+          "de": "Surround-Programm wurde geändert"
+        },
+        "tokens": [
+          {
+            "name": "surround_program",
+            "type": "string",
+            "title": {
+              "en": "Selected surround program",
+              "nl": "Geselecteerde surround-programma",
+              "de": "Ausgewähltes Surround-Programm"
+            },
+            "example": "5ch Stereo"
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=musiccast"
+          }
+        ]
+      },
+      {
+        "id": "muted",
+        "title": {
+          "en": "Device was muted",
+          "nl": "Apparaat is gedempt",
+          "de": "Gerät wurde stummgeschaltet"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=musiccast"
+          }
+        ]
+      },
+      {
+        "id": "unmuted",
+        "title": {
+          "en": "Device was unmuted",
+          "nl": "Apparaat niet langer gedempt",
+          "de": "Gerät war nicht stummgeschaltet"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=musiccast"
+          }
+        ]
+      },
+      {
+        "id": "input_changed",
+        "title": {
+          "en": "Input was changed",
+          "nl": "Input is gewijzigd",
+          "de": "Eingabe wurde geändert"
+        },
+        "tokens": [
+          {
+            "name": "input",
+            "type": "string",
+            "title": {
+              "en": "Selected input",
+              "nl": "Geselecteerde input",
+              "de": "Ausgewählter Eingang"
+            },
+            "example": "HDMI1"
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=receiver"
+          }
+        ]
+      },
+      {
+        "id": "surround_program_changed",
+        "title": {
+          "en": "Surround program was changed",
+          "nl": "Surround-programma is gewijzigd",
+          "de": "Surround-Programm wurde geändert"
+        },
+        "tokens": [
+          {
+            "name": "surround_program",
+            "type": "string",
+            "title": {
+              "en": "Selected surround program",
+              "nl": "Geselecteerde surround-programma",
+              "de": "Ausgewähltes Surround-Programm"
+            },
+            "example": "5ch Stereo"
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=receiver"
+          }
+        ]
+      },
+      {
+        "id": "muted",
+        "title": {
+          "en": "AV Receiver was muted",
+          "nl": "AV-ontvanger is gedempt",
+          "de": "AV-Receiver ist stummgeschaltet"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=receiver"
+          }
+        ]
+      },
+      {
+        "id": "unmuted",
+        "title": {
+          "en": "AV Receiver was unmuted",
+          "nl": "AV-ontvanger is ongedempt",
+          "de": "AV-Receiver ist ungedämpft"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=receiver"
+          }
+        ]
+      },
+      {
+        "id": "input_changed",
+        "title": {
+          "en": "Input was changed",
+          "nl": "Input is gewijzigd",
+          "de": "Eingabe wurde geändert"
+        },
+        "tokens": [
+          {
+            "name": "input",
+            "type": "string",
+            "title": {
+              "en": "Selected input",
+              "nl": "Geselecteerde input",
+              "de": "Ausgewählter Eingang"
+            },
+            "example": "HDMI1"
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=receiver-device"
+          }
+        ]
+      },
+      {
+        "id": "surround_program_changed",
+        "title": {
+          "en": "Surround program was changed",
+          "nl": "Surround-programma is gewijzigd",
+          "de": "Surround-Programm wurde geändert"
+        },
+        "tokens": [
+          {
+            "name": "surround_program",
+            "type": "string",
+            "title": {
+              "en": "Selected surround program",
+              "nl": "Geselecteerde surround-programma",
+              "de": "Ausgewähltes Surround-Programm"
+            },
+            "example": "5ch Stereo"
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=receiver-device"
+          }
+        ]
+      },
+      {
+        "id": "muted",
+        "title": {
+          "en": "AV Receiver was muted",
+          "nl": "AV-ontvanger is gedempt",
+          "de": "AV-Receiver ist stummgeschaltet"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=receiver-device"
+          }
+        ]
+      },
+      {
+        "id": "unmuted",
+        "title": {
+          "en": "AV Receiver was unmuted",
+          "nl": "AV-ontvanger is ongedempt",
+          "de": "AV-Receiver ist ungedämpft"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=receiver-device"
+          }
+        ]
+      },
+      {
+        "id": "input_changed",
+        "title": {
+          "en": "Input was changed",
+          "nl": "Input is gewijzigd",
+          "de": "Eingabe wurde geändert"
+        },
+        "tokens": [
+          {
+            "name": "input",
+            "type": "string",
+            "title": {
+              "en": "Selected input",
+              "nl": "Geselecteerde input",
+              "de": "Ausgewählter Eingang"
+            },
+            "example": "HDMI1"
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=receiver-zone"
+          }
+        ]
+      },
+      {
+        "id": "surround_program_changed",
+        "title": {
+          "en": "Surround program was changed",
+          "nl": "Surround-programma is gewijzigd",
+          "de": "Surround-Programm wurde geändert"
+        },
+        "tokens": [
+          {
+            "name": "surround_program",
+            "type": "string",
+            "title": {
+              "en": "Selected surround program",
+              "nl": "Geselecteerde surround-programma",
+              "de": "Ausgewähltes Surround-Programm"
+            },
+            "example": "5ch Stereo"
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=receiver-zone"
+          }
+        ]
+      },
+      {
+        "id": "muted",
+        "title": {
+          "en": "AV Receiver was muted",
+          "nl": "AV-ontvanger is gedempt",
+          "de": "AV-Receiver ist stummgeschaltet"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=receiver-zone"
+          }
+        ]
+      },
+      {
+        "id": "unmuted",
+        "title": {
+          "en": "AV Receiver was unmuted",
+          "nl": "AV-ontvanger is ongedempt",
+          "de": "AV-Receiver ist ungedämpft"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=receiver-zone"
+          }
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "change_zone",
+        "title": {
+          "en": "Change zone",
+          "nl": "Wijzig zone",
+          "de": "Zone wechseln"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=musiccast"
+          },
+          {
+            "type": "dropdown",
+            "name": "zone",
+            "title": {
+              "en": "Select which zone you want to control",
+              "nl": "Selecteer welke zone je wilt bedienen",
+              "de": "Wählen Sie die Zone aus, die Sie steuern möchten"
+            },
+            "values": [
+              {
+                "id": "main",
+                "label": {
+                  "en": "Main"
+                }
+              },
+              {
+                "id": "zone2",
+                "label": {
+                  "en": "Zone 2"
+                }
+              },
+              {
+                "id": "zone3",
+                "label": {
+                  "en": "Zone 3"
+                }
+              },
+              {
+                "id": "zone4",
+                "label": {
+                  "en": "Zone 4"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "change_input",
+        "title": {
+          "en": "Change input",
+          "nl": "Wijzig bron",
+          "de": "Quelle ändern"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=musiccast"
+          },
+          {
+            "name": "input",
+            "type": "autocomplete",
+            "title": {
+              "en": "Input",
+              "nl": "Input",
+              "de": "Eingang"
             }
           }
         ]
-      ]
-    }
+      },
+      {
+        "id": "change_surround_program",
+        "title": {
+          "en": "Change surround program",
+          "nl": "Wijzig surround-programma",
+          "de": "Ändern Sie das Surround-Programm"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=musiccast"
+          },
+          {
+            "name": "surround_program",
+            "type": "autocomplete",
+            "title": {
+              "en": "Surround program",
+              "nl": "Surround-programma",
+              "de": "Surround-Programm"
+            }
+          }
+        ]
+      },
+      {
+        "id": "volume_up",
+        "title": {
+          "en": "Raise volume",
+          "nl": "Zet geluid harder"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=musiccast"
+          },
+          {
+            "name": "volume",
+            "type": "range",
+            "title": {
+              "en": "Volume",
+              "nl": "Volume",
+              "de": "Volumen"
+            },
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "label": "dB"
+          }
+        ]
+      },
+      {
+        "id": "volume_down",
+        "title": {
+          "en": "Lower volume",
+          "nl": "Zet geluid zachter"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=musiccast"
+          },
+          {
+            "name": "volume",
+            "type": "range",
+            "title": {
+              "en": "Volume",
+              "nl": "Volume",
+              "de": "Volumen"
+            },
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "label": "dB"
+          }
+        ]
+      },
+      {
+        "id": "change_input",
+        "title": {
+          "en": "Change input",
+          "nl": "Wijzig bron",
+          "de": "Quelle ändern"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=receiver"
+          },
+          {
+            "name": "input",
+            "type": "autocomplete",
+            "placeholder": {
+              "en": "Input",
+              "nl": "Input",
+              "de": "Eingang"
+            }
+          }
+        ]
+      },
+      {
+        "id": "change_surround_program",
+        "title": {
+          "en": "Change surround program",
+          "nl": "Wijzig surround-programma",
+          "de": "Ändern Sie das Surround-Programm"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=receiver"
+          },
+          {
+            "name": "surround_program",
+            "type": "autocomplete",
+            "placeholder": {
+              "en": "Surround program",
+              "nl": "Surround-programma",
+              "de": "Surround-Programm"
+            }
+          }
+        ]
+      },
+      {
+        "id": "change_line_input",
+        "title": {
+          "en": "Select line input",
+          "nl": "Selecteer regelnummer",
+          "de": "Zeilennummer auswählen"
+        },
+        "hint": {
+          "en": "Select a specific line within a menu (only for menu based inputs like Net Radio, Server, USB).",
+          "nl": "Selecteer een specifieke regelnummer binnen een menu (alleen voor menu gebaseerde inputs zoals Net Radio, Server, USB).",
+          "de": "Wählen Sie eine bestimmte Zeilennummer innerhalb eines Menüs (nur für menübasierte Eingänge wie Net Radio, Server, USB)."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=receiver"
+          },
+          {
+            "name": "input",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "NET_RADIO",
+                "label": {
+                  "en": "NET RADIO"
+                }
+              },
+              {
+                "id": "USB",
+                "label": {
+                  "en": "USB"
+                }
+              },
+              {
+                "id": "SERVER",
+                "label": {
+                  "en": "SERVER"
+                }
+              }
+            ]
+          },
+          {
+            "name": "line",
+            "type": "number",
+            "min": 1,
+            "placeholder": {
+              "en": "Line number",
+              "nl": "Regelnummer",
+              "de": "Zeilennummer"
+            }
+          }
+        ]
+      },
+      {
+        "id": "media_previous",
+        "title": {
+          "en": "Previous",
+          "nl": "Vorige",
+          "de": "Zurück"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=receiver"
+          }
+        ]
+      },
+      {
+        "id": "media_next",
+        "title": {
+          "en": "Next",
+          "nl": "Volgende",
+          "de": "Nächster"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=receiver"
+          }
+        ]
+      },
+      {
+        "id": "media_play",
+        "title": {
+          "en": "Play",
+          "nl": "Play",
+          "de": "Play"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=receiver"
+          }
+        ]
+      },
+      {
+        "id": "media_pause",
+        "title": {
+          "en": "Pause",
+          "nl": "Pauze",
+          "de": "Pause"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=receiver"
+          }
+        ]
+      },
+      {
+        "id": "change_input",
+        "title": {
+          "en": "Change input",
+          "nl": "Wijzig bron",
+          "de": "Quelle ändern"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=receiver-device"
+          },
+          {
+            "name": "input",
+            "type": "autocomplete",
+            "placeholder": {
+              "en": "Input",
+              "nl": "Input",
+              "de": "Eingang"
+            }
+          }
+        ]
+      },
+      {
+        "id": "change_surround_program",
+        "title": {
+          "en": "Change surround program",
+          "nl": "Wijzig surround-programma",
+          "de": "Ändern Sie das Surround-Programm"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=receiver-device"
+          },
+          {
+            "name": "surround_program",
+            "type": "autocomplete",
+            "placeholder": {
+              "en": "Surround program",
+              "nl": "Surround-programma",
+              "de": "Surround-Programm"
+            }
+          }
+        ]
+      },
+      {
+        "id": "change_line_input",
+        "title": {
+          "en": "Select line input",
+          "nl": "Selecteer regelnummer",
+          "de": "Zeilennummer auswählen"
+        },
+        "hint": {
+          "en": "Select a specific line within a menu (only for menu based inputs like Net Radio, Server, USB).",
+          "nl": "Selecteer een specifieke regelnummer binnen een menu (alleen voor menu gebaseerde inputs zoals Net Radio, Server, USB).",
+          "de": "Wählen Sie eine bestimmte Zeilennummer innerhalb eines Menüs (nur für menübasierte Eingänge wie Net Radio, Server, USB)."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=receiver-device"
+          },
+          {
+            "name": "input",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "NET_RADIO",
+                "label": {
+                  "en": "NET RADIO"
+                }
+              },
+              {
+                "id": "USB",
+                "label": {
+                  "en": "USB"
+                }
+              },
+              {
+                "id": "SERVER",
+                "label": {
+                  "en": "SERVER"
+                }
+              }
+            ]
+          },
+          {
+            "name": "line",
+            "type": "number",
+            "min": 1,
+            "placeholder": {
+              "en": "Line number",
+              "nl": "Regelnummer",
+              "de": "Zeilennummer"
+            }
+          }
+        ]
+      },
+      {
+        "id": "media_previous",
+        "title": {
+          "en": "Previous",
+          "nl": "Vorige",
+          "de": "Zurück"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=receiver-device"
+          }
+        ]
+      },
+      {
+        "id": "media_next",
+        "title": {
+          "en": "Next",
+          "nl": "Volgende",
+          "de": "Nächster"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=receiver-device"
+          }
+        ]
+      },
+      {
+        "id": "media_play",
+        "title": {
+          "en": "Play",
+          "nl": "Play",
+          "de": "Play"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=receiver-device"
+          }
+        ]
+      },
+      {
+        "id": "media_pause",
+        "title": {
+          "en": "Pause",
+          "nl": "Pauze",
+          "de": "Pause"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=receiver-device"
+          }
+        ]
+      },
+      {
+        "id": "change_input",
+        "title": {
+          "en": "Change input",
+          "nl": "Wijzig bron",
+          "de": "Quelle ändern"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=receiver-zone"
+          },
+          {
+            "name": "input",
+            "type": "autocomplete",
+            "placeholder": {
+              "en": "Input",
+              "nl": "Input",
+              "de": "Eingang"
+            }
+          }
+        ]
+      },
+      {
+        "id": "change_surround_program",
+        "title": {
+          "en": "Change surround program",
+          "nl": "Wijzig surround-programma",
+          "de": "Ändern Sie das Surround-Programm"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=receiver-zone"
+          },
+          {
+            "name": "surround_program",
+            "type": "autocomplete",
+            "placeholder": {
+              "en": "Surround program",
+              "nl": "Surround-programma",
+              "de": "Surround-Programm"
+            }
+          }
+        ]
+      },
+      {
+        "id": "change_line_input",
+        "title": {
+          "en": "Select line input",
+          "nl": "Selecteer regelnummer",
+          "de": "Zeilennummer auswählen"
+        },
+        "hint": {
+          "en": "Select a specific line within a menu (only for menu based inputs like Net Radio, Server, USB).",
+          "nl": "Selecteer een specifieke regelnummer binnen een menu (alleen voor menu gebaseerde inputs zoals Net Radio, Server, USB).",
+          "de": "Wählen Sie eine bestimmte Zeilennummer innerhalb eines Menüs (nur für menübasierte Eingänge wie Net Radio, Server, USB)."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=receiver-zone"
+          },
+          {
+            "name": "input",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "NET_RADIO",
+                "label": {
+                  "en": "NET RADIO"
+                }
+              },
+              {
+                "id": "USB",
+                "label": {
+                  "en": "USB"
+                }
+              },
+              {
+                "id": "SERVER",
+                "label": {
+                  "en": "SERVER"
+                }
+              }
+            ]
+          },
+          {
+            "name": "line",
+            "type": "number",
+            "min": 1,
+            "placeholder": {
+              "en": "Line number",
+              "nl": "Regelnummer",
+              "de": "Zeilennummer"
+            }
+          }
+        ]
+      },
+      {
+        "id": "media_previous",
+        "title": {
+          "en": "Previous",
+          "nl": "Vorige",
+          "de": "Zurück"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=receiver-zone"
+          }
+        ]
+      },
+      {
+        "id": "media_next",
+        "title": {
+          "en": "Next",
+          "nl": "Volgende",
+          "de": "Nächster"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=receiver-zone"
+          }
+        ]
+      },
+      {
+        "id": "media_play",
+        "title": {
+          "en": "Play",
+          "nl": "Play",
+          "de": "Play"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=receiver-zone"
+          }
+        ]
+      },
+      {
+        "id": "media_pause",
+        "title": {
+          "en": "Pause",
+          "nl": "Pauze",
+          "de": "Pause"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=receiver-zone"
+          }
+        ]
+      }
+    ]
   },
+  "drivers": [
+    {
+      "name": {
+        "en": "Yamaha MusicCast",
+        "nl": "Yamaha MusicCast",
+        "de": "Yamaha MusicCast"
+      },
+      "images": {
+        "large": "drivers/musiccast/assets/images/large.png",
+        "small": "drivers/musiccast/assets/images/small.png"
+      },
+      "class": "amplifier",
+      "discovery": "yamaha-discovery",
+      "capabilities": [
+        "onoff",
+        "volume_mute",
+        "volume_set",
+        "yxc_input_selected",
+        "musiccast_zone",
+        "speaker_playing",
+        "speaker_shuffle",
+        "speaker_artist",
+        "speaker_album",
+        "speaker_track",
+        "speaker_next",
+        "speaker_prev"
+      ],
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_receiver"
+          }
+        },
+        {
+          "id": "search_device"
+        },
+        {
+          "id": "add_receiver",
+          "template": "add_devices"
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "General settings",
+            "nl": "Algemene instellingen",
+            "de": "Allgemeine Einstellungen"
+          },
+          "children": []
+        }
+      ],
+      "id": "musiccast"
+    },
+    {
+      "name": {
+        "en": "Yamaha Receiver (OLD)",
+        "nl": "Yamaha Ontvanger (OUD)",
+        "de": "Yamaha Receiver (ELT)"
+      },
+      "images": {
+        "large": "drivers/receiver/assets/images/large.png",
+        "small": "drivers/receiver/assets/images/small.png"
+      },
+      "class": "amplifier",
+      "discovery": "yamaha-discovery",
+      "capabilities": [
+        "onoff",
+        "volume_set",
+        "volume_mute",
+        "input_selected",
+        "receiver_zone",
+        "surround_program",
+        "surround_straight",
+        "surround_enhancer",
+        "sound_direct",
+        "sound_extra_bass",
+        "sound_adaptive_drc",
+        "media_previous",
+        "media_next",
+        "media_play",
+        "media_pause"
+      ],
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_receiver"
+          }
+        },
+        {
+          "id": "search_device"
+        },
+        {
+          "id": "loading",
+          "template": "loading"
+        },
+        {
+          "id": "list_manual_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_receiver"
+          }
+        },
+        {
+          "id": "add_receiver",
+          "template": "add_devices"
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "General settings",
+            "nl": "Algemene instellingen",
+            "de": "Allgemeine Einstellungen"
+          },
+          "children": [
+            {
+              "id": "zone",
+              "type": "text",
+              "label": {
+                "en": "Zone",
+                "nl": "Zone"
+              },
+              "value": "Main_Zone",
+              "hint": {
+                "en": "Enter the Zone of your Yamaha receiver here. If you are unsure what to enter, fill in 'Main_Zone'.",
+                "nl": "Vul de Zone van uw Yamaha receiver hier in. Als je niet zeker weet wat u in moet voeren, vul dan 'Main_Zone' in.",
+                "de": "Geben Sie hier die Zone Ihres Yamaha-Empfängers ein. Wenn Sie sich nicht sicher sind, was Sie eingeben sollen, geben Sie 'Main_Zone' ein."
+              }
+            },
+            {
+              "id": "updateInterval",
+              "type": "number",
+              "label": {
+                "en": "Update interval in seconds",
+                "nl": "Update interval in seconden",
+                "de": "Aktualisierungsintervall in Sekunden"
+              },
+              "value": 5,
+              "hint": {
+                "en": "The interval in which Homey should check if anything has changed. The minimum value if 5.",
+                "nl": "De interval waarin Homey moet controleren of er iets is veranderd. De minimumwaarde is 5.",
+                "de": "Das Intervall, in dem Homey prüfen muss, ob sich etwas geändert hat. Der Mindestwert ist 5."
+              }
+            }
+          ]
+        }
+      ],
+      "id": "receiver"
+    },
+    {
+      "name": {
+        "en": "Yamaha AV Receiver",
+        "nl": "Yamaha AV-ontvanger",
+        "de": "Yamaha AV-Receiver"
+      },
+      "images": {
+        "large": "drivers/receiver/assets/images/large.png",
+        "small": "drivers/receiver/assets/images/small.png"
+      },
+      "class": "amplifier",
+      "discovery": "yamaha-discovery",
+      "capabilities": [
+        "onoff",
+        "volume_set",
+        "volume_mute",
+        "input_selected",
+        "receiver_zone",
+        "surround_program",
+        "surround_straight",
+        "surround_enhancer",
+        "sound_direct",
+        "sound_extra_bass",
+        "sound_adaptive_drc",
+        "media_previous",
+        "media_next",
+        "media_play",
+        "media_pause"
+      ],
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_receiver"
+          }
+        },
+        {
+          "id": "search_device"
+        },
+        {
+          "id": "loading",
+          "template": "loading"
+        },
+        {
+          "id": "list_manual_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_receiver"
+          }
+        },
+        {
+          "id": "add_receiver",
+          "template": "add_devices"
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "General settings",
+            "nl": "Algemene instellingen",
+            "de": "Allgemeine Einstellungen"
+          },
+          "children": [
+            {
+              "id": "zone",
+              "type": "text",
+              "label": {
+                "en": "Zone",
+                "nl": "Zone"
+              },
+              "value": "Main_Zone",
+              "hint": {
+                "en": "Enter the Zone of your Yamaha receiver here. If you are unsure what to enter, fill in 'Main_Zone'.",
+                "nl": "Vul de Zone van uw Yamaha receiver hier in. Als je niet zeker weet wat u in moet voeren, vul dan 'Main_Zone' in.",
+                "de": "Geben Sie hier die Zone Ihres Yamaha-Empfängers ein. Wenn Sie sich nicht sicher sind, was Sie eingeben sollen, geben Sie 'Main_Zone' ein."
+              }
+            },
+            {
+              "id": "updateInterval",
+              "type": "number",
+              "label": {
+                "en": "Update interval in seconds",
+                "nl": "Update interval in seconden",
+                "de": "Aktualisierungsintervall in Sekunden"
+              },
+              "value": 5,
+              "hint": {
+                "en": "The interval in which Homey should check if anything has changed. The minimum value if 5.",
+                "nl": "De interval waarin Homey moet controleren of er iets is veranderd. De minimumwaarde is 5.",
+                "de": "Das Intervall, in dem Homey prüfen muss, ob sich etwas geändert hat. Der Mindestwert ist 5."
+              }
+            }
+          ]
+        }
+      ],
+      "id": "receiver-device"
+    },
+    {
+      "name": {
+        "en": "Yamaha AV Zone",
+        "nl": "Yamaha AV zone",
+        "de": "Yamaha AV Zone"
+      },
+      "images": {
+        "large": "drivers/receiver/assets/images/large.png",
+        "small": "drivers/receiver/assets/images/small.png"
+      },
+      "class": "amplifier",
+      "discovery": "yamaha-discovery",
+      "capabilities": [
+        "onoff",
+        "volume_set",
+        "volume_mute",
+        "input_selected",
+        "surround_program",
+        "surround_straight",
+        "surround_enhancer",
+        "sound_direct",
+        "sound_extra_bass",
+        "sound_adaptive_drc",
+        "media_previous",
+        "media_next",
+        "media_play",
+        "media_pause"
+      ],
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_receiver"
+          }
+        },
+        {
+          "id": "search_device"
+        },
+        {
+          "id": "loading",
+          "template": "loading"
+        },
+        {
+          "id": "list_manual_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_receiver"
+          }
+        },
+        {
+          "id": "add_receiver",
+          "template": "add_devices"
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "General settings",
+            "nl": "Algemene instellingen",
+            "de": "Allgemeine Einstellungen"
+          },
+          "children": [
+            {
+              "id": "zone",
+              "type": "text",
+              "label": {
+                "en": "Zone",
+                "nl": "Zone"
+              },
+              "value": "Main_Zone",
+              "hint": {
+                "en": "Enter the Zone of your Yamaha receiver here. If you are unsure what to enter, fill in 'Main_Zone'.",
+                "nl": "Vul de Zone van uw Yamaha receiver hier in. Als je niet zeker weet wat u in moet voeren, vul dan 'Main_Zone' in.",
+                "de": "Geben Sie hier die Zone Ihres Yamaha-Empfängers ein. Wenn Sie sich nicht sicher sind, was Sie eingeben sollen, geben Sie 'Main_Zone' ein."
+              }
+            },
+            {
+              "id": "updateInterval",
+              "type": "number",
+              "label": {
+                "en": "Update interval in seconds",
+                "nl": "Update interval in seconden",
+                "de": "Aktualisierungsintervall in Sekunden"
+              },
+              "value": 5,
+              "hint": {
+                "en": "The interval in which Homey should check if anything has changed. The minimum value if 5.",
+                "nl": "De interval waarin Homey moet controleren of er iets is veranderd. De minimumwaarde is 5.",
+                "de": "Das Intervall, in dem Homey prüfen muss, ob sich etwas geändert hat. Der Mindestwert ist 5."
+              }
+            }
+          ]
+        }
+      ],
+      "id": "receiver-zone"
+    }
+  ],
   "capabilities": {
-    "receiver_zone": {
-      "type": "enum",
-      "title": {
-        "en": "Selected zone",
-        "nl": "Geselecteerde zone"
-      },
-      "getable": true,
-      "setable": true,
-      "values": [
-        {
-          "id": "Main_Zone",
-          "title": {
-            "en": "Main zone"
-          }
-        },
-        {
-          "id": "Zone_2",
-          "title": {
-            "en": "Zone 2"
-          }
-        },
-        {
-          "id": "Zone_3",
-          "title": {
-            "en": "Zone 3"
-          }
-        },
-        {
-          "id": "Zone_4",
-          "title": {
-            "en": "Zone 4"
-          }
-        }
-      ]
-    },
-    "musiccast_zone": {
-      "type": "enum",
-      "title": {
-        "en": "Selected zone",
-        "nl": "Geselecteerde zone"
-      },
-      "getable": true,
-      "setable": true,
-      "values": [
-        {
-          "id": "main",
-          "title": {
-            "en": "Main"
-          }
-        },
-        {
-          "id": "zone2",
-          "title": {
-            "en": "Zone 2"
-          }
-        },
-        {
-          "id": "zone3",
-          "title": {
-            "en": "Zone 3"
-          }
-        },
-        {
-          "id": "zone4",
-          "title": {
-            "en": "Zone 4"
-          }
-        }
-      ]
-    },
     "input_selected": {
       "type": "enum",
       "title": {
@@ -398,6 +1641,327 @@
           }
         }
       ]
+    },
+    "media_next": {
+      "type": "boolean",
+      "title": {
+        "en": "Next",
+        "nl": "Volgende",
+        "de": "Nächster"
+      },
+      "getable": false,
+      "setable": true,
+      "uiComponent": "button",
+      "uiQuickAction": true
+    },
+    "media_pause": {
+      "type": "boolean",
+      "title": {
+        "en": "Pause",
+        "nl": "Pauze",
+        "de": "Pause"
+      },
+      "getable": false,
+      "setable": true,
+      "uiComponent": "button",
+      "uiQuickAction": true
+    },
+    "media_play": {
+      "type": "boolean",
+      "title": {
+        "en": "Play",
+        "nl": "Play",
+        "de": "Play"
+      },
+      "getable": false,
+      "setable": true,
+      "uiComponent": "button",
+      "uiQuickAction": true
+    },
+    "media_previous": {
+      "type": "boolean",
+      "title": {
+        "en": "Previous",
+        "nl": "Vorige",
+        "de": "Zurück"
+      },
+      "getable": false,
+      "setable": true,
+      "uiComponent": "button",
+      "uiQuickAction": true
+    },
+    "musiccast_zone": {
+      "type": "enum",
+      "title": {
+        "en": "Selected zone",
+        "nl": "Geselecteerde zone"
+      },
+      "getable": true,
+      "setable": true,
+      "values": [
+        {
+          "id": "main",
+          "title": {
+            "en": "Main"
+          }
+        },
+        {
+          "id": "zone2",
+          "title": {
+            "en": "Zone 2"
+          }
+        },
+        {
+          "id": "zone3",
+          "title": {
+            "en": "Zone 3"
+          }
+        },
+        {
+          "id": "zone4",
+          "title": {
+            "en": "Zone 4"
+          }
+        }
+      ]
+    },
+    "receiver_zone": {
+      "type": "enum",
+      "title": {
+        "en": "Selected zone",
+        "nl": "Geselecteerde zone"
+      },
+      "getable": true,
+      "setable": true,
+      "values": [
+        {
+          "id": "Main_Zone",
+          "title": {
+            "en": "Main zone"
+          }
+        },
+        {
+          "id": "Zone_2",
+          "title": {
+            "en": "Zone 2"
+          }
+        },
+        {
+          "id": "Zone_3",
+          "title": {
+            "en": "Zone 3"
+          }
+        },
+        {
+          "id": "Zone_4",
+          "title": {
+            "en": "Zone 4"
+          }
+        }
+      ]
+    },
+    "sound_adaptive_drc": {
+      "type": "boolean",
+      "title": {
+        "en": "Adaptive DRC",
+        "nl": "Adaptieve DRC",
+        "de": "Adaptive DRC"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "button",
+      "uiQuickAction": true
+    },
+    "sound_direct": {
+      "type": "boolean",
+      "title": {
+        "en": "Direct audio",
+        "nl": "Direct audio",
+        "de": "Direktes Audio"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "button",
+      "uiQuickAction": true
+    },
+    "sound_extra_bass": {
+      "type": "boolean",
+      "title": {
+        "en": "Extra bass",
+        "nl": "Extra bas",
+        "de": "Extra Bass"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "button",
+      "uiQuickAction": true
+    },
+    "surround_enhancer": {
+      "type": "boolean",
+      "title": {
+        "en": "Enhancer",
+        "nl": "Enhancer",
+        "de": "Enhancer"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "button",
+      "uiQuickAction": true
+    },
+    "surround_program": {
+      "type": "enum",
+      "title": {
+        "en": "Surround program",
+        "nl": "Surround-programma"
+      },
+      "getable": true,
+      "setable": true,
+      "values": [
+        {
+          "id": "Action Game",
+          "title": {
+            "en": "Action Game"
+          }
+        },
+        {
+          "id": "Roleplaying Game",
+          "title": {
+            "en": "Roleplaying Game"
+          }
+        },
+        {
+          "id": "Music Video",
+          "title": {
+            "en": "Music Video"
+          }
+        },
+        {
+          "id": "Standard",
+          "title": {
+            "en": "Standard"
+          }
+        },
+        {
+          "id": "Spectacle",
+          "title": {
+            "en": "Spectacle"
+          }
+        },
+        {
+          "id": "Sci-Fi",
+          "title": {
+            "en": "Sci-Fi"
+          }
+        },
+        {
+          "id": "Adventure",
+          "title": {
+            "en": "Adventure"
+          }
+        },
+        {
+          "id": "Drama",
+          "title": {
+            "en": "Drama"
+          }
+        },
+        {
+          "id": "Hall in Munich",
+          "title": {
+            "en": "Hall in Munich"
+          }
+        },
+        {
+          "id": "Hall in Vienna",
+          "title": {
+            "en": "Hall in Vienna"
+          }
+        },
+        {
+          "id": "Chamber",
+          "title": {
+            "en": "Chamber"
+          }
+        },
+        {
+          "id": "Cellar Club",
+          "title": {
+            "en": "Cellar Club"
+          }
+        },
+        {
+          "id": "Church in Royaumont",
+          "title": {
+            "en": "Church in Royaumont"
+          }
+        },
+        {
+          "id": "The Roxy Theatre",
+          "title": {
+            "en": "The Roxy Theatre"
+          }
+        },
+        {
+          "id": "The Bottom Line",
+          "title": {
+            "en": "The Bottom Line"
+          }
+        },
+        {
+          "id": "Sports",
+          "title": {
+            "en": "Sports"
+          }
+        },
+        {
+          "id": "Mono Movie",
+          "title": {
+            "en": "Mono Movie"
+          }
+        },
+        {
+          "id": "2ch Stereo",
+          "title": {
+            "en": "2ch Stereo"
+          }
+        },
+        {
+          "id": "5ch Stereo",
+          "title": {
+            "en": "5ch Stereo"
+          }
+        },
+        {
+          "id": "7ch Stereo",
+          "title": {
+            "en": "7ch Stereo"
+          }
+        },
+        {
+          "id": "9ch Stereo",
+          "title": {
+            "en": "9ch Stereo"
+          }
+        },
+        {
+          "id": "Surround Decoder",
+          "title": {
+            "en": "Surround Decoder"
+          }
+        }
+      ]
+    },
+    "surround_straight": {
+      "type": "boolean",
+      "title": {
+        "en": "Straight audio",
+        "nl": "Straight audio",
+        "de": "Straight Audio"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "button",
+      "uiQuickAction": true
     },
     "yxc_input_selected": {
       "type": "enum",
@@ -793,1013 +2357,26 @@
           }
         }
       ]
-    },
-    "surround_program": {
-      "type": "enum",
-      "title": {
-        "en": "Surround program",
-        "nl": "Surround-programma"
-      },
-      "getable": true,
-      "setable": true,
-      "values": [
-        {
-          "id": "Action Game",
-          "title": {
-            "en": "Action Game"
-          }
-        },
-        {
-          "id": "Roleplaying Game",
-          "title": {
-            "en": "Roleplaying Game"
-          }
-        },
-        {
-          "id": "Music Video",
-          "title": {
-            "en": "Music Video"
-          }
-        },
-        {
-          "id": "Standard",
-          "title": {
-            "en": "Standard"
-          }
-        },
-        {
-          "id": "Spectacle",
-          "title": {
-            "en": "Spectacle"
-          }
-        },
-        {
-          "id": "Sci-Fi",
-          "title": {
-            "en": "Sci-Fi"
-          }
-        },
-        {
-          "id": "Adventure",
-          "title": {
-            "en": "Adventure"
-          }
-        },
-        {
-          "id": "Drama",
-          "title": {
-            "en": "Drama"
-          }
-        },
-        {
-          "id": "Hall in Munich",
-          "title": {
-            "en": "Hall in Munich"
-          }
-        },
-        {
-          "id": "Hall in Vienna",
-          "title": {
-            "en": "Hall in Vienna"
-          }
-        },
-        {
-          "id": "Chamber",
-          "title": {
-            "en": "Chamber"
-          }
-        },
-        {
-          "id": "Cellar Club",
-          "title": {
-            "en": "Cellar Club"
-          }
-        },
-        {
-          "id": "Church in Royaumont",
-          "title": {
-            "en": "Church in Royaumont"
-          }
-        },
-        {
-          "id": "The Roxy Theatre",
-          "title": {
-            "en": "The Roxy Theatre"
-          }
-        },
-        {
-          "id": "The Bottom Line",
-          "title": {
-            "en": "The Bottom Line"
-          }
-        },
-        {
-          "id": "Sports",
-          "title": {
-            "en": "Sports"
-          }
-        },
-        {
-          "id": "Mono Movie",
-          "title": {
-            "en": "Mono Movie"
-          }
-        },
-        {
-          "id": "2ch Stereo",
-          "title": {
-            "en": "2ch Stereo"
-          }
-        },
-        {
-          "id": "5ch Stereo",
-          "title": {
-            "en": "5ch Stereo"
-          }
-        },
-        {
-          "id": "7ch Stereo",
-          "title": {
-            "en": "7ch Stereo"
-          }
-        },
-        {
-          "id": "9ch Stereo",
-          "title": {
-            "en": "9ch Stereo"
-          }
-        },
-        {
-          "id": "Surround Decoder",
-          "title": {
-            "en": "Surround Decoder"
-          }
-        }
-      ]
-    },
-    "surround_straight": {
-      "type": "boolean",
-      "title": {
-        "en": "Straight audio",
-        "nl": "Straight audio",
-        "de": "Straight Audio"
-      },
-      "getable": true,
-      "setable": true,
-      "uiComponent": "button",
-      "uiQuickAction": true
-    },
-    "surround_straight": {
-      "type": "boolean",
-      "title": {
-        "en": "Straight audio",
-        "nl": "Straight audio",
-        "de": "Straight Audio"
-      },
-      "getable": true,
-      "setable": true,
-      "uiComponent": "button",
-      "uiQuickAction": true
-    },
-    "surround_enhancer": {
-      "type": "boolean",
-      "title": {
-        "en": "Enhancer",
-        "nl": "Enhancer",
-        "de": "Enhancer"
-      },
-      "getable": true,
-      "setable": true,
-      "uiComponent": "button",
-      "uiQuickAction": true
-    },
-    "sound_direct": {
-      "type": "boolean",
-      "title": {
-        "en": "Direct audio",
-        "nl": "Direct audio",
-        "de": "Direktes Audio"
-      },
-      "getable": true,
-      "setable": true,
-      "uiComponent": "button",
-      "uiQuickAction": true
-    },
-    "sound_extra_bass": {
-      "type": "boolean",
-      "title": {
-        "en": "Extra bass",
-        "nl": "Extra bas",
-        "de": "Extra Bass"
-      },
-      "getable": true,
-      "setable": true,
-      "uiComponent": "button",
-      "uiQuickAction": true
-    },
-    "sound_adaptive_drc": {
-      "type": "boolean",
-      "title": {
-        "en": "Adaptive DRC",
-        "nl": "Adaptieve DRC",
-        "de": "Adaptive DRC"
-      },
-      "getable": true,
-      "setable": true,
-      "uiComponent": "button",
-      "uiQuickAction": true
-    },
-    "media_previous": {
-      "type": "boolean",
-      "title": {
-        "en": "Previous",
-        "nl": "Vorige",
-        "de": "Zurück"
-      },
-      "getable": false,
-      "setable": true,
-      "uiComponent": "button",
-      "uiQuickAction": true
-    },
-    "media_next": {
-      "type": "boolean",
-      "title": {
-        "en": "Next",
-        "nl": "Volgende",
-        "de": "Nächster"
-      },
-      "getable": false,
-      "setable": true,
-      "uiComponent": "button",
-      "uiQuickAction": true
-    },
-    "media_play": {
-      "type": "boolean",
-      "title": {
-        "en": "Play",
-        "nl": "Play",
-        "de": "Play"
-      },
-      "getable": false,
-      "setable": true,
-      "uiComponent": "button",
-      "uiQuickAction": true
-    },
-    "media_pause": {
-      "type": "boolean",
-      "title": {
-        "en": "Pause",
-        "nl": "Pauze",
-        "de": "Pause"
-      },
-      "getable": false,
-      "setable": true,
-      "uiComponent": "button",
-      "uiQuickAction": true
     }
   },
-  "drivers": [
-    {
-      "id": "receiver",
-      "name": {
-        "en": "Yamaha AV Receiver",
-        "nl": "Yamaha AV-ontvanger",
-        "de": "Yamaha AV-Receiver"
+  "discovery": {
+    "yamaha-discovery": {
+      "type": "ssdp",
+      "ssdp": {
+        "search": "urn:schemas-upnp-org:device:MediaRenderer:1"
       },
-      "images": {
-        "large": "drivers/receiver/assets/images/large.png",
-        "small": "drivers/receiver/assets/images/small.png"
-      },
-      "class": "amplifier",
-      "discovery": "yamaha-discovery",
-      "capabilities": [
-        "onoff",
-        "volume_set",
-        "volume_mute",
-        "input_selected",
-        "receiver_zone",
-        "surround_program",
-        "surround_straight",
-        "surround_enhancer",
-        "sound_direct",
-        "sound_extra_bass",
-        "sound_adaptive_drc",
-        "media_previous",
-        "media_next",
-        "media_play",
-        "media_pause"
-      ],
-      "pair": [
-        {
-          "id": "list_devices",
-          "template": "list_devices",
-          "navigation": {
-            "next": "add_receiver"
-          }
-        },
-        {
-          "id": "search_device"
-        },
-        {
-          "id": "loading",
-          "template": "loading"
-        },
-        {
-          "id": "list_manual_devices",
-          "template": "list_devices",
-          "navigation": {
-            "next": "add_receiver"
-          }
-        },
-        {
-          "id": "add_receiver",
-          "template": "add_devices"
-        }
-      ],
-      "settings": [
-        {
-          "type": "group",
-          "label": {
-            "en": "General settings",
-            "nl": "Algemene instellingen",
-            "de": "Allgemeine Einstellungen"
-          },
-          "children": [
-            {
-              "id": "zone",
-              "type": "text",
-              "label": {
-                "en": "Zone",
-                "nl": "Zone"
-              },
-              "value": "Main_Zone",
-              "hint": {
-                "en": "Enter the Zone of your Yamaha receiver here. If you are unsure what to enter, fill in 'Main_Zone'.",
-                "nl": "Vul de Zone van uw Yamaha receiver hier in. Als je niet zeker weet wat u in moet voeren, vul dan 'Main_Zone' in.",
-                "de": "Geben Sie hier die Zone Ihres Yamaha-Empfängers ein. Wenn Sie sich nicht sicher sind, was Sie eingeben sollen, geben Sie 'Main_Zone' ein."
-              }
-            },
-            {
-              "id": "updateInterval",
-              "type": "number",
-              "label": {
-                "en": "Update interval in seconds",
-                "nl": "Update interval in seconden",
-                "de": "Aktualisierungsintervall in Sekunden"
-              },
-              "value": 5,
-              "hint": {
-                "en": "The interval in which Homey should check if anything has changed. The minimum value if 5.",
-                "nl": "De interval waarin Homey moet controleren of er iets is veranderd. De minimumwaarde is 5.",
-                "de": "Das Intervall, in dem Homey prüfen muss, ob sich etwas geändert hat. Der Mindestwert ist 5."
-              }
+      "id": "{{headers.usn}}",
+      "conditions": [
+        [
+          {
+            "field": "headers.st",
+            "match": {
+              "type": "string",
+              "value": "urn:schemas-upnp-org:device:MediaRenderer:1"
             }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "musiccast",
-      "name": {
-        "en": "Yamaha MusicCast",
-        "nl": "Yamaha MusicCast",
-        "de": "Yamaha MusicCast"
-      },
-      "images": {
-        "large": "drivers/musiccast/assets/images/large.png",
-        "small": "drivers/musiccast/assets/images/small.png"
-      },
-      "class": "amplifier",
-      "discovery": "yamaha-discovery",
-      "capabilities": [
-        "onoff",
-        "volume_mute",
-        "volume_set",
-        "yxc_input_selected",
-        "musiccast_zone",
-        "speaker_playing",
-        "speaker_shuffle",
-        "speaker_artist",
-        "speaker_album",
-        "speaker_track",
-        "speaker_next",
-        "speaker_prev"
-      ],
-      "pair": [
-        {
-          "id": "list_devices",
-          "template": "list_devices",
-          "navigation": {
-            "next": "add_receiver"
           }
-        },
-        {
-          "id": "search_device"
-        },
-        {
-          "id": "add_receiver",
-          "template": "add_devices"
-        }
-      ],
-      "settings": [
-        {
-          "type": "group",
-          "label": {
-            "en": "General settings",
-            "nl": "Algemene instellingen",
-            "de": "Allgemeine Einstellungen"
-          },
-          "children": []
-        }
+        ]
       ]
     }
-  ],
-  "flow": {
-    "triggers": [
-      {
-        "id": "input_changed",
-        "title": {
-          "en": "Input was changed",
-          "nl": "Input is gewijzigd",
-          "de": "Eingabe wurde geändert"
-        },
-        "tokens": [
-          {
-            "name": "input",
-            "type": "string",
-            "title": {
-              "en": "Selected input",
-              "nl": "Geselecteerde input",
-              "de": "Ausgewählter Eingang"
-            },
-            "example": "HDMI1"
-          }
-        ],
-        "args": [
-          {
-            "name": "device",
-            "type": "device",
-            "placeholder": {
-              "en": "Select AV Receiver",
-              "nl": "Selecteer AV-ontvanger",
-              "de": "Wählen Sie AV-Receiver"
-            },
-            "filter": "driver_id=receiver"
-          }
-        ]
-      },
-      {
-        "id": "surround_program_changed",
-        "title": {
-          "en": "Surround program was changed",
-          "nl": "Surround-programma is gewijzigd",
-          "de": "Surround-Programm wurde geändert"
-        },
-        "tokens": [
-          {
-            "name": "surround_program",
-            "type": "string",
-            "title": {
-              "en": "Selected surround program",
-              "nl": "Geselecteerde surround-programma",
-              "de": "Ausgewähltes Surround-Programm"
-            },
-            "example": "5ch Stereo"
-          }
-        ],
-        "args": [
-          {
-            "name": "device",
-            "type": "device",
-            "placeholder": {
-              "en": "Select AV Receiver",
-              "nl": "Selecteer AV-ontvanger",
-              "de": "Wählen Sie AV-Receiver"
-            },
-            "filter": "driver_id=receiver"
-          }
-        ]
-      },
-      {
-        "id": "muted",
-        "title": {
-          "en": "AV Receiver was muted",
-          "nl": "AV-ontvanger is gedempt",
-          "de": "AV-Receiver ist stummgeschaltet"
-        },
-        "args": [
-          {
-            "name": "device",
-            "type": "device",
-            "placeholder": {
-              "en": "Select AV Receiver",
-              "nl": "Selecteer AV-ontvanger",
-              "de": "Wählen Sie AV-Receiver"
-            },
-            "filter": "driver_id=receiver"
-          }
-        ]
-      },
-      {
-        "id": "unmuted",
-        "title": {
-          "en": "AV Receiver was unmuted",
-          "nl": "AV-ontvanger is ongedempt",
-          "de": "AV-Receiver ist ungedämpft"
-        },
-        "args": [
-          {
-            "name": "device",
-            "type": "device",
-            "placeholder": {
-              "en": "Select AV Receiver",
-              "nl": "Selecteer AV-ontvanger",
-              "de": "Wählen Sie AV-Receiver"
-            },
-            "filter": "driver_id=receiver"
-          }
-        ]
-      },
-      {
-        "id": "input_changed",
-        "title": {
-          "en": "Input was changed",
-          "nl": "Input is gewijzigd",
-          "de": "Eingabe wurde geändert"
-        },
-        "tokens": [
-          {
-            "name": "input",
-            "type": "string",
-            "title": {
-              "en": "Selected input",
-              "nl": "Geselecteerde input",
-              "de": "Ausgewählter Eingang"
-            },
-            "example": "HDMI1"
-          }
-        ],
-        "args": [
-          {
-            "name": "device",
-            "type": "device",
-            "placeholder": {
-              "en": "Select MusicCast device",
-              "nl": "Selecteer MusicCast apparaat",
-              "de": "Wählen Sie MusicCast-Gerät"
-            },
-            "filter": "driver_id=musiccast"
-          }
-        ]
-      },
-      {
-        "id": "surround_program_changed",
-        "title": {
-          "en": "Surround program was changed",
-          "nl": "Surround-programma is gewijzigd",
-          "de": "Surround-Programm wurde geändert"
-        },
-        "tokens": [
-          {
-            "name": "surround_program",
-            "type": "string",
-            "title": {
-              "en": "Selected surround program",
-              "nl": "Geselecteerde surround-programma",
-              "de": "Ausgewähltes Surround-Programm"
-            },
-            "example": "5ch Stereo"
-          }
-        ],
-        "args": [
-          {
-            "name": "device",
-            "type": "device",
-            "placeholder": {
-              "en": "Select MusicCast device",
-              "nl": "Selecteer MusicCast apparaat",
-              "de": "Wählen Sie MusicCast-Gerät"
-            },
-            "filter": "driver_id=musiccast"
-          }
-        ]
-      },
-      {
-        "id": "muted",
-        "title": {
-          "en": "Device was muted",
-          "nl": "Apparaat is gedempt",
-          "de": "Gerät wurde stummgeschaltet"
-        },
-        "args": [
-          {
-            "name": "device",
-            "type": "device",
-            "placeholder": {
-              "en": "Select MusicCast device",
-              "nl": "Selecteer MusicCast apparaat",
-              "de": "Wählen Sie MusicCast-Gerät"
-            },
-            "filter": "driver_id=musiccast"
-          }
-        ]
-      },
-      {
-        "id": "unmuted",
-        "title": {
-          "en": "Device was unmuted",
-          "nl": "Apparaat niet langer gedempt",
-          "de": "Gerät war nicht stummgeschaltet"
-        },
-        "args": [
-          {
-            "name": "device",
-            "type": "device",
-            "placeholder": {
-              "en": "Select MusicCast device",
-              "nl": "Selecteer MusicCast apparaat",
-              "de": "Wählen Sie MusicCast-Gerät"
-            },
-            "filter": "driver_id=musiccast"
-          }
-        ]
-      }
-    ],
-    "actions": [
-      {
-        "id": "change_input",
-        "title": {
-          "en": "Change input",
-          "nl": "Wijzig bron",
-          "de": "Quelle ändern"
-        },
-        "args": [
-          {
-            "name": "device",
-            "type": "device",
-            "placeholder": {
-              "en": "Select AV Receiver",
-              "nl": "Selecteer AV-ontvanger",
-              "de": "Wählen Sie AV-Receiver"
-            },
-            "filter": "driver_id=receiver"
-          },
-          {
-            "name": "input",
-            "type": "autocomplete",
-            "placeholder": {
-              "en": "Input",
-              "nl": "Input",
-              "de": "Eingang"
-            }
-          }
-        ]
-      },
-      {
-        "id": "change_surround_program",
-        "title": {
-          "en": "Change surround program",
-          "nl": "Wijzig surround-programma",
-          "de": "Ändern Sie das Surround-Programm"
-        },
-        "args": [
-          {
-            "name": "device",
-            "type": "device",
-            "placeholder": {
-              "en": "Select AV Receiver",
-              "nl": "Selecteer AV-ontvanger",
-              "de": "Wählen Sie AV-Receiver"
-            },
-            "filter": "driver_id=receiver"
-          },
-          {
-            "name": "surround_program",
-            "type": "autocomplete",
-            "placeholder": {
-              "en": "Surround program",
-              "nl": "Surround-programma",
-              "de": "Surround-Programm"
-            }
-          }
-        ]
-      },
-      {
-        "id": "change_line_input",
-        "title": {
-          "en": "Select line input",
-          "nl": "Selecteer regelnummer",
-          "de": "Zeilennummer auswählen"
-        },
-        "hint": {
-          "en": "Select a specific line within a menu (only for menu based inputs like Net Radio, Server, USB).",
-          "nl": "Selecteer een specifieke regelnummer binnen een menu (alleen voor menu gebaseerde inputs zoals Net Radio, Server, USB).",
-          "de": "Wählen Sie eine bestimmte Zeilennummer innerhalb eines Menüs (nur für menübasierte Eingänge wie Net Radio, Server, USB)."
-        },
-        "args": [
-          {
-            "name": "device",
-            "type": "device",
-            "placeholder": {
-              "en": "Select AV Receiver",
-              "nl": "Selecteer AV-ontvanger",
-              "de": "Wählen Sie AV-Receiver"
-            },
-            "filter": "driver_id=receiver"
-          },
-          {
-            "name": "input",
-            "type": "dropdown",
-            "values": [
-              {
-                "id": "NET_RADIO",
-                "label": {
-                  "en": "NET RADIO"
-                }
-              },
-              {
-                "id": "USB",
-                "label": {
-                  "en": "USB"
-                }
-              },
-              {
-                "id": "SERVER",
-                "label": {
-                  "en": "SERVER"
-                }
-              }
-            ]
-          },
-          {
-            "name": "line",
-            "type": "number",
-            "min": 1,
-            "placeholder": {
-              "en": "Line number",
-              "nl": "Regelnummer",
-              "de": "Zeilennummer"
-            }
-          }
-        ]
-      },
-      {
-        "id": "change_zone",
-        "title": {
-          "en": "Change zone",
-          "nl": "Wijzig zone",
-          "de": "Zone wechseln"
-        },
-        "args": [
-          {
-            "name": "device",
-            "type": "device",
-            "placeholder": {
-              "en": "Select MusicCast device",
-              "nl": "Selecteer MusicCast apparaat",
-              "de": "Wählen Sie MusicCast-Gerät"
-            },
-            "filter": "driver_id=musiccast"
-          },
-          {
-            "type": "dropdown",
-            "name": "zone",
-            "title": {
-              "en": "Select which zone you want to control",
-              "nl": "Selecteer welke zone je wilt bedienen",
-              "de": "Wählen Sie die Zone aus, die Sie steuern möchten"
-            },
-            "values": [
-              {
-                "id": "main",
-                "label": {
-                  "en": "Main"
-                }
-              },
-              {
-                "id": "zone2",
-                "label": {
-                  "en": "Zone 2"
-                }
-              },
-              {
-                "id": "zone3",
-                "label": {
-                  "en": "Zone 3"
-                }
-              },
-              {
-                "id": "zone4",
-                "label": {
-                  "en": "Zone 4"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "id": "change_input",
-        "title": {
-          "en": "Change input",
-          "nl": "Wijzig bron",
-          "de": "Quelle ändern"
-        },
-        "args": [
-          {
-            "name": "device",
-            "type": "device",
-            "placeholder": {
-              "en": "Select MusicCast device",
-              "nl": "Selecteer MusicCast apparaat",
-              "de": "Wählen Sie MusicCast-Gerät"
-            },
-            "filter": "driver_id=musiccast"
-          },
-          {
-            "name": "input",
-            "type": "autocomplete",
-            "title": {
-              "en": "Input",
-              "nl": "Input",
-              "de": "Eingang"
-            }
-          }
-        ]
-      },
-      {
-        "id": "change_surround_program",
-        "title": {
-          "en": "Change surround program",
-          "nl": "Wijzig surround-programma",
-          "de": "Ändern Sie das Surround-Programm"
-        },
-        "args": [
-          {
-            "name": "device",
-            "type": "device",
-            "placeholder": {
-              "en": "Select MusicCast device",
-              "nl": "Selecteer MusicCast apparaat",
-              "de": "Wählen Sie MusicCast-Gerät"
-            },
-            "filter": "driver_id=musiccast"
-          },
-          {
-            "name": "surround_program",
-            "type": "autocomplete",
-            "title": {
-              "en": "Surround program",
-              "nl": "Surround-programma",
-              "de": "Surround-Programm"
-            }
-          }
-        ]
-      },
-      {
-        "id": "media_previous",
-        "title": {
-          "en": "Previous",
-          "nl": "Vorige",
-          "de": "Zurück"
-        },
-        "args": [
-          {
-            "name": "device",
-            "type": "device",
-            "placeholder": {
-              "en": "Select AV Receiver",
-              "nl": "Selecteer AV-ontvanger",
-              "de": "Wählen Sie AV-Receiver"
-            },
-            "filter": "driver_id=receiver"
-          }
-        ]
-      },
-      {
-        "id": "media_next",
-        "title": {
-          "en": "Next",
-          "nl": "Volgende",
-          "de": "Nächster"
-        },
-        "args": [
-          {
-            "name": "device",
-            "type": "device",
-            "placeholder": {
-              "en": "Select AV Receiver",
-              "nl": "Selecteer AV-ontvanger",
-              "de": "Wählen Sie AV-Receiver"
-            },
-            "filter": "driver_id=receiver"
-          }
-        ]
-      },
-      {
-        "id": "media_play",
-        "title": {
-          "en": "Play",
-          "nl": "Play",
-          "de": "Play"
-        },
-        "args": [
-          {
-            "name": "device",
-            "type": "device",
-            "placeholder": {
-              "en": "Select AV Receiver",
-              "nl": "Selecteer AV-ontvanger",
-              "de": "Wählen Sie AV-Receiver"
-            },
-            "filter": "driver_id=receiver"
-          }
-        ]
-      },
-      {
-        "id": "media_pause",
-        "title": {
-          "en": "Pause",
-          "nl": "Pauze",
-          "de": "Pause"
-        },
-        "args": [
-          {
-            "name": "device",
-            "type": "device",
-            "placeholder": {
-              "en": "Select AV Receiver",
-              "nl": "Selecteer AV-ontvanger",
-              "de": "Wählen Sie AV-Receiver"
-            },
-            "filter": "driver_id=receiver"
-          }
-        ]
-      },
-      {
-        "id": "volume_up",
-        "title": {
-          "en": "Raise volume",
-          "nl": "Zet geluid harder"
-        },
-        "args": [
-          {
-            "name": "device",
-            "type": "device",
-            "placeholder": {
-              "en": "Select MusicCast device",
-              "nl": "Selecteer MusicCast apparaat",
-              "de": "Wählen Sie MusicCast-Gerät"
-            },
-            "filter": "driver_id=musiccast"
-          },
-          {
-            "name": "volume",
-            "type": "range",
-            "title": {
-              "en": "Volume",
-              "nl": "Volume",
-              "de": "Volumen"
-            },
-            "min": 0,
-            "max": 100,
-            "step": 1,
-            "label": "dB"
-          }
-        ]
-      },
-      {
-        "id": "volume_down",
-        "title": {
-          "en": "Lower volume",
-          "nl": "Zet geluid zachter"
-        },
-        "args": [
-          {
-            "name": "device",
-            "type": "device",
-            "placeholder": {
-              "en": "Select MusicCast device",
-              "nl": "Selecteer MusicCast apparaat",
-              "de": "Wählen Sie MusicCast-Gerät"
-            },
-            "filter": "driver_id=musiccast"
-          },
-          {
-            "name": "volume",
-            "type": "range",
-            "title": {
-              "en": "Volume",
-              "nl": "Volume",
-              "de": "Volumen"
-            },
-            "min": 0,
-            "max": 100,
-            "step": 1,
-            "label": "dB"
-          }
-        ]
-      }
-    ]
   }
 }
