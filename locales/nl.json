@@ -20,6 +20,10 @@
       "search_again": "Opnieuw zoeken",
       "manual_search": "Handmatig zoeken",
       "submit": "Apparaat zoeken"
+    },
+    "zone": {
+      "default": "Standaard",
+      "custom": "Handmatig instellen"
     }
   },
   "error": {
@@ -29,6 +33,7 @@
     "invalidZone": "De zone \"__zone__\" wordt niet door dit apparaat ondersteund",
     "invalidInput": "De bron \"__input__\" wordt niet door dit apparaat ondersteund",
     "invalidSurroundProgram": "Het surround programma \"__program__\" wordt niet door dit apparaat ondersteund",
-    "uncontrollable": "Kan het apparaat niet bedienen, misschien staat deze uit?"
+    "uncontrollable": "Kan het apparaat niet bedienen, misschien staat deze uit?",
+    "badRequest": "Apparaat kon het verzoek niet verwerken. Is the zone correct?"
   }
 }

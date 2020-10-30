@@ -1,0 +1,98 @@
+{
+  "name": {
+    "en": "Yamaha AV Receiver",
+    "nl": "Yamaha AV-ontvanger",
+    "de": "Yamaha AV-Receiver"
+  },
+  "images": {
+    "large": "drivers/receiver/assets/images/large.png",
+    "small": "drivers/receiver/assets/images/small.png"
+  },
+  "class": "amplifier",
+  "discovery": "yamaha-discovery",
+  "capabilities": [
+    "onoff",
+    "volume_set",
+    "volume_mute",
+    "input_selected",
+    "receiver_zone",
+    "surround_program",
+    "surround_straight",
+    "surround_enhancer",
+    "sound_direct",
+    "sound_extra_bass",
+    "sound_adaptive_drc",
+    "media_previous",
+    "media_next",
+    "media_play",
+    "media_pause"
+  ],
+  "pair": [
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_receiver"
+      }
+    },
+    {
+      "id": "search_device"
+    },
+    {
+      "id": "loading",
+      "template": "loading"
+    },
+    {
+      "id": "list_manual_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_receiver"
+      }
+    },
+    {
+      "id": "add_receiver",
+      "template": "add_devices"
+    }
+  ],
+  "settings": [
+    {
+      "type": "group",
+      "label": {
+        "en": "General settings",
+        "nl": "Algemene instellingen",
+        "de": "Allgemeine Einstellungen"
+      },
+      "children": [
+        {
+          "id": "zone",
+          "type": "text",
+          "label": {
+            "en": "Zone",
+            "nl": "Zone"
+          },
+          "value": "Main_Zone",
+          "hint": {
+            "en": "Enter the Zone of your Yamaha receiver here. If you are unsure what to enter, fill in 'Main_Zone'.",
+            "nl": "Vul de Zone van uw Yamaha receiver hier in. Als je niet zeker weet wat u in moet voeren, vul dan 'Main_Zone' in.",
+            "de": "Geben Sie hier die Zone Ihres Yamaha-Empfängers ein. Wenn Sie sich nicht sicher sind, was Sie eingeben sollen, geben Sie 'Main_Zone' ein."
+          }
+        },
+        {
+          "id": "updateInterval",
+          "type": "number",
+          "label": {
+            "en": "Update interval in seconds",
+            "nl": "Update interval in seconden",
+            "de": "Aktualisierungsintervall in Sekunden"
+          },
+          "value": 5,
+          "hint": {
+            "en": "The interval in which Homey should check if anything has changed. The minimum value if 5.",
+            "nl": "De interval waarin Homey moet controleren of er iets is veranderd. De minimumwaarde is 5.",
+            "de": "Das Intervall, in dem Homey prüfen muss, ob sich etwas geändert hat. Der Mindestwert ist 5."
+          }
+        }
+      ]
+    }
+  ]
+}

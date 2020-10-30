@@ -1,0 +1,78 @@
+{
+  "id": "martens.yamaha",
+  "version": "1.2.0",
+  "compatibility": ">=3.0.0",
+  "sdk": 2,
+  "name": {
+    "en": "Yamaha",
+    "nl": "Yamaha",
+    "de": "Yamaha"
+  },
+  "description": {
+    "en": "Control your Yamaha AV receivers and MusicCast devices.",
+    "nl": "Bedien uw Yamaha AV-ontvangers en MusicCast apparaten.",
+    "de": "Steuern Sie Ihre Yamaha AV-Receiver und MusicCast-Geräte"
+  },
+  "category": [
+    "music",
+    "appliances"
+  ],
+  "tags": {
+    "en": [
+      "receiver",
+      "amplifier",
+      "audio",
+      "musiccast",
+      "music",
+      "cast"
+    ],
+    "nl": [
+      "ontvanger",
+      "versterker",
+      "audio",
+      "musiccast",
+      "music",
+      "cast"
+    ]
+  },
+  "permissions": [],
+  "images": {
+    "large": "/assets/images/large.png",
+    "small": "/assets/images/small.png"
+  },
+  "author": {
+    "name": "Lucas van der Have",
+    "email": "lucasvdhave@gmail.com"
+  },
+  "contributing": {
+    "donate": {
+      "paypal": {
+        "username": "lucasvdh"
+      }
+    }
+  },
+  "contributors": {
+    "developers": [
+      {
+        "name": "Lucas van der Have",
+        "email": "lucasvdhave@gmail.com"
+      },
+      {
+        "name": "Koen Martens",
+        "email": "koen-martens@hotmail.com"
+      }
+    ],
+    "translators": [
+      {
+        "name": "Lucas van der Have",
+        "email": "lucasvdhave@gmail.com"
+      }
+    ]
+  },
+  "bugs": {
+    "url": "https://github.com/lucasvdh/com.yamaha.receiver/issues"
+  },
+  "source": "https://github.com/lucasvdh/com.yamaha.receiver",
+  "homepage": "https://github.com/lucasvdh/com.yamaha.receiver",
+  "support": "mailto:lucasvdhave@gmail.com"
+}

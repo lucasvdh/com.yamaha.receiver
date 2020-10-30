@@ -20,6 +20,10 @@
       "search_again": "Neue Suche",
       "manual_search": "Manuelle Suche",
       "submit": "Suchgerät"
+    },
+    "zone": {
+      "default": "Standard",
+      "custom": "Manuell konfigurieren"
     }
   },
   "error": {
@@ -28,6 +32,8 @@
     "connectionTimedOut": "Zeitüberschreitung bei der Verbindung zum Verstärker. Ist die IP korrekt und der Verstärker eingeschaltet?",
     "invalidZone": "Die Zone \"__zone__\" wird von diesem Gerät nicht unterstützt",
     "invalidSurroundProgram": "Das Surround-Programm \"__program__\" wird von diesem Gerät nicht unterstützt",
-    "invalidInput": "Die Eingabe \"__input__\" wird von diesem Gerät nicht unterstützt"
+    "invalidInput": "Die Eingabe \"__input__\" wird von diesem Gerät nicht unterstützt",
+    "uncontrollable": "Das Gerät kann nicht gesteuert werden, ist es möglicherweise ausgeschaltet?",
+    "badRequest": "Das Gerät konnte die Anforderung nicht verarbeiten. Ist die Zone korrekt?"
   }
 }

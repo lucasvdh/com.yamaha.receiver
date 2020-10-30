@@ -39,6 +39,13 @@ td.padding-bottom {
     display: none;
 }
 
+select {
+    display: block;
+    width: 100%;
+    padding: .5rem;
+    font-size: 15px;
+}
+
 .btn {
     display: inline-block;
     border-radius: 4px;

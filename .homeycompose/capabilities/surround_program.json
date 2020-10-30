@@ -1,0 +1,143 @@
+{
+  "type": "enum",
+  "title": {
+    "en": "Surround program",
+    "nl": "Surround-programma"
+  },
+  "getable": true,
+  "setable": true,
+  "values": [
+    {
+      "id": "Action Game",
+      "title": {
+        "en": "Action Game"
+      }
+    },
+    {
+      "id": "Roleplaying Game",
+      "title": {
+        "en": "Roleplaying Game"
+      }
+    },
+    {
+      "id": "Music Video",
+      "title": {
+        "en": "Music Video"
+      }
+    },
+    {
+      "id": "Standard",
+      "title": {
+        "en": "Standard"
+      }
+    },
+    {
+      "id": "Spectacle",
+      "title": {
+        "en": "Spectacle"
+      }
+    },
+    {
+      "id": "Sci-Fi",
+      "title": {
+        "en": "Sci-Fi"
+      }
+    },
+    {
+      "id": "Adventure",
+      "title": {
+        "en": "Adventure"
+      }
+    },
+    {
+      "id": "Drama",
+      "title": {
+        "en": "Drama"
+      }
+    },
+    {
+      "id": "Hall in Munich",
+      "title": {
+        "en": "Hall in Munich"
+      }
+    },
+    {
+      "id": "Hall in Vienna",
+      "title": {
+        "en": "Hall in Vienna"
+      }
+    },
+    {
+      "id": "Chamber",
+      "title": {
+        "en": "Chamber"
+      }
+    },
+    {
+      "id": "Cellar Club",
+      "title": {
+        "en": "Cellar Club"
+      }
+    },
+    {
+      "id": "Church in Royaumont",
+      "title": {
+        "en": "Church in Royaumont"
+      }
+    },
+    {
+      "id": "The Roxy Theatre",
+      "title": {
+        "en": "The Roxy Theatre"
+      }
+    },
+    {
+      "id": "The Bottom Line",
+      "title": {
+        "en": "The Bottom Line"
+      }
+    },
+    {
+      "id": "Sports",
+      "title": {
+        "en": "Sports"
+      }
+    },
+    {
+      "id": "Mono Movie",
+      "title": {
+        "en": "Mono Movie"
+      }
+    },
+    {
+      "id": "2ch Stereo",
+      "title": {
+        "en": "2ch Stereo"
+      }
+    },
+    {
+      "id": "5ch Stereo",
+      "title": {
+        "en": "5ch Stereo"
+      }
+    },
+    {
+      "id": "7ch Stereo",
+      "title": {
+        "en": "7ch Stereo"
+      }
+    },
+    {
+      "id": "9ch Stereo",
+      "title": {
+        "en": "9ch Stereo"
+      }
+    },
+    {
+      "id": "Surround Decoder",
+      "title": {
+        "en": "Surround Decoder"
+      }
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "type": "enum",
+  "title": {
+    "en": "Selected zone",
+    "nl": "Geselecteerde zone"
+  },
+  "getable": true,
+  "setable": true,
+  "values": [
+    {
+      "id": "Main_Zone",
+      "title": {
+        "en": "Main zone"
+      }
+    },
+    {
+      "id": "Zone_2",
+      "title": {
+        "en": "Zone 2"
+      }
+    },
+    {
+      "id": "Zone_3",
+      "title": {
+        "en": "Zone 3"
+      }
+    },
+    {
+      "id": "Zone_4",
+      "title": {
+        "en": "Zone 4"
+      }
+    }
+  ]
+}
