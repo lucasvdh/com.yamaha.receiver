@@ -147,12 +147,12 @@ class YamahaReceiverDevice extends Homey.Device {
     }
 
     registerFlowCards() {
-        this.inputChangedTrigger = new Homey.FlowCardTriggerDevice('input_changed').register();
-        this.surroundProgramChangedTrigger = new Homey.FlowCardTriggerDevice('surround_program_changed').register();
-        this.mutedTrigger = new Homey.FlowCardTriggerDevice('muted').register();
-        this.unmutedTrigger = new Homey.FlowCardTriggerDevice('unmuted').register();
+        this.inputChangedTrigger = this.homey.flow.getDeviceTriggerCard('receiver_input_changed').register();
+        this.surroundProgramChangedTrigger = this.homey.flow.getDeviceTriggerCard('receiver_surround_program_changed').register();
+        this.mutedTrigger = this.homey.flow.getDeviceTriggerCard('receiver_muted').register();
+        this.unmutedTrigger = this.homey.flow.getDeviceTriggerCard('receiver_unmuted').register();
 
-        this.changeInputAction = new Homey.FlowCardAction('change_input').register();
+        this.changeInputAction = this.homey.flow.getActionCard('receiver_change_input').register();
         this.changeInputAction
             .registerRunListener((args, state) => {
                 return this.getClient().setInput(args.input.id).then(() => {
@@ -174,7 +174,7 @@ class YamahaReceiverDevice extends Homey.Device {
                 );
             });
 
-        this.changeSurroundProgramAction = new Homey.FlowCardAction('change_surround_program').register();
+        this.changeSurroundProgramAction = this.homey.flow.getActionCard('receiver_change_surround_program').register();
         this.changeSurroundProgramAction
             .registerRunListener((args, state) => {
                 return this.getClient().setSurroundProgram(args.surround_program.id).then(() => {
@@ -196,22 +196,22 @@ class YamahaReceiverDevice extends Homey.Device {
                 );
             });
 
-        this.mediaPreviousAction = new Homey.FlowCardAction('media_previous').register();
+        this.mediaPreviousAction = this.homey.flow.getActionCard('receiver_media_previous').register();
         this.mediaPreviousAction
             .registerRunListener((args, state) => {
                 return this.getClient().previous().catch(this.error);
             });
-        this.mediaNextAction = new Homey.FlowCardAction('media_next').register();
+        this.mediaNextAction = this.homey.flow.getActionCard('receiver_media_next').register();
         this.mediaNextAction
             .registerRunListener((args, state) => {
                 return this.getClient().next().catch(this.error);
             });
-        this.mediaPlayAction = new Homey.FlowCardAction('media_play').register();
+        this.mediaPlayAction = this.homey.flow.getActionCard('receiver_media_play').register();
         this.mediaPlayAction
             .registerRunListener((args, state) => {
                 return this.getClient().play().catch(this.error);
             });
-        this.mediaPauseAction = new Homey.FlowCardAction('media_pause').register();
+        this.mediaPauseAction = this.homey.flow.getActionCard('receiver_media_pause').register();
         this.mediaPauseAction
             .registerRunListener((args, state) => {
                 return this.getClient().pause().catch(this.error);

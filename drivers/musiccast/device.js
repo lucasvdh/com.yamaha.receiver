@@ -14,7 +14,7 @@ const UNAVAILABLE_UPDATE_INTERVAL = 60000;
 
 class YamahaMusicCastDevice extends Unicast.Device {
 
-    onInit() {
+    async onInit() {
         this.deleted = false;
         this._data = this.getData();
         this._settings = this.getSettings();
@@ -30,7 +30,7 @@ class YamahaMusicCastDevice extends Unicast.Device {
         this.setAvailable().catch(this.error);
 
         this.albumCoverImageUrl = null;
-        this.albumCoverImage = new Homey.Image('jpg');
+        this.albumCoverImage = await this.homey.images.createImage();
         this.albumCoverImage.setUrl(null);
         this.albumCoverImage.register()
             .then(() => {
@@ -155,12 +155,12 @@ class YamahaMusicCastDevice extends Unicast.Device {
     }
 
     registerFlowCards() {
-        this.inputChangedTrigger = new Homey.FlowCardTriggerDevice('input_changed').register();
-        this.surroundProgramChangedTrigger = new Homey.FlowCardTriggerDevice('surround_program_changed').register();
-        this.mutedTrigger = new Homey.FlowCardTriggerDevice('muted').register();
-        this.unmutedTrigger = new Homey.FlowCardTriggerDevice('unmuted').register();
+        this.inputChangedTrigger = this.homey.flow.getDeviceTriggerCard('musiccast_input_changed').register();
+        this.surroundProgramChangedTrigger = this.homey.flow.getDeviceTriggerCard('surround_program_changed').register();
+        this.mutedTrigger = this.homey.flow.getDeviceTriggerCard('muted').register();
+        this.unmutedTrigger = this.homey.flow.getDeviceTriggerCard('unmuted').register();
 
-        this.changeInputAction = new Homey.FlowCardAction('change_input');
+        this.changeInputAction = this.homey.flow.getActionCard('change_input');
         this.changeInputAction
             .register()
             .registerRunListener((args, state) => {
@@ -179,7 +179,7 @@ class YamahaMusicCastDevice extends Unicast.Device {
                 );
             });
 
-        this.changeSurroundProgramAction = new Homey.FlowCardAction('change_surround_program');
+        this.changeSurroundProgramAction = this.homey.flow.getActionCard('change_surround_program');
         this.changeSurroundProgramAction
             .register()
             .registerRunListener((args, state) => {
@@ -198,14 +198,14 @@ class YamahaMusicCastDevice extends Unicast.Device {
                 );
             });
 
-        this.volumeUpAction = new Homey.FlowCardAction('volume_up');
+        this.volumeUpAction = this.homey.flow.getActionCard('volume_up');
         this.volumeUpAction
             .register()
             .registerRunListener((args, state) => {
                 return this.getClient().volumeUp(args.volume);
             });
 
-        this.volumeDownAction = new Homey.FlowCardAction('volume_down');
+        this.volumeDownAction = this.homey.flow.getActionCard('volume_down');
         this.volumeDownAction
             .register()
             .registerRunListener((args, state) => {
