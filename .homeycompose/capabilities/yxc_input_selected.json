@@ -1,0 +1,395 @@
+{
+  "type": "enum",
+  "title": {
+    "en": "Selected source",
+    "nl": "Geselecteerde bron"
+  },
+  "getable": true,
+  "setable": true,
+  "values": [
+    {
+      "id": "cd",
+      "title": {
+        "en": "CD"
+      }
+    },
+    {
+      "id": "tuner",
+      "title": {
+        "en": "Tuner"
+      }
+    },
+    {
+      "id": "multi_ch",
+      "title": {
+        "en": "Multi CH"
+      }
+    },
+    {
+      "id": "phono",
+      "title": {
+        "en": "Phono"
+      }
+    },
+    {
+      "id": "hdmi1",
+      "title": {
+        "en": "HDMI 1"
+      }
+    },
+    {
+      "id": "hdmi2",
+      "title": {
+        "en": "HDMI 2"
+      }
+    },
+    {
+      "id": "hdmi3",
+      "title": {
+        "en": "HDMI 3"
+      }
+    },
+    {
+      "id": "hdmi4",
+      "title": {
+        "en": "HDMI 4"
+      }
+    },
+    {
+      "id": "hdmi5",
+      "title": {
+        "en": "HDMI 5"
+      }
+    },
+    {
+      "id": "hdmi6",
+      "title": {
+        "en": "HDMI 6"
+      }
+    },
+    {
+      "id": "hdmi7",
+      "title": {
+        "en": "HDMI 7"
+      }
+    },
+    {
+      "id": "hdmi8",
+      "title": {
+        "en": "HDMI 8"
+      }
+    },
+    {
+      "id": "hdmi",
+      "title": {
+        "en": "HDMI"
+      }
+    },
+    {
+      "id": "av1",
+      "title": {
+        "en": "AV 1"
+      }
+    },
+    {
+      "id": "av2",
+      "title": {
+        "en": "AV 2"
+      }
+    },
+    {
+      "id": "av3",
+      "title": {
+        "en": "AV 3"
+      }
+    },
+    {
+      "id": "av4",
+      "title": {
+        "en": "AV 4"
+      }
+    },
+    {
+      "id": "av5",
+      "title": {
+        "en": "AV 5"
+      }
+    },
+    {
+      "id": "av6",
+      "title": {
+        "en": "AV 6"
+      }
+    },
+    {
+      "id": "av7",
+      "title": {
+        "en": "AV 7"
+      }
+    },
+    {
+      "id": "v_aux",
+      "title": {
+        "en": "V_aux"
+      }
+    },
+    {
+      "id": "aux1",
+      "title": {
+        "en": "Aux 1"
+      }
+    },
+    {
+      "id": "aux2",
+      "title": {
+        "en": "Aux 2"
+      }
+    },
+    {
+      "id": "aux",
+      "title": {
+        "en": "Aux"
+      }
+    },
+    {
+      "id": "audio1",
+      "title": {
+        "en": "Audio 1"
+      }
+    },
+    {
+      "id": "audio2",
+      "title": {
+        "en": "Audio 2"
+      }
+    },
+    {
+      "id": "audio3",
+      "title": {
+        "en": "Audio 3"
+      }
+    },
+    {
+      "id": "audio4",
+      "title": {
+        "en": "Audio 4"
+      }
+    },
+    {
+      "id": "audio_cd",
+      "title": {
+        "en": "Audio_cd"
+      }
+    },
+    {
+      "id": "audio",
+      "title": {
+        "en": "Audio"
+      }
+    },
+    {
+      "id": "optical1",
+      "title": {
+        "en": "Optical 1"
+      }
+    },
+    {
+      "id": "optical2",
+      "title": {
+        "en": "Optical 2"
+      }
+    },
+    {
+      "id": "optical",
+      "title": {
+        "en": "Optical"
+      }
+    },
+    {
+      "id": "coaxial1",
+      "title": {
+        "en": "Coaxial 1"
+      }
+    },
+    {
+      "id": "coaxial2",
+      "title": {
+        "en": "Coaxial 2"
+      }
+    },
+    {
+      "id": "coaxial",
+      "title": {
+        "en": "Coaxial"
+      }
+    },
+    {
+      "id": "digital1",
+      "title": {
+        "en": "Digital 1"
+      }
+    },
+    {
+      "id": "digital2",
+      "title": {
+        "en": "Digital 2"
+      }
+    },
+    {
+      "id": "digital",
+      "title": {
+        "en": "Digital"
+      }
+    },
+    {
+      "id": "line1",
+      "title": {
+        "en": "Line 1"
+      }
+    },
+    {
+      "id": "line2",
+      "title": {
+        "en": "Line 2"
+      }
+    },
+    {
+      "id": "line3",
+      "title": {
+        "en": "Line 3"
+      }
+    },
+    {
+      "id": "line_cd",
+      "title": {
+        "en": "Line CD"
+      }
+    },
+    {
+      "id": "analog",
+      "title": {
+        "en": "Analog"
+      }
+    },
+    {
+      "id": "tv",
+      "title": {
+        "en": "TV"
+      }
+    },
+    {
+      "id": "bd_dvd",
+      "title": {
+        "en": "BD DVD"
+      }
+    },
+    {
+      "id": "usb_dac",
+      "title": {
+        "en": "USB DAC"
+      }
+    },
+    {
+      "id": "usb",
+      "title": {
+        "en": "USB"
+      }
+    },
+    {
+      "id": "bluetooth",
+      "title": {
+        "en": "Bluetooth"
+      }
+    },
+    {
+      "id": "server",
+      "title": {
+        "en": "Server"
+      }
+    },
+    {
+      "id": "net_radio",
+      "title": {
+        "en": "Net Radio"
+      }
+    },
+    {
+      "id": "rhapsody",
+      "title": {
+        "en": "Rhapsody"
+      }
+    },
+    {
+      "id": "napster",
+      "title": {
+        "en": "Napster"
+      }
+    },
+    {
+      "id": "pandora",
+      "title": {
+        "en": "Pandora"
+      }
+    },
+    {
+      "id": "siriusxm",
+      "title": {
+        "en": "Siriusxm"
+      }
+    },
+    {
+      "id": "spotify",
+      "title": {
+        "en": "Spotify"
+      }
+    },
+    {
+      "id": "juke",
+      "title": {
+        "en": "Juke"
+      }
+    },
+    {
+      "id": "airplay",
+      "title": {
+        "en": "AirPlay"
+      }
+    },
+    {
+      "id": "radiko",
+      "title": {
+        "en": "Radiko"
+      }
+    },
+    {
+      "id": "qobuz",
+      "title": {
+        "en": "Qobuz"
+      }
+    },
+    {
+      "id": "mc_link",
+      "title": {
+        "en": "MC link"
+      }
+    },
+    {
+      "id": "main_sync",
+      "title": {
+        "en": "Main Sync"
+      }
+    },
+    {
+      "id": "tidal",
+      "title": {
+        "en": "Tidal"
+      }
+    },
+    {
+      "id": "deezer",
+      "title": {
+        "en": "Deezer"
+      }
+    }
+  ]
+}

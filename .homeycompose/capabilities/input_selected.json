@@ -1,0 +1,233 @@
+{
+  "type": "enum",
+  "title": {
+    "en": "Selected source",
+    "nl": "Geselecteerde bron"
+  },
+  "getable": true,
+  "setable": true,
+  "values": [
+    {
+      "id": "HDMI1",
+      "title": {
+        "en": "HDMI1"
+      }
+    },
+    {
+      "id": "HDMI2",
+      "title": {
+        "en": "HDMI2"
+      }
+    },
+    {
+      "id": "HDMI3",
+      "title": {
+        "en": "HDMI3"
+      }
+    },
+    {
+      "id": "HDMI4",
+      "title": {
+        "en": "HDMI4"
+      }
+    },
+    {
+      "id": "HDMI5",
+      "title": {
+        "en": "HDMI5"
+      }
+    },
+    {
+      "id": "HDMI6",
+      "title": {
+        "en": "HDMI6"
+      }
+    },
+    {
+      "id": "HDMI7",
+      "title": {
+        "en": "HDMI7"
+      }
+    },
+    {
+      "id": "HDMI8",
+      "title": {
+        "en": "HDMI8"
+      }
+    },
+    {
+      "id": "HDMI",
+      "title": {
+        "en": "HDMI"
+      }
+    },
+    {
+      "id": "AV1",
+      "title": {
+        "en": "AV1"
+      }
+    },
+    {
+      "id": "AV2",
+      "title": {
+        "en": "AV2"
+      }
+    },
+    {
+      "id": "AV3",
+      "title": {
+        "en": "AV3"
+      }
+    },
+    {
+      "id": "AV4",
+      "title": {
+        "en": "AV4"
+      }
+    },
+    {
+      "id": "AV5",
+      "title": {
+        "en": "AV5"
+      }
+    },
+    {
+      "id": "AV6",
+      "title": {
+        "en": "AV6"
+      }
+    },
+    {
+      "id": "AV7",
+      "title": {
+        "en": "AV7"
+      }
+    },
+    {
+      "id": "AV8",
+      "title": {
+        "en": "AV8"
+      }
+    },
+    {
+      "id": "AV",
+      "title": {
+        "en": "AV"
+      }
+    },
+    {
+      "id": "AUDIO1",
+      "title": {
+        "en": "AUDIO1"
+      }
+    },
+    {
+      "id": "AUDIO2",
+      "title": {
+        "en": "AUDIO2"
+      }
+    },
+    {
+      "id": "AUDIO3",
+      "title": {
+        "en": "AUDIO3"
+      }
+    },
+    {
+      "id": "AUDIO4",
+      "title": {
+        "en": "AUDIO4"
+      }
+    },
+    {
+      "id": "AUDIO5",
+      "title": {
+        "en": "AUDIO5"
+      }
+    },
+    {
+      "id": "AUDIO6",
+      "title": {
+        "en": "AUDIO6"
+      }
+    },
+    {
+      "id": "AUDIO7",
+      "title": {
+        "en": "AUDIO7"
+      }
+    },
+    {
+      "id": "AUDIO8",
+      "title": {
+        "en": "AUDIO8"
+      }
+    },
+    {
+      "id": "AUDIO",
+      "title": {
+        "en": "AUDIO"
+      }
+    },
+    {
+      "id": "TUNER",
+      "title": {
+        "en": "TUNER"
+      }
+    },
+    {
+      "id": "AUX",
+      "title": {
+        "en": "AUX"
+      }
+    },
+    {
+      "id": "V-AUX",
+      "title": {
+        "en": "V-AUX"
+      }
+    },
+    {
+      "id": "SERVER",
+      "title": {
+        "en": "SERVER"
+      }
+    },
+    {
+      "id": "NET RADIO",
+      "title": {
+        "en": "NET RADIO"
+      }
+    },
+    {
+      "id": "USB",
+      "title": {
+        "en": "USB"
+      }
+    },
+    {
+      "id": "Spotify",
+      "title": {
+        "en": "Spotify"
+      }
+    },
+    {
+      "id": "AirPlay",
+      "title": {
+        "en": "AirPlay"
+      }
+    },
+    {
+      "id": "Bluetooth",
+      "title": {
+        "en": "Bluetooth"
+      }
+    },
+    {
+      "id": "Deezer",
+      "title": {
+        "en": "Deezer"
+      }
+    }
+  ]
+}
